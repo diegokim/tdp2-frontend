@@ -3,4 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="logoTextBackground">#465565</color>
+    <color name="textColorPrimary">@android:color/black</color>
+    <color name="background">#ffffff</color>
+    <color name="facebook">#3b5998</color>
 </resources>
