@@ -20,8 +20,8 @@ public class IpAndPortSelectionActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ip_and_port_selection);
-        ipInput = findViewById(R.id.ip_input);
-        portInput = findViewById(R.id.port_input);
+        ipInput = (EditText) findViewById(R.id.ip_input);
+        portInput = (EditText) findViewById(R.id.port_input);
     }
 
     public void setServerAddress() {
