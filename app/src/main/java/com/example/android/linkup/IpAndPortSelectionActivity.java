@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.NetworkConfiguration;
 
 public class IpAndPortSelectionActivity extends Activity {
@@ -19,6 +20,8 @@ public class IpAndPortSelectionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
         setContentView(R.layout.activity_ip_and_port_selection);
         ipInput = (EditText) findViewById(R.id.ip_input);
         portInput = (EditText) findViewById(R.id.port_input);
