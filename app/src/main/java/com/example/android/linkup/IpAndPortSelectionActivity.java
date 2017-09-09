@@ -36,5 +36,6 @@ public class IpAndPortSelectionActivity extends Activity {
         setServerAddress();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        finish();
     }
 }

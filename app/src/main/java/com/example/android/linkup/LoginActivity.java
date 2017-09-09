@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -111,8 +112,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile","user_photos");
-        //,"publish_actions", "user_about_me","user_birthday","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_location","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","user_actions.books","user_actions.fitness","user_actions.music","user_actions.news","user_actions.video","read_custom_friendlists"
+        loginButton.setReadPermissions("email", "public_profile","user_photos","user_birthday","user_location","user_actions.books","user_actions.fitness","user_actions.music","user_actions.news","user_actions.video");
+        //,"publish_actions", "user_about_me","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","read_custom_friendlists"
         final Context context = this.getApplicationContext();
 
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
@@ -122,7 +123,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
-                NetworkRequestQueue.getInstance(context).addToRequestQueue(new CustomJsonObjectRequest(Request.Method.GET,"http://192.168.43.47:5000/login", new JSONObject(), new AnResponseListener(), new AnErrorListener()));
+                JsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET,NetworkConfiguration.getInstance().serverAddr+"/login", new JSONObject(), new AnResponseListener(), new AnErrorListener());
+                request.setRetryPolicy(new DefaultRetryPolicy(10000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
 
             }
 
