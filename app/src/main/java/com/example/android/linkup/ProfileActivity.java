@@ -9,31 +9,26 @@ import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.android.linkup.sync_list.SyncListFragment;
 
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
-public class ProfileActivity extends FragmentActivity {
+public class ProfileActivity extends FragmentActivity implements Observer {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-//        LinearLayout fragmentContainer = (LinearLayout) findViewById(R.id.fragment_container);
-        // add rowLayout to the root layout somewhere here
+        TextView appBarTitle = (TextView) findViewById(R.id.app_bar_title);
+        appBarTitle.setText("Mi Perfil");
+    }
 
-        FragmentManager fragMan = getFragmentManager();
-        FragmentTransaction fragTransaction = fragMan.beginTransaction();
+    @Override
+    public void update(Observable o, Object arg) {
 
-
-        ArrayList<String> list = new ArrayList();
-        for (int i =0 ; i < 10 ; i ++ ){
-            list.add("hola " + i);
-        }
-        SyncListFragment<String> myFrag = new SyncListFragment<>(list);
-
-        fragTransaction.add(R.id.fragment_container, myFrag , "fragment");
-        fragTransaction.commit();
     }
 }

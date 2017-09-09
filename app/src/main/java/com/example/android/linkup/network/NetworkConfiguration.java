@@ -6,6 +6,7 @@ package com.example.android.linkup.network;
 
 public class NetworkConfiguration {
     public String serverAddr;
+    public String accessToken;
     private static NetworkConfiguration instance;
 
     private NetworkConfiguration() {
