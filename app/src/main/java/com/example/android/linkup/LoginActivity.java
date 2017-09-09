@@ -3,6 +3,7 @@ package com.example.android.linkup;
 
 import android.app.Activity;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.example.android.linkup.network.CustomJsonObjectRequest;
+import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkRequestQueue;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -39,6 +47,8 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import org.json.JSONObject;
+
 public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private static final String TAG = "FacebookLogin";
@@ -50,6 +60,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private CallbackManager mCallbackManager;
 
+    public class AnErrorListener implements Response.ErrorListener {
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            Log.i(TAG, error.toString());
+        }
+    }
+
+    public class AnResponseListener implements Response.Listener<JSONObject> {
+
+        @Override
+        public void onResponse(JSONObject response) {
+            Log.i(TAG, response.toString());
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,17 +111,25 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile");
+        loginButton.setReadPermissions("email", "public_profile","user_photos");
+        //,"publish_actions", "user_about_me","user_birthday","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_location","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","user_actions.books","user_actions.fitness","user_actions.music","user_actions.news","user_actions.video","read_custom_friendlists"
+        final Context context = this.getApplicationContext();
+
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
                 Log.d(TAG, "facebook:onSuccess:" + loginResult);
                 handleFacebookAccessToken(loginResult.getAccessToken());
+                Log.d(TAG,loginResult.getAccessToken().getToken());
+                NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
+                NetworkRequestQueue.getInstance(context).addToRequestQueue(new CustomJsonObjectRequest(Request.Method.GET,"http://192.168.43.47:5000/login", new JSONObject(), new AnResponseListener(), new AnErrorListener()));
+
             }
 
             @Override
             public void onCancel() {
                 Log.d(TAG, "facebook:onCancel");
+                NetworkConfiguration.getInstance().accessToken = "-1";
                 // [START_EXCLUDE]
                 updateUI(null);
                 // [END_EXCLUDE]
@@ -105,6 +138,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             @Override
             public void onError(FacebookException error) {
                 Log.d(TAG, "facebook:onError", error);
+                NetworkConfiguration.getInstance().accessToken = "-1";
                 // [START_EXCLUDE]
                 updateUI(null);
                 // [END_EXCLUDE]

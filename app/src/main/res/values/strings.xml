@@ -1,9 +1,7 @@
 <resources>
     <string name="app_name">Link Up</string>
 
-    <string name="slogan"> Hay que pensar o preguntarles de un slogan </string>
-
-
+    <string name="slogan"> Conectate con quien quieras! </string>
 
     <string name="facebook_app_id">375444156206680</string>
     <string name="fb_login_protocol_scheme">fb375444156206680</string>
