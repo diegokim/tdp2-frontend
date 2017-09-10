@@ -9,10 +9,6 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by diegokim on 9/9/17.
- */
-
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
     public CustomJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {

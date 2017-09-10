@@ -20,8 +20,6 @@ public class IpAndPortSelectionActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = new Intent(this, ProfileActivity.class);
-        startActivity(intent);
         setContentView(R.layout.activity_ip_and_port_selection);
         ipInput = (EditText) findViewById(R.id.ip_input);
         portInput = (EditText) findViewById(R.id.port_input);
@@ -37,7 +35,8 @@ public class IpAndPortSelectionActivity extends Activity {
 
     public void startApplication(View view) {
         setServerAddress();
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
+        //finish();
     }
 }
