@@ -18,14 +18,14 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                InterestsFragment tab1 = new InterestsFragment();
-                return tab1;
+                PhotosFragment photosFragment = new PhotosFragment();
+                return photosFragment;
             case 1:
-                PhotosFragment tab2 = new PhotosFragment();
-                return tab2;
+                InterestsFragment interestsFragment = new InterestsFragment();
+                return interestsFragment;
             case 2:
-                PhotosFragment tab3 = new PhotosFragment();
-                return tab3;
+                DescriptionFragment descriptionFragment = new DescriptionFragment();
+                return descriptionFragment;
             default:
                 return null;
         }

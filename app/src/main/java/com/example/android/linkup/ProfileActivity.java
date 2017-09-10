@@ -24,9 +24,9 @@ public class ProfileActivity extends FragmentActivity implements Observer {
         appBarTitle.setText("Mi Perfil");
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 1"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 2"));
-        tabLayout.addTab(tabLayout.newTab().setText("Tab 3"));
+        tabLayout.addTab(tabLayout.newTab().setText("Fotos"));
+        tabLayout.addTab(tabLayout.newTab().setText("Intereses"));
+        tabLayout.addTab(tabLayout.newTab().setText("Descripcion"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);

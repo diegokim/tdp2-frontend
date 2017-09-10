@@ -13,6 +13,7 @@ public class Profile extends Observable {
     public String ocupation;
     public String education;
     public ArrayList<String> photos;
+    public String profilePhoto;
 
     public void commitChanges() {
         setChanged();
