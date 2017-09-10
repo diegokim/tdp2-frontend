@@ -9,13 +9,30 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.models.Profile;
 
-public class PhotosFragment extends Fragment {
+import java.util.Observable;
+import java.util.Observer;
+
+public class PhotosFragment extends Fragment implements Observer{
+
+    private final Profile profile;
+
+    public PhotosFragment (Profile profile) {
+        super();
+        this.profile = profile;
+        profile.addObserver(this);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_photos, container, false);
+    }
+
+    @Override
+    public void update(Observable o, Object arg) {
+
     }
 }

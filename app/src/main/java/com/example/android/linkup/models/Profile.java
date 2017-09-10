@@ -9,10 +9,10 @@ public class Profile extends Observable {
     public String interests[];
     public String description;
     public String gender;
-    public short age;
+    public int age;
     public String ocupation;
     public String education;
-    public ArrayList<String> photos;
+    public String photos[];
     public String profilePhoto;
 
     public void commitChanges() {

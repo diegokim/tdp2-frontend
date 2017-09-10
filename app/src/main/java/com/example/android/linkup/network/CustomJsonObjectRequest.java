@@ -1,5 +1,7 @@
 package com.example.android.linkup.network;
 
+import android.util.Log;
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -20,6 +22,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
     public Map<String, String> getHeaders() throws AuthFailureError {
         Map headers = new HashMap<>();
         String accessToken = NetworkConfiguration.getInstance().accessToken;
+        Log.i("ACCESS TOKEN", accessToken);
         headers.put("Content-Type", "application/json");
         if (accessToken != null) {
             headers.put("Authorization", accessToken);

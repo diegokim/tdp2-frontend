@@ -14,18 +14,14 @@ import org.json.JSONObject;
 public class GetProfileRequestGenerator {
     private static final int GET_PROFILE_METHOD = Request.Method.GET;
     private static final String PROFILE_ENDPOINT = "/profile";
-    private CustomJsonObjectRequest request;
 
-    public GetProfileRequestGenerator(Profile profileToFill, Command onErrorCommand) {
+    public static Request generate(Profile profileToFill, Command onErrorCommand) {
         String url = NetworkConfiguration.getInstance().serverAddr;
         url += PROFILE_ENDPOINT;
         JSONObject obj = new JSONObject();
         GetProfileResponseListener responseListener = new GetProfileResponseListener(profileToFill);
         GetProfileErrorListener errorListener = new GetProfileErrorListener(onErrorCommand);
-        request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
-    }
-
-    public Request getRequest() {
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
         return request;
     }
 

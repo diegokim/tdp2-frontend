@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.network.NetworkConfiguration;
 
 public class IpAndPortSelectionActivity extends Activity {
@@ -37,6 +37,5 @@ public class IpAndPortSelectionActivity extends Activity {
         setServerAddress();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
-        //finish();
     }
 }

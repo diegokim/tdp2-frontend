@@ -5,11 +5,15 @@ package com.example.android.linkup.profile;
         import android.support.v4.app.FragmentManager;
         import android.support.v4.app.FragmentStatePagerAdapter;
 
-public class PagerAdapter extends FragmentStatePagerAdapter {
-    int mNumOfTabs;
+        import com.example.android.linkup.models.Profile;
 
-    public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
+    int mNumOfTabs;
+    private Profile profile;
+
+    public ProfilePagerAdapter(FragmentManager fm, int NumOfTabs, Profile profile) {
         super(fm);
+        this.profile = profile;
         this.mNumOfTabs = NumOfTabs;
     }
 
@@ -18,13 +22,13 @@ public class PagerAdapter extends FragmentStatePagerAdapter {
 
         switch (position) {
             case 0:
-                PhotosFragment photosFragment = new PhotosFragment();
+                PhotosFragment photosFragment = new PhotosFragment(profile);
                 return photosFragment;
             case 1:
-                InterestsFragment interestsFragment = new InterestsFragment();
+                InterestsFragment interestsFragment = new InterestsFragment(profile);
                 return interestsFragment;
             case 2:
-                DescriptionFragment descriptionFragment = new DescriptionFragment();
+                DescriptionFragment descriptionFragment = new DescriptionFragment(profile);
                 return descriptionFragment;
             default:
                 return null;

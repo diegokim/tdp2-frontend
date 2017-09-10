@@ -1,33 +1,28 @@
-package com.example.android.linkup;
+package com.example.android.linkup.login;
 
-
-import android.app.Activity;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.content.Intent;
-import android.hardware.camera2.params.Face;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.android.linkup.network.CustomJsonObjectRequest;
+import com.example.android.linkup.BaseActivity;
+import com.example.android.linkup.R;
+import com.example.android.linkup.network.Command;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkRequestQueue;
+import com.example.android.linkup.network.ToastErrorCommand;
+import com.example.android.linkup.network.login.LoginRequestGenerator;
+import com.example.android.linkup.profile.ProfileActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -42,7 +37,6 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 
-import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -61,22 +55,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
 
     private CallbackManager mCallbackManager;
 
-    public class AnErrorListener implements Response.ErrorListener {
-
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            Log.i(TAG, error.toString());
-        }
-    }
-
-    public class AnResponseListener implements Response.Listener<JSONObject> {
-
-        @Override
-        public void onResponse(JSONObject response) {
-            Log.i(TAG, response.toString());
-        }
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,10 +62,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
 
-        // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
-        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
+        initializeViews();
 
         // [START initialize_auth]
         // Initialize Firebase Auth
@@ -112,7 +87,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
         // Initialize Facebook Login button
         mCallbackManager = CallbackManager.Factory.create();
         LoginButton loginButton = (LoginButton) findViewById(R.id.button_facebook_login);
-        loginButton.setReadPermissions("email", "public_profile","user_photos","user_birthday","user_location","user_actions.books","user_actions.fitness","user_actions.music","user_actions.news","user_actions.video");
+        loginButton.setReadPermissions("email",
+                "public_profile","user_photos",
+                "user_birthday","user_location"
+                ,"user_actions.books","user_actions.fitness",
+                "user_actions.music","user_actions.news",
+                "user_actions.video", "user_posts");
         //,"publish_actions", "user_about_me","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","read_custom_friendlists"
         final Context context = this.getApplicationContext();
 
@@ -123,9 +103,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
-                JsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.GET,NetworkConfiguration.getInstance().serverAddr+"/login", new JSONObject(), new AnResponseListener(), new AnErrorListener());
-                request.setRetryPolicy(new DefaultRetryPolicy(10000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+                Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
+                Command onSuccessCommand = new ToastErrorCommand(context, "SUCCESS");
+
+                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand);
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+                //request.setRetryPolicy(new DefaultRetryPolicy(10000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                //NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+//                Intent intent = new Intent(context, ProfileActivity.class);
+//                startActivity(intent);
 
             }
 
@@ -148,6 +135,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
             }
         });
         // [END initialize_fblogin]
+    }
+
+    private void initializeViews () {
+        // Views
+        mStatusTextView = (TextView) findViewById(R.id.status);
+        mDetailTextView = (TextView) findViewById(R.id.detail);
+        findViewById(R.id.button_facebook_signout).setOnClickListener(this);
     }
 
     @Override
