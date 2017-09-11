@@ -20,7 +20,7 @@ public class GetProfileRequestGenerator {
         url += PROFILE_ENDPOINT;
         JSONObject obj = new JSONObject();
         GetProfileResponseListener responseListener = new GetProfileResponseListener(profileToFill);
-        GetProfileErrorListener errorListener = new GetProfileErrorListener(onErrorCommand);
+        GetProfileErrorListener errorListener = new GetProfileErrorListener(onErrorCommand, profileToFill);
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
         return request;
     }

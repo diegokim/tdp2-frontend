@@ -14,15 +14,17 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
 
     private Command command;
     private Photos photos;
+    private Command hideProgressBar;
 
-    public LoginResponseListener(Command onSuccessCommand, Photos photos) {
+    public LoginResponseListener(Command onSuccessCommand, Command hideProgressBar, Photos photos) {
         this.command = onSuccessCommand;
         this.photos = photos;
+        this.hideProgressBar = hideProgressBar;
     }
 
     @Override
     public void onResponse(JSONObject response) {
-
+        hideProgressBar.excecute();
         try {
             JSONArray photos = response.getJSONArray(PHOTOS_KEY);
             for (int i =0 ; i< photos.length() ; i++) {

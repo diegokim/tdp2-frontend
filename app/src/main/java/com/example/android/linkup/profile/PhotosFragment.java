@@ -44,8 +44,12 @@ public class PhotosFragment extends Fragment implements Observer{
                 imageView.setPadding(2, 2, 2, 2);
                 Base64Converter converter = new Base64Converter();
                 Bitmap bitmap = converter.Base64ToBitmap(profile.photos[i]);
+                bitmap = converter.resizeBitmap(bitmap, 600);
+
                 imageView.setImageBitmap(bitmap);
-                imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
+                //imageView.setScaleType(ImageView.ScaleType.FIT_XY);
+
                 layout.addView(imageView);
             }
         }
@@ -61,7 +65,7 @@ public class PhotosFragment extends Fragment implements Observer{
                 imageView.setPadding(2, 2, 2, 2);
                 Base64Converter converter = new Base64Converter();
                 Bitmap bitmap = converter.Base64ToBitmap(profile.photos[i]);
-                bitmap = converter.getResizedBitmap(bitmap, 1600);
+                bitmap = converter.resizeBitmap(bitmap, 600);
 
                 imageView.setImageBitmap(bitmap);
 

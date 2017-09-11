@@ -15,6 +15,17 @@ public class Profile extends Observable {
     public String photos[];
     public String profilePhoto;
 
+    public Profile () {
+        name = "";
+        interests = new String[0];
+        description = "";
+        gender = "";
+        ocupation = "";
+        photos = new String[0];
+        profilePhoto = "";
+        age = 18;
+    }
+
     public void commitChanges() {
         setChanged();
         notifyObservers();

@@ -14,4 +14,9 @@
         android:textColor="@color/colorPrimary"
         android:textSize="18sp" />
 
+    <ListView
+        android:id="@+id/interests_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
 </FrameLayout>

@@ -2,17 +2,23 @@ package com.example.android.linkup.profile;
 
 
 
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.android.linkup.R;
+import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkRequestQueue;
@@ -20,6 +26,8 @@ import com.example.android.linkup.network.ToastErrorCommand;
 import com.example.android.linkup.network.get_profile.GetProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfilePagerAdapter;
 import com.example.android.linkup.utils.Base64Converter;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -34,6 +42,7 @@ public class ProfileActivity extends FragmentActivity implements Observer {
     private ImageView photo;
     private Profile profile;
     private Base64Converter photoConverter;
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,33 @@ public class ProfileActivity extends FragmentActivity implements Observer {
         findAndInitializeViews();
         setUpTabLayout();
         setUpAppToolBar();
+        showProgressDialog();
         sendGetProfileRequest();
+    }
+
+
+    public void showProgressDialog() {
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setMessage(getString(R.string.loading));
+            mProgressDialog.setIndeterminate(true);
+        }
+        mProgressDialog.show();
+    }
+
+    public void hideProgressDialog() {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+    }
+
+    public void signOut() {
+        FirebaseAuth.getInstance().signOut();
+        LoginManager.getInstance().logOut();
+        NetworkConfiguration.getInstance().accessToken = "-1";
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void findAndInitializeViews() {
@@ -89,6 +124,15 @@ public class ProfileActivity extends FragmentActivity implements Observer {
     private void setUpAppToolBar() {
         TextView appBarTitle = (TextView) findViewById(R.id.app_bar_title);
         appBarTitle.setText(PROFILE_APP_BAR_TEXT);
+        Button button = (Button) findViewById(R.id.log_out);
+        button.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ProfileActivity.this.signOut();
+            }
+        });
+
     }
 
     private void sendGetProfileRequest(){
@@ -99,11 +143,13 @@ public class ProfileActivity extends FragmentActivity implements Observer {
 
     @Override
     public void update(Observable o, Object arg) {
-        Log.i("PROFILE", profile.toString());
-        photo.setImageBitmap(photoConverter.Base64ToBitmap(profile.profilePhoto));
-        name.setText(profile.name);
-        age.setText(Integer.toString(profile.age) + " Años");
-        ocupation.setText(profile.ocupation);
-        education.setText(profile.education);
+        hideProgressDialog();
+        if (profile.name != null) {
+            photo.setImageBitmap(photoConverter.Base64ToBitmap(profile.profilePhoto));
+            name.setText(profile.name);
+            age.setText(Integer.toString(profile.age) + " Años");
+            ocupation.setText(profile.ocupation);
+            education.setText(profile.education);
+        }
     }
 }

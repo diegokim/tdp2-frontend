@@ -69,6 +69,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
 
+        if ( !NetworkConfiguration.getInstance().accessToken.equals("-1")) {
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            finish();
+        }
         photosToSelectFrom = new Photos();
         photosToSelectFrom.addObserver(this);
 
@@ -85,7 +90,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 "public_profile","user_photos",
                 "user_birthday","user_location"
                 ,"user_actions.books","user_actions.fitness",
-                "user_actions.music","user_actions.news",
+                "user_actions.music","user_actions.news", "user_work_history",
                 "user_actions.video", "user_posts");
         //,"publish_actions", "user_about_me","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","read_custom_friendlists"
         final Context context = LoginActivity.this;
@@ -193,9 +198,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                                     Toast.LENGTH_SHORT).show();
                         }
                         sendLoginRequest();
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
                     }
                 });
     }
@@ -211,6 +213,12 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             }
         };
         Command onSuccessCommand = new SelectPhotosCommand(this, getLayoutInflater(), photosToSelectFrom, LoginActivity.this);
+        Command hideProgressBarCommand = new Command() {
+            @Override
+            public void excecute() {
+                hideProgressDialog();
+            }
+        };
 
 //                Command onErrorCommand = new Command() {
 //                    @Override
@@ -221,7 +229,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 //                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
 
 
-        Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, this, photosToSelectFrom);
+        Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, hideProgressBarCommand, this, photosToSelectFrom);
         NetworkRequestQueue.getInstance(this).addToRequestQueue(request);
 
     }
