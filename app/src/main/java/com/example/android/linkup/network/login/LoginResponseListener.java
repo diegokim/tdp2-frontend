@@ -1,13 +1,14 @@
 package com.example.android.linkup.network.login;
 
+import android.util.Log;
+
 import com.android.volley.Response;
 import com.example.android.linkup.network.Command;
+import com.example.android.linkup.network.DisplayLoginErrorCommand;
 
-/**
- * Created by diegokim on 9/10/17.
- */
+import org.json.JSONObject;
 
-public class LoginResponseListener implements Response.Listener {
+public class LoginResponseListener implements Response.Listener <JSONObject> {
     private Command command;
 
     public LoginResponseListener(Command onSuccessCommand) {
@@ -15,7 +16,8 @@ public class LoginResponseListener implements Response.Listener {
     }
 
     @Override
-    public void onResponse(Object response) {
+    public void onResponse(JSONObject response) {
+        Log.d("ServerResponse","GET /login request success");
         command.excecute();
     }
 }

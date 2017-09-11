@@ -17,7 +17,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
+import com.example.android.linkup.network.ChangeActivityCommand;
 import com.example.android.linkup.network.Command;
+import com.example.android.linkup.network.DisplayLoginErrorCommand;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkRequestQueue;
 import com.example.android.linkup.network.ToastErrorCommand;
@@ -76,6 +78,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
+                    LoginManager.getInstance().logOut();
+                    updateUI(null);
                     Log.d(TAG, "onAuthStateChanged:signed_out");
                 }
                 // ...
@@ -104,15 +108,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
 
-                Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
-                Command onSuccessCommand = new ToastErrorCommand(context, "SUCCESS");
+                Command onErrorCommand = new Command() {
+                    @Override
+                    public void excecute() {
+                        signOut();
+                    }
+                };
+                Command onSuccessCommand = new ChangeActivityCommand(context);
 
-                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand);
+                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, context);
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
-                //request.setRetryPolicy(new DefaultRetryPolicy(10000,1,DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-                //NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
-//                Intent intent = new Intent(context, ProfileActivity.class);
-//                startActivity(intent);
 
             }
 
@@ -202,9 +207,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener{
     // [END auth_with_facebook]
 
     public void signOut() {
+        Log.d(TAG,"SignOut...");
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-
         updateUI(null);
     }
 
