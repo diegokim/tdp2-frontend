@@ -103,7 +103,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                         signOut();
                     }
                 };
-                Command onSuccessCommand = new ChangeActivityCommand(context,inflater,photosToSelectFrom);
+                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
 
                 Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, context, photosToSelectFrom);
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
