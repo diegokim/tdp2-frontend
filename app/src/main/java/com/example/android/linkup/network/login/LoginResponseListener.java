@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 public class LoginResponseListener implements Response.Listener<JSONObject> {
     private static final String PHOTOS_KEY = "photos";
+
     private Command command;
     private Photos photos;
 
@@ -21,6 +22,7 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
+
         try {
             JSONArray photos = response.getJSONArray(PHOTOS_KEY);
             for (int i =0 ; i< photos.length() ; i++) {

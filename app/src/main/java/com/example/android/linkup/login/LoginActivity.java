@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.android.volley.Request;
 import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
+import com.example.android.linkup.network.ChangeActivityCommand;
 import com.example.android.linkup.login.photo_selection.SelectPhotosCommand;
 import com.example.android.linkup.network.Command;
 import com.example.android.linkup.network.NetworkConfiguration;
@@ -102,7 +103,16 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
                 Command onSuccessCommand = new SelectPhotosCommand(context, inflater, photosToSelectFrom, activity);
 
-                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, photosToSelectFrom);
+//                Command onErrorCommand = new Command() {
+//                    @Override
+//                    public void excecute() {
+//                        signOut();
+//                    }
+//                };
+//                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
+
+
+                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, context, photosToSelectFrom);
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
 
             }
@@ -210,9 +220,9 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     // [END auth_with_facebook]
 
     public void signOut() {
+        Log.d(TAG,"SignOut...");
         mAuth.signOut();
         LoginManager.getInstance().logOut();
-
         updateUI(null);
     }
 
