@@ -37,7 +37,7 @@ public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionVi
             String photo = base64Photos.get(i);
             Base64Converter converter = new Base64Converter();
             Bitmap bitmap = converter.Base64ToBitmap(photo);
-            bitmap = converter.resizeBitmap(bitmap,1200);
+            bitmap = converter.resizeBitmap(bitmap,600);
             photos.add(bitmap);
         }
 

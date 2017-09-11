@@ -99,22 +99,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
-
-                Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
-                Command onSuccessCommand = new SelectPhotosCommand(context, inflater, photosToSelectFrom, activity);
-
-//                Command onErrorCommand = new Command() {
-//                    @Override
-//                    public void excecute() {
-//                        signOut();
-//                    }
-//                };
-//                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
-
-
-                Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, context, photosToSelectFrom);
-                NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
-
             }
 
             @Override
@@ -202,15 +186,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
                         }
-
+                        sendLoginRequest();
                         // [START_EXCLUDE]
                         hideProgressDialog();
                         // [END_EXCLUDE]
@@ -218,6 +200,31 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 });
     }
     // [END auth_with_facebook]
+
+
+    private void sendLoginRequest () {
+        //Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
+        Command onErrorCommand = new Command() {
+            @Override
+            public void excecute() {
+                signOut();
+            }
+        };
+        Command onSuccessCommand = new SelectPhotosCommand(this, getLayoutInflater(), photosToSelectFrom, LoginActivity.this);
+
+//                Command onErrorCommand = new Command() {
+//                    @Override
+//                    public void excecute() {
+//                        signOut();
+//                    }
+//                };
+//                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
+
+
+        Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, this, photosToSelectFrom);
+        NetworkRequestQueue.getInstance(this).addToRequestQueue(request);
+
+    }
 
     public void signOut() {
         Log.d(TAG,"SignOut...");
@@ -227,20 +234,20 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void updateUI(FirebaseUser user) {
-        hideProgressDialog();
-        if (user != null) {
-            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-        } else {
-            mStatusTextView.setText(R.string.signed_out);
-            mDetailTextView.setText(null);
-
-            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
-            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
-        }
+//        hideProgressDialog();
+//        if (user != null) {
+//            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
+//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+//
+//            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
+//            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
+//        } else {
+//            mStatusTextView.setText(R.string.signed_out);
+//            mDetailTextView.setText(null);
+//
+//            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
+//            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
+//        }
 
     }
 

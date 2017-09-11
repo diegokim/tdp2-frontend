@@ -23,7 +23,6 @@ import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkRequestQueue;
 import com.example.android.linkup.network.ToastErrorCommand;
 import com.example.android.linkup.network.register.RegisterData;
-import com.example.android.linkup.network.register.RegisterErrorListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 
 import java.util.ArrayList;
