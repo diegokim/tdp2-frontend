@@ -7,8 +7,11 @@
     <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
+        android:id="@+id/interests_fragment_text"
         android:layout_height="match_parent"
+        android:padding="8dp"
+        android:text="INTERESES"
         android:textColor="@color/colorPrimary"
-        android:text="INTERESES" />
+        android:textSize="18sp" />
 
 </FrameLayout>

@@ -1,5 +1,6 @@
 package com.example.android.linkup.login;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -21,6 +22,7 @@ import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkRequestQueue;
 import com.example.android.linkup.network.ToastErrorCommand;
 import com.example.android.linkup.network.login.LoginRequestGenerator;
+import com.example.android.linkup.profile.ProfileActivity;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -87,6 +89,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         //,"publish_actions", "user_about_me","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","read_custom_friendlists"
         final Context context = LoginActivity.this;
         final LayoutInflater inflater = getLayoutInflater();
+        final Activity activity = LoginActivity.this;
 
         loginButton.registerCallback(mCallbackManager, new FacebookCallback<LoginResult>() {
             @Override
@@ -97,10 +100,11 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
 
                 Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
-                Command onSuccessCommand = new SelectPhotosCommand(context, inflater, photosToSelectFrom);
+                Command onSuccessCommand = new SelectPhotosCommand(context, inflater, photosToSelectFrom, activity);
 
                 Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, photosToSelectFrom);
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+
             }
 
             @Override

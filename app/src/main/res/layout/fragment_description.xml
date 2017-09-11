@@ -6,8 +6,12 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/description_fragment_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Descripción" />
+        android:layout_gravity="center"
+        android:text="Descripción"
+        android:layout_margin="8dp"
+        android:textSize="24sp" />
 
 </FrameLayout>

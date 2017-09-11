@@ -19,6 +19,7 @@ import com.example.android.linkup.network.NetworkRequestQueue;
 import com.example.android.linkup.network.ToastErrorCommand;
 import com.example.android.linkup.network.get_profile.GetProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfilePagerAdapter;
+import com.example.android.linkup.utils.Base64Converter;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -32,11 +33,14 @@ public class ProfileActivity extends FragmentActivity implements Observer {
     private TextView education;
     private ImageView photo;
     private Profile profile;
+    private Base64Converter photoConverter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.photoConverter = new Base64Converter();
         this.profile = new Profile();
+        this.profile.addObserver(this);
         setContentView(R.layout.activity_profile);
         findAndInitializeViews();
         setUpTabLayout();
@@ -96,8 +100,9 @@ public class ProfileActivity extends FragmentActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         Log.i("PROFILE", profile.toString());
+        photo.setImageBitmap(photoConverter.Base64ToBitmap(profile.profilePhoto));
         name.setText(profile.name);
-        age.setText(profile.age);
+        age.setText(Integer.toString(profile.age) + " Años");
         ocupation.setText(profile.ocupation);
         education.setText(profile.education);
     }

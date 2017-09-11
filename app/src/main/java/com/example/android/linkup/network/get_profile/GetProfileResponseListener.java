@@ -22,7 +22,7 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
     private static final String PROFILE_PHOTO_KEY = "photo";
     private static final String PHOTOS_KEY = "photos";
     private static final String NAME_KEY = "name";
-    private static final String BIRTHDATE_KEY = "birthdate";
+    private static final String BIRTHDAY_KEY = "birthday";
 
     private Profile profileToFill;
 
@@ -33,8 +33,8 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
     @Override
     public void onResponse(JSONObject response) {
         try {
-            String birthdate = response.getString(BIRTHDATE_KEY);
-            profileToFill.age = getAgeFromBirthDate(birthdate);
+            String birthday = response.getString(BIRTHDAY_KEY);
+            profileToFill.age = getAgeFromBirthDay(birthday);
 
             profileToFill.name = response.getString(NAME_KEY);
             profileToFill.description = response.getString(DESCRIPTION_KEY);
@@ -59,7 +59,7 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
 
 
 
-    public int getAgeFromBirthDate (String birthdate) {
+    public int getAgeFromBirthDay(String birthdate) {
         String partsOfBirthdate[] = birthdate.split("/");
         int day = Integer.parseInt(partsOfBirthdate[0]);
         int month = Integer.parseInt(partsOfBirthdate[1]);

@@ -1,5 +1,6 @@
 package com.example.android.linkup.login.photo_selection;
 
+import android.app.Activity;
 import android.content.Context;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -10,32 +11,45 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.example.android.linkup.R;
 import com.example.android.linkup.login.Photos;
+import com.example.android.linkup.login.RegisterOnSuccessCommand;
 import com.example.android.linkup.network.Command;
+import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkRequestQueue;
+import com.example.android.linkup.network.ToastErrorCommand;
+import com.example.android.linkup.network.register.RegisterData;
+import com.example.android.linkup.network.register.RegisterErrorListener;
+import com.example.android.linkup.network.register.RegisterRequestGenerator;
 
 import java.util.ArrayList;
 
 public class SelectPhotosCommand implements Command {
 
     private final Context context;
+    private final Activity activity;
     private final LayoutInflater inflater;
     private Photos photos;
     private int amountOfPhotosSelected;
     private ArrayList<String> photosSelected;
     private String profilePhoto;
+    private String description;
 
     private android.app.AlertDialog mDialog;
 
-    public SelectPhotosCommand (Context context, LayoutInflater inflater, Photos photos) {
+    public SelectPhotosCommand (Context context, LayoutInflater inflater, Photos photos, Activity activity) {
         this.photos = photos;
         this.context = context;
+        this.activity = activity;
         this.inflater = inflater;
         this.amountOfPhotosSelected = 0;
         this.photosSelected = new ArrayList<>();
         this.profilePhoto = "";
+        this.description = "";
     }
 
     @Override
@@ -89,8 +103,6 @@ public class SelectPhotosCommand implements Command {
 
         mDialog = dialog;
         dialog.show();
-
-
     }
 
     class FivePhotosSelectedOkListener implements View.OnClickListener {
@@ -168,8 +180,43 @@ public class SelectPhotosCommand implements Command {
             if (!profilePhoto.equals("")) {
                 //TODO: communicarse tirar el request e ir al perfil o a descripcion.
                 mDialog.dismiss();
+                createDescriptionInputDialog();
             }
         }
     }
+
+
+    public void createDescriptionInputDialog() {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+        View mView = inflater.inflate(R.layout.description_input_dialog, null);
+
+        final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
+
+        mBuilder.setView(mView);
+        mBuilder.setTitle("Contanos un poquito acerca de vos");
+        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                description = descriptionTextView.getText().toString();
+                Command  onSuccessCommand = new RegisterOnSuccessCommand(activity);
+                Command onErrCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
+
+                RegisterData data = new RegisterData();
+                data.description = description;
+                data.photos = photosSelected;
+                data.profilePhoto = profilePhoto;
+
+                Request registerRequest = RegisterRequestGenerator.generate(onSuccessCommand, onErrCommand, data);
+                NetworkRequestQueue.getInstance(context).addToRequestQueue(registerRequest);
+            }
+        } );
+        mBuilder.setNegativeButton("Cancelar", null );
+
+        AlertDialog dialog = mBuilder.create();
+
+        mDialog = dialog;
+        dialog.show();
+    }
+
 
 }
