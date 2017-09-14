@@ -1,0 +1,63 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.linkup.profile.InterestsFragment"
+    android:orientation="vertical">
+
+    <!-- TODO: Update blank fragment layout -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingTop="32dp"
+        android:paddingRight="32dp"
+        android:paddingBottom="16dp"
+        android:paddingLeft="48dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorAccent"
+            android:text="Tenemos un problema!"
+            android:id="@+id/no_interests_title"
+            android:padding="8dp"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:id="@+id/no_interests_text"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="@string/no_interests_text"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="48sp"
+        android:paddingRight="32sp">
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="36dp" />
+
+        <TextView
+            android:id="@+id/interests_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Mis intereses"
+            android:textSize="14sp"
+            android:textColor="@color/colorAccent"
+            android:paddingBottom="16sp"/>
+        <ListView
+            android:id="@+id/interests_list_view"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />    
+    </LinearLayout>
+    
+
+</FrameLayout>

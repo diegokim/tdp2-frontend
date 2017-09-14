@@ -1,0 +1,81 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.android.linkup.profile.DescriptionFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="8dp"
+        android:paddingLeft="48dp"
+        android:paddingRight="32dp"
+        android:orientation="vertical">
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:text="Trabaja en"
+            android:textColor="@color/titleText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/work_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:text="Descripción"
+            android:textSize="14sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center"
+            android:text="Estudio en"
+            android:textColor="@color/titleText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/education_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+
+            android:layout_gravity="center"
+            android:text="Descripción"
+            android:textSize="14sp" />
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:text="Descripción"
+            android:textColor="@color/titleText"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/description_fragment_text"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="16dp"
+            android:layout_gravity="center"
+            android:text="Descripción"
+            android:textSize="14sp" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="36dp" />
+    </LinearLayout>
+    <!-- TODO: Update blank fragment layout -->
+
+
+</ScrollView>
