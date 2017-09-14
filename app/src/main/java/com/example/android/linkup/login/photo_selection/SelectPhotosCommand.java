@@ -87,7 +87,6 @@ public class SelectPhotosCommand implements Command {
         mBuilder.setView(mView);
         mBuilder.setTitle("Selecciona 5 fotos");
         mBuilder.setPositiveButton("OK", null );
-        mBuilder.setNegativeButton("Cancelar", null );
 
         AlertDialog dialog = mBuilder.create();
 
@@ -192,7 +191,7 @@ public class SelectPhotosCommand implements Command {
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
 
         mBuilder.setView(mView);
-        mBuilder.setTitle("Contanos un poquito acerca de vos");
+        mBuilder.setTitle("Descripcion");
         mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -209,7 +208,6 @@ public class SelectPhotosCommand implements Command {
                 NetworkRequestQueue.getInstance(context).addToRequestQueue(registerRequest);
             }
         } );
-        mBuilder.setNegativeButton("Cancelar", null );
 
         AlertDialog dialog = mBuilder.create();
 
