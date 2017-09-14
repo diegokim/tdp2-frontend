@@ -39,7 +39,7 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
             profileToFill.name = response.getString(NAME_KEY);
             profileToFill.description = response.getString(DESCRIPTION_KEY);
             profileToFill.gender = response.getString(GENDER_KEY);
-            profileToFill.ocupation = response.getString(OCUPATION_KEY);
+            profileToFill.work = response.getString(OCUPATION_KEY);
             profileToFill.education = response.getString(EDUCATION_KEY);
             profileToFill.profilePhoto = response.getString(PROFILE_PHOTO_KEY);
 

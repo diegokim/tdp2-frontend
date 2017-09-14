@@ -3,12 +3,25 @@ package com.example.android.linkup.profile;
 
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.AttributeSet;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -35,10 +48,14 @@ import java.util.Observer;
 public class ProfileActivity extends FragmentActivity implements Observer {
 
     private static final String PROFILE_APP_BAR_TEXT = "Mi Perfil" ;
+    public static final String LOGGED_IN = "com.example.android.weatherapp.LOGGED_IN";
+    public static final String ACCESS_TOKEN = "com.example.android.weatherapp.ACCESS_TOKEN";
+
     private TextView name;
     private TextView age;
-    private TextView ocupation;
-    private TextView education;
+    private TextView gender;
+//    private TextView work;
+//    private TextView education;
     private ImageView photo;
     private Profile profile;
     private Base64Converter photoConverter;
@@ -50,14 +67,23 @@ public class ProfileActivity extends FragmentActivity implements Observer {
         this.photoConverter = new Base64Converter();
         this.profile = new Profile();
         this.profile.addObserver(this);
+
         setContentView(R.layout.activity_profile);
         findAndInitializeViews();
+        saveLoginState();
         setUpTabLayout();
         setUpAppToolBar();
         showProgressDialog();
         sendGetProfileRequest();
     }
 
+    public void saveLoginState () {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putString(ACCESS_TOKEN, NetworkConfiguration.getInstance().accessToken);
+        editor.putBoolean(LOGGED_IN, true);
+        editor.apply();
+    }
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
@@ -78,16 +104,25 @@ public class ProfileActivity extends FragmentActivity implements Observer {
         FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
         NetworkConfiguration.getInstance().accessToken = "-1";
+        saveLogoutState();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
+    public void saveLogoutState () {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putBoolean(LOGGED_IN, false);
+        editor.apply();
+    }
+
     private void findAndInitializeViews() {
         name = (TextView) findViewById(R.id.profile_name);
         age = (TextView) findViewById(R.id.profile_age);
-        education =(TextView) findViewById(R.id.profile_education);
-        ocupation = (TextView) findViewById(R.id.profile_ocupation);
+        gender = (TextView) findViewById(R.id.profile_gender);
+//        education =(TextView) findViewById(R.id.profile_education);
+//        work = (TextView) findViewById(R.id.profile_ocupation);
         photo = (ImageView) findViewById(R.id.profile_picture);
     }
 
@@ -145,11 +180,14 @@ public class ProfileActivity extends FragmentActivity implements Observer {
     public void update(Observable o, Object arg) {
         hideProgressDialog();
         if (profile.name != null) {
-            photo.setImageBitmap(photoConverter.Base64ToBitmap(profile.profilePhoto));
+            Bitmap bitmap = photoConverter.Base64ToBitmap(profile.profilePhoto);
+            bitmap = photoConverter.getRoundedCornerBitmap(bitmap,Color.WHITE,16,5,this);
+            photo.setImageBitmap(bitmap);
             name.setText(profile.name);
             age.setText(Integer.toString(profile.age) + " Años");
-            ocupation.setText(profile.ocupation);
-            education.setText(profile.education);
+            gender.setText(profile.gender);
         }
     }
+
+
 }

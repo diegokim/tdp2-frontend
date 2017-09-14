@@ -1,7 +1,6 @@
 package com.example.android.linkup.models;
 
 
-import java.util.ArrayList;
 import java.util.Observable;
 
 public class Profile extends Observable {
@@ -10,17 +9,19 @@ public class Profile extends Observable {
     public String description;
     public String gender;
     public int age;
-    public String ocupation;
+    public String work;
     public String education;
     public String photos[];
     public String profilePhoto;
 
+
     public Profile () {
-        name = "";
+        name = "Diego Kim";
         interests = new String[0];
         description = "";
+        education = "FIUBA";
         gender = "";
-        ocupation = "";
+        work = "Estudiante";
         photos = new String[0];
         profilePhoto = "";
         age = 18;

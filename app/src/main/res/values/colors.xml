@@ -8,7 +8,7 @@
     <!--<color name="background">#ffffff</color>-->
     <!--<color name="facebook">#3b5998</color>-->
 
-    <color name="colorPrimary">#009688</color>
+    <color name="colorPrimary">#607d8b</color>
     <color name="colorPrimaryDark">#00695C</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorLight">#B2DFDB</color>
@@ -16,6 +16,8 @@
     <color name="textColorPrimary">@android:color/black</color>
     <color name="background">#ffffff</color>
     <color name="facebook">#3b5998</color>
+    <color name="titleText">#FF4081</color>
+    <!--<color name="titleText">#7E57C2</color>-->
 
     <!--<color name="colorPrimary">#039BE5</color>-->
     <!--<color name="colorPrimaryDark">#0288D1</color>-->

@@ -82,6 +82,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_interests_text">Aun no tienes intereses, los cuales son una parte fundamental para poder recomendarte personas, por favor selecciona algunos en facebook, para que podamos brindarte una mejor experiencia!</string>
 
 
 </resources>

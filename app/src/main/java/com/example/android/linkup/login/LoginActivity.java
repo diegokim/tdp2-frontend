@@ -3,6 +3,7 @@ package com.example.android.linkup.login;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
@@ -68,12 +69,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
-
-        if ( !NetworkConfiguration.getInstance().accessToken.equals("-1")) {
+        SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
+        if ( sharedPref.getBoolean(ProfileActivity.LOGGED_IN, false)) {
+            NetworkConfiguration.getInstance().accessToken = sharedPref.getString(ProfileActivity.ACCESS_TOKEN,"");
             Intent intent = new Intent(this, ProfileActivity.class);
             startActivity(intent);
             finish();
         }
+
         photosToSelectFrom = new Photos();
         photosToSelectFrom.addObserver(this);
 
@@ -205,7 +208,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
 
     private void sendLoginRequest () {
-        //Command onErrorCommand = new ToastErrorCommand(context, NetworkConfiguration.SERVER_REQUEST_ERROR);
+
         Command onErrorCommand = new Command() {
             @Override
             public void excecute() {
@@ -219,15 +222,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 hideProgressDialog();
             }
         };
-
-//                Command onErrorCommand = new Command() {
-//                    @Override
-//                    public void excecute() {
-//                        signOut();
-//                    }
-//                };
-//                Command onSuccessCommand = new SelectPhotosCommand(context,inflater,photosToSelectFrom);
-
 
         Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, hideProgressBarCommand, this, photosToSelectFrom);
         NetworkRequestQueue.getInstance(this).addToRequestQueue(request);
@@ -266,6 +260,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             signOut();
         }
     }
+
+
 
 
     @Override
