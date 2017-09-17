@@ -1,20 +1,15 @@
-package com.example.android.linkup.login.photo_selection;
+package com.example.android.linkup.login.register_parameters_selection;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.utils.Base64Converter;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Base64;
 import android.widget.ImageView;
 
 public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionViewHolder> {

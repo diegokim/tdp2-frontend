@@ -1,13 +1,13 @@
 package com.example.android.linkup.network.register;
 
-import android.app.Activity;
-
 import com.android.volley.Request;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.example.android.linkup.network.Command;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.WebServiceManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,7 +21,7 @@ public class RegisterRequestGenerator {
     private static final String PHOTOS_KEY = "photos" ;
     private static final String DESCRIPTION_KEY = "description";
 
-    public static Request generate(Command onSuccessCommand, Command onErrCommand, RegisterData data) {
+    public static Request generate(RegisterData data) {
         String url = NetworkConfiguration.getInstance().serverAddr;
         url += REGISTER_ENDPOINT;
         JSONObject obj = new JSONObject();
@@ -37,9 +37,30 @@ public class RegisterRequestGenerator {
         } catch (Exception e) {
 
         }
-        RegisterErrorListener errorListener = new RegisterErrorListener(onErrCommand);
-        RegisterResponseListener responseListener = new RegisterResponseListener(onSuccessCommand);
+        RegisterErrorListener errorListener = new RegisterErrorListener();
+        RegisterResponseListener responseListener = new RegisterResponseListener();
         Request request = new CustomJsonObjectRequest(REGISTER_METHOD, url, obj,responseListener, errorListener);
         return request;
     }
+
+    public static class RegisterErrorListener implements Response.ErrorListener {
+
+        @Override
+        public void onErrorResponse(VolleyError error) {
+            //TODO: handle error message
+            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("error"));
+        }
+    }
+
+    public static class RegisterResponseListener implements Response.Listener<JSONObject> {
+
+        @Override
+        public void onResponse(JSONObject response) {
+            EventBus.getDefault().post(new RegisterSuccessEvent());
+        }
+
+        public static class RegisterSuccessEvent {
+        }
+    }
+
 }

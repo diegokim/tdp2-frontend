@@ -31,4 +31,17 @@ public class Profile extends Observable {
         setChanged();
         notifyObservers();
     }
+
+    public void update(Profile profile) {
+        this.name = profile.name;
+        this.interests = profile.interests;
+        this.description = profile.description;
+        this.education = profile.education;
+        this.gender = profile.gender;
+        this.work = profile.work;
+        this.photos = profile.photos;
+        this.profilePhoto = profile.profilePhoto;
+        this.age = profile.age;
+
+    }
 }
