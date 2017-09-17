@@ -4,7 +4,9 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.WebServiceManager;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,39 +26,33 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
     private static final String NAME_KEY = "name";
     private static final String BIRTHDAY_KEY = "birthday";
 
-    private Profile profileToFill;
-
-    public GetProfileResponseListener (Profile profileToFill) {
-        this.profileToFill = profileToFill;
-    }
-
     @Override
     public void onResponse(JSONObject response) {
+        Profile profile = new Profile();
         try {
             String birthday = response.getString(BIRTHDAY_KEY);
-            profileToFill.age = getAgeFromBirthDay(birthday);
+            profile.age = getAgeFromBirthDay(birthday);
 
-            profileToFill.name = response.getString(NAME_KEY);
-            profileToFill.description = response.getString(DESCRIPTION_KEY);
-            profileToFill.gender = response.getString(GENDER_KEY);
-            profileToFill.work = response.getString(OCUPATION_KEY);
-            profileToFill.education = response.getString(EDUCATION_KEY);
-            profileToFill.profilePhoto = response.getString(PROFILE_PHOTO_KEY);
+            profile.name = response.getString(NAME_KEY);
+            profile.description = response.getString(DESCRIPTION_KEY);
+            profile.gender = response.getString(GENDER_KEY);
+            profile.work = response.getString(OCUPATION_KEY);
+            profile.education = response.getString(EDUCATION_KEY);
+            profile.profilePhoto = response.getString(PROFILE_PHOTO_KEY);
 
             JSONArray photos = response.getJSONArray(PHOTOS_KEY);
-            profileToFill.photos = getStringArrayFrom(photos);
+            profile.photos = getStringArrayFrom(photos);
 
             JSONArray interests = response.getJSONArray(INTERESTS_KEY);
-            profileToFill.interests = getStringArrayFrom(interests);
+            profile.interests = getStringArrayFrom(interests);
 
-            profileToFill.commitChanges();
+            EventBus.getDefault().post(new GetProfileSuccessEvent(profile));
 
         } catch (Exception e) {
+            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("ERROR ALSKJDALSKDJASLKDJLK"));
             Log.e("ERROR", e.getStackTrace().toString());
         }
     }
-
-
 
 
     public int getAgeFromBirthDay(String birthdate) {
@@ -64,7 +60,7 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
         int day = Integer.parseInt(partsOfBirthdate[0]);
         int month = Integer.parseInt(partsOfBirthdate[1]);
         int year = Integer.parseInt(partsOfBirthdate[2]);
-        return getAge(year, month, day);
+        return getAge(year, month, day) + 1;
     }
 
     private int getAge(int year, int month, int day){
@@ -88,5 +84,12 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
             arr[i] = jsonArr.getString(i);
         }
         return arr;
+    }
+
+    public static class GetProfileSuccessEvent {
+        public Profile profile;
+        public GetProfileSuccessEvent( Profile profile ) {
+            this.profile = profile;
+        }
     }
 }

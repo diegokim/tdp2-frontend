@@ -1,4 +1,4 @@
-package com.example.android.linkup.network;
+package com.example.android.linkup.utils;
 
 public interface Command {
     void excecute();
