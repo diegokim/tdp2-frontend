@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.example.android.linkup.BaseActivity;
+import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
 import com.example.android.linkup.network.ChangeActivityCommand;
 import com.example.android.linkup.login.photo_selection.SelectPhotosCommand;
@@ -30,6 +31,7 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -61,14 +63,13 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private Photos photosToSelectFrom;
 
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
+/*
         SharedPreferences sharedPref = this.getPreferences(Context.MODE_PRIVATE);
         if ( sharedPref.getBoolean(ProfileActivity.LOGGED_IN, false)) {
             NetworkConfiguration.getInstance().accessToken = sharedPref.getString(ProfileActivity.ACCESS_TOKEN,"");
@@ -79,12 +80,14 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         photosToSelectFrom = new Photos();
         photosToSelectFrom.addObserver(this);
+*/
 
         initializeViews();
         initializeFirebaseAuth();
         initializeFacebookLoginButton();
 
     }
+
 
     private void initializeFacebookLoginButton() {
         mCallbackManager = CallbackManager.Factory.create();
@@ -95,7 +98,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 ,"user_actions.books","user_actions.fitness",
                 "user_actions.music","user_actions.news", "user_work_history",
                 "user_actions.video", "user_posts");
-        //,"publish_actions", "user_about_me","user_education_history","user_friends","user_games_activity","user_hometown","user_likes","user_posts","user_relationship_details","user_relationships","user_religion_politics","user_status","user_tagged_places","user_videos","user_website","user_work_history","user_events","read_custom_friendlists"
+
         final Context context = LoginActivity.this;
         final LayoutInflater inflater = getLayoutInflater();
         final Activity activity = LoginActivity.this;
@@ -107,6 +110,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                 handleFacebookAccessToken(loginResult.getAccessToken());
                 Log.d(TAG,loginResult.getAccessToken().getToken());
                 NetworkConfiguration.getInstance().accessToken = loginResult.getAccessToken().getToken();
+
             }
 
             @Override
@@ -149,8 +153,8 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
     private void initializeViews () {
         // Views
-        mStatusTextView = (TextView) findViewById(R.id.status);
-        mDetailTextView = (TextView) findViewById(R.id.detail);
+        //mStatusTextView = (TextView) findViewById(R.id.status);
+        //mDetailTextView = (TextView) findViewById(R.id.detail);
         findViewById(R.id.button_facebook_signout).setOnClickListener(this);
     }
 
@@ -159,6 +163,21 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
         updateUI(mAuth.getCurrentUser());
+        //Si estoy loggeado en facebook
+        if( AccessToken.getCurrentAccessToken() != null && Profile.getCurrentProfile() != null) {
+            Log.d(TAG,"Estoy loggeado con facebook!");
+            //Si estoy loggeado en firebase
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                Log.d(TAG,"Estoy loggeado con firebase!");
+                Intent intent = new Intent (this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            } else {
+                Log.d(TAG,"No estoy loggeado con Firebase");
+            }
+        } else {
+            Log.d(TAG, "No estoy Loggeado con Facebook!");
+        }
     }
 
     @Override
@@ -200,7 +219,7 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
-                        sendLoginRequest();
+                        //sendLoginRequest();
                     }
                 });
     }
@@ -225,7 +244,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
 
         Request request = LoginRequestGenerator.generate(onSuccessCommand, onErrorCommand, hideProgressBarCommand, this, photosToSelectFrom);
         NetworkRequestQueue.getInstance(this).addToRequestQueue(request);
-
     }
 
     public void signOut() {
@@ -236,21 +254,22 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
     }
 
     private void updateUI(FirebaseUser user) {
-//        hideProgressDialog();
-//        if (user != null) {
-//            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
-//            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-//
-//            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
-//            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
-//        } else {
-//            mStatusTextView.setText(R.string.signed_out);
-//            mDetailTextView.setText(null);
-//
-//            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
-//            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
-//        }
+        hideProgressDialog();
+        /*
+        if (user != null) {
+            mStatusTextView.setText(getString(R.string.facebook_status_fmt, user.getDisplayName()));
+            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
+            findViewById(R.id.button_facebook_login).setVisibility(View.GONE);
+            findViewById(R.id.button_facebook_signout).setVisibility(View.VISIBLE);
+        } else {
+            mStatusTextView.setText(R.string.signed_out);
+            mDetailTextView.setText(null);
+
+            findViewById(R.id.button_facebook_login).setVisibility(View.VISIBLE);
+            findViewById(R.id.button_facebook_signout).setVisibility(View.GONE);
+        }
+        */
     }
 
     @Override
@@ -260,9 +279,6 @@ public class LoginActivity extends BaseActivity implements View.OnClickListener,
             signOut();
         }
     }
-
-
-
 
     @Override
     public void update(Observable o, Object arg) {
