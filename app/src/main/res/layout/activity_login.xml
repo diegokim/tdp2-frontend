@@ -2,8 +2,104 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.linkup.LoginActivity">
+    android:weightSum="10"
+    android:orientation="vertical"
+    android:layout_weight="10"
+    android:background="@drawable/app_background"
+    >
+
+
+    <TextView
+            android:id="@+id/textView"
+            android:layout_width="188dp"
+            android:layout_height="69dp"
+            android:background="@color/logoTextBackground"
+            android:text="Link Up"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="50sp"
+
+        android:elevation="16dp"
+        app:layout_constraintTop_toTopOf="@+id/linearLayout"
+        android:layout_marginTop="178dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="8dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="284dp"
+        android:layout_weight="6.51"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:weightSum="1">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/title_bottom_margin"
+            android:text="@string/facebook_title_text"
+            android:textSize="40sp"
+            android:theme="@style/ThemeOverlay.MyTitleText" />
+
+        <TextView
+            android:id="@+id/status"
+            style="@style/ThemeOverlay.MyTextDetail"
+            android:layout_width="96dp"
+            android:layout_height="wrap_content"
+            android:text="@string/signed_out"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/detail"
+            style="@style/ThemeOverlay.MyTextDetail"
+            android:layout_width="wrap_content"
+            tools:text="Firebase User ID: 123456789abc"
+            android:layout_height="wrap_content" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/button_facebook_login"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="11dp"
+            android:paddingEnd="11dp"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="213dp"
+        android:layout_weight="3.15"
+        android:background="@drawable/logo_background"
+        android:elevation="12dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/linearLayout">
+
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
+
+
+
+

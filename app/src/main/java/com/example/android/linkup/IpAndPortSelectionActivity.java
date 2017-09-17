@@ -1,15 +1,17 @@
 package com.example.android.linkup;
 
+import android.app.Activity;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
-public class IpAndPortSelectionActivity extends AppCompatActivity {
+import com.example.android.linkup.login.LoginActivity;
+import com.example.android.linkup.network.NetworkConfiguration;
 
-    public static final String SERVER_ADDR_EXTRA = "SERVER ADDRESS EXTRA";
+public class IpAndPortSelectionActivity extends Activity {
+
     private static final String SERVER_PROTOCOL = "http://" ;
     private String IP_AND_PORT_SEPARATOR = ":";
     private EditText ipInput;
@@ -23,19 +25,18 @@ public class IpAndPortSelectionActivity extends AppCompatActivity {
         portInput = (EditText) findViewById(R.id.port_input);
     }
 
-
-    public void startApplication(View view) {
-        Intent intent = new Intent(this, LoginActivity.class);
+    public void setServerAddress() {
         String port = portInput.getText().toString();
         String ip = ipInput.getText().toString();
         String serverAddr = SERVER_PROTOCOL + ip + IP_AND_PORT_SEPARATOR + port;
         Log.i("SERVER ADDR" , serverAddr);
-        intent.putExtra(SERVER_ADDR_EXTRA,serverAddr);
-        startActivity(intent);
+        NetworkConfiguration.getInstance().serverAddr = serverAddr;
     }
 
-
-
-
-
+    public void startApplication(View view) {
+        setServerAddress();
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
