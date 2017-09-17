@@ -1,17 +1,17 @@
 package com.example.android.linkup;
 
+import android.support.v4.app.Fragment;
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
-import android.support.v7.app.AppCompatActivity;
 
-public class BaseActivity extends AppCompatActivity {
 
+public abstract class BaseFragment extends Fragment {
     @VisibleForTesting
     public ProgressDialog mProgressDialog;
 
     public void showProgressDialog() {
         if (mProgressDialog == null) {
-            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog = new ProgressDialog(this.getContext());
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
         }
@@ -30,5 +30,4 @@ public class BaseActivity extends AppCompatActivity {
         super.onStop();
         hideProgressDialog();
     }
-
 }

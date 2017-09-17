@@ -1,39 +1,36 @@
 package com.example.android.linkup;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.android.linkup.login.LoginActivity;
-import com.example.android.linkup.profile.ProfileFragment;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class MainActivity extends AppCompatActivity {
 
+public class BaseNavigationDrawerActivity extends BaseActivity {
     private DrawerLayout mDrawerLayout;
-    protected FrameLayout fragmentContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    }
+
+    protected void navigationDrawer() {
         // Adding Toolbar to Main screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
         // Create Navigation drawer and inlfate layout
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -47,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
             supportActionBar.setHomeAsUpIndicator(indicator);
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+
         // Set behavior of Navigation drawer
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -61,19 +59,16 @@ public class MainActivity extends AppCompatActivity {
                         switch (id) {
                             case R.id.item_profile:
                                 Log.d("DEBUG","Apreté mi perfil");
-                                ProfileFragment firstFragment = new ProfileFragment();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, firstFragment).commit();
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
                                 break;
                             case R.id.item_logout:
-                                Toast.makeText(MainActivity.this, "Cerrar sesion",
+                                Toast.makeText(BaseNavigationDrawerActivity.this, "Cerrar sesion",
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseAuth.getInstance().signOut();
                                 LoginManager.getInstance().logOut();
-                                startActivity(new Intent(MainActivity.this,LoginActivity.class));
+                                startActivity(new Intent(BaseNavigationDrawerActivity.this,LoginActivity.class));
                                 finish();
                                 break;
                         }
@@ -84,7 +79,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

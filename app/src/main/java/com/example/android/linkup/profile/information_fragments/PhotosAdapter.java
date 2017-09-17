@@ -1,4 +1,4 @@
-package com.example.android.linkup.profile;
+package com.example.android.linkup.profile.information_fragments;
 
 import android.content.Context;
 import android.graphics.Bitmap;
