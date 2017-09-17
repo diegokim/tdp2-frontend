@@ -5,10 +5,10 @@ import android.content.Intent;
 
 import android.os.Bundle;
 
-import android.support.annotation.NonNull;
 import android.widget.Toast;
 
 import com.example.android.linkup.BaseActivity;
+import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
 
 import com.example.android.linkup.login.register_parameters_selection.SelectPhotosCommand;
@@ -17,13 +17,10 @@ import com.example.android.linkup.network.login.LoginResponseListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.facebook.FacebookSdk;
+
 import com.facebook.login.widget.LoginButton;
 
 import com.facebook.appevents.AppEventsLogger;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -35,7 +32,6 @@ public class LoginActivity extends BaseActivity {
     private AuthManager authManager;
     private LoginButton loginButton;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,6 +42,8 @@ public class LoginActivity extends BaseActivity {
         findViews();
         final Activity activity = LoginActivity.this;
         authManager.initializeFacebookLoginButton(loginButton);
+
+
     }
 
     private void findViews() {
@@ -56,12 +54,18 @@ public class LoginActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         authManager.passActivityResultToFacebookSDK(requestCode, resultCode, data);
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        if (authManager.userIsLoggedIn()) {
+            Intent intent = new Intent (this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override
@@ -92,7 +96,4 @@ public class LoginActivity extends BaseActivity {
         startActivity(intent);
         finish();
     }
-
-
-
 }

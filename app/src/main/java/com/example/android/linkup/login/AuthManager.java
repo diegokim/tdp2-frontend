@@ -14,6 +14,7 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.Profile;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -104,6 +105,15 @@ public class AuthManager {
 
     public void passActivityResultToFacebookSDK (int requestCode, int resultCode, Intent data) {
         mCallbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public boolean userIsLoggedIn() {
+        if( AccessToken.getCurrentAccessToken() != null && Profile.getCurrentProfile() != null) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
