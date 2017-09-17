@@ -15,7 +15,7 @@ import com.example.android.linkup.login.register_parameters_selection.SelectPhot
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.login.LoginResponseListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
-import com.example.android.linkup.profile.ProfileActivity;
+import com.example.android.linkup.profile.ProfileFragment;
 import com.facebook.FacebookSdk;
 
 import com.facebook.login.widget.LoginButton;
@@ -92,7 +92,7 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onRegisterSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.RegisterSuccessEvent event) {
-        Intent intent = new Intent(this, ProfileActivity.class);
+        Intent intent = new Intent(this, ProfileFragment.class);
         startActivity(intent);
         finish();
     }

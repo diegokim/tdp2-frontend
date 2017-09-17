@@ -23,6 +23,9 @@ public class IpAndPortSelectionActivity extends Activity {
         setContentView(R.layout.activity_ip_and_port_selection);
         ipInput = (EditText) findViewById(R.id.ip_input);
         portInput = (EditText) findViewById(R.id.port_input);
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     public void setServerAddress() {

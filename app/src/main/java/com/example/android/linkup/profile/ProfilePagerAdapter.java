@@ -6,6 +6,9 @@ package com.example.android.linkup.profile;
         import android.support.v4.app.FragmentStatePagerAdapter;
 
         import com.example.android.linkup.models.Profile;
+        import com.example.android.linkup.profile.information_fragments.DescriptionFragment;
+        import com.example.android.linkup.profile.information_fragments.InterestsFragment;
+        import com.example.android.linkup.profile.information_fragments.PhotosFragment;
 
 public class ProfilePagerAdapter extends FragmentStatePagerAdapter {
     int mNumOfTabs;

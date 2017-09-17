@@ -1,4 +1,4 @@
-package com.example.android.linkup.profile;
+package com.example.android.linkup.profile.information_fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
