@@ -16,12 +16,12 @@ public class Profile extends Observable {
 
 
     public Profile () {
-        name = "Diego Kim";
+        name = "";
         interests = new String[0];
         description = "";
-        education = "FIUBA";
+        education = "";
         gender = "";
-        work = "Estudiante";
+        work = "";
         photos = new String[0];
         profilePhoto = "";
         age = 18;

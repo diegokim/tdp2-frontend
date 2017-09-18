@@ -12,6 +12,7 @@ import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
 
 import com.example.android.linkup.login.register_parameters_selection.SelectPhotosCommand;
+import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.login.LoginResponseListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
@@ -40,7 +41,6 @@ public class LoginActivity extends BaseActivity {
         setContentView(R.layout.activity_login);
         authManager = AuthManager.getInstance(this);
         findViews();
-        final Activity activity = LoginActivity.this;
         authManager.initializeFacebookLoginButton(loginButton);
 
 
@@ -62,6 +62,7 @@ public class LoginActivity extends BaseActivity {
         super.onStart();
         EventBus.getDefault().register(this);
         if (authManager.userIsLoggedIn()) {
+            NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
             Intent intent = new Intent (this, MainActivity.class);
             startActivity(intent);
             finish();
@@ -92,7 +93,7 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onRegisterSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.RegisterSuccessEvent event) {
-        Intent intent = new Intent(this, ProfileFragment.class);
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
     }
