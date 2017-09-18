@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
+                                startActivity(new Intent (MainActivity.this,SettingsActivity.class));
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
