@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -78,10 +79,13 @@ public class SelectPhotosCommand implements Command {
         AlertDialog dialog = mBuilder.create();
 
         dialog.setOnShowListener(onShowListener);
-        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
-            public void onDismiss(DialogInterface dialog) {
+            public void onCancel(DialogInterface dialog) {
+                Log.e("LOGOUT" , "laksjdlfkajsdlfj");
                 AuthManager.getInstance(activity).signOut();
+
             }
         });
         mDialog = dialog;
@@ -172,7 +176,13 @@ public class SelectPhotosCommand implements Command {
         } );
 
         AlertDialog dialog = mBuilder.create();
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                AuthManager.getInstance(activity).signOut();
 
+            }
+        });
         mDialog = dialog;
         dialog.show();
     }

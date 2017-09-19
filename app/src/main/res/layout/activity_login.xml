@@ -46,6 +46,10 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:weightSum="1">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="16dp" />
+
         <TextView
             android:id="@+id/title_text"
             android:layout_width="wrap_content"
@@ -55,20 +59,10 @@
             android:textSize="40sp"
             android:theme="@style/ThemeOverlay.MyTitleText" />
 
-        <TextView
-            android:id="@+id/status"
-            style="@style/ThemeOverlay.MyTextDetail"
-            android:layout_width="96dp"
-            android:layout_height="wrap_content"
-            android:text="@string/signed_out"
-            android:textSize="18sp" />
 
-        <TextView
-            android:id="@+id/detail"
-            style="@style/ThemeOverlay.MyTextDetail"
-            android:layout_width="wrap_content"
-            tools:text="Firebase User ID: 123456789abc"
-            android:layout_height="wrap_content" />
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="64dp" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/button_facebook_login"

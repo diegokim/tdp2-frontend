@@ -116,4 +116,8 @@ public class AuthManager {
         return false;
     }
 
+    public String getAccessToken() {
+        return AccessToken.getCurrentAccessToken().getToken();
+    }
+
 }

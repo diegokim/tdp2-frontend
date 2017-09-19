@@ -59,8 +59,7 @@ public class RegisterRequestGenerator {
             EventBus.getDefault().post(new RegisterSuccessEvent());
         }
 
-        public static class RegisterSuccessEvent {
-        }
+        public static class RegisterSuccessEvent {}
     }
 
 }

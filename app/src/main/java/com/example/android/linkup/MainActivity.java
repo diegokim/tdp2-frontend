@@ -17,14 +17,22 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.android.linkup.login.LoginActivity;
+import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfileFragment;
+import com.example.android.linkup.profile.edit_profile.EditProfileFragment;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     protected FrameLayout fragmentContainer;
+    protected Menu menu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +68,11 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (id) {
                             case R.id.item_profile:
-                                Log.d("DEBUG","Apreté mi perfil");
-                                ProfileFragment firstFragment = new ProfileFragment();
-                                getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragment_container, firstFragment).commit();
+                                showProfileFragment();
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
+                                startActivity(new Intent (MainActivity.this,SettingsActivity.class));
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
@@ -85,26 +91,73 @@ public class MainActivity extends AppCompatActivity {
                 });
     }
 
+    public void showProfileFragment () {
+        ProfileFragment firstFragment = new ProfileFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, firstFragment).commit();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Mi Perfil");
+        menu.clear();
+        MenuItem item = menu.add("Editar Perfil");
+        item.setIcon(R.drawable.com_facebook_button_icon);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                showEditProfileFragment();
+                return false;
+            }
+        });
+    }
+
+    public void showEditProfileFragment () {
+        menu.clear();
+        EditProfileFragment fragment = new EditProfileFragment();
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragment).commit();
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle("Editar perfil");
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+//        // Handle action bar item clicks here. The action bar will
+//        // automatically handle clicks on the Home/Up button, so long
+//        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            //TODO: ACCION QUE DISPARA EL BOTON EDITAR
-            return true;
-        } else if (id == android.R.id.home) {
+//        if (id == R.id.action_settings) {
+//            //TODO: ACCION QUE DISPARA EL BOTON EDITAR
+//            return true;
+//        } else
+            if (id == android.R.id.home) {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEditProfileSuccess(EditProfileRequestGenerator.EditProfileResponseListener.EditProfileSuccessEvent event) {
+        showProfileFragment();
     }
 }

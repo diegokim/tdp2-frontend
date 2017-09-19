@@ -23,6 +23,7 @@ import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
 
 
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 
 import com.example.android.linkup.network.get_profile.GetProfileResponseListener;
@@ -50,7 +51,7 @@ public class ProfileFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile, container, false);
         this.photoConverter = new Base64Converter();
-        this.profile = new Profile();
+        this.profile = Session.getInstance().myProfile;
         findAndInitializeViews(view);
         setUpTabLayout(view);
         this.view = view;
