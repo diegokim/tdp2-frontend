@@ -17,10 +17,16 @@ import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.example.android.linkup.login.LoginActivity;
+import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfileFragment;
 import com.example.android.linkup.profile.edit_profile.EditProfileFragment;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -135,5 +141,23 @@ public class MainActivity extends AppCompatActivity {
             mDrawerLayout.openDrawer(GravityCompat.START);
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEditProfileSuccess(EditProfileRequestGenerator.EditProfileResponseListener.EditProfileSuccessEvent event) {
+        showProfileFragment();
     }
 }

@@ -38,6 +38,8 @@ public class LoginActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
+
+
         setContentView(R.layout.activity_login);
         authManager = AuthManager.getInstance(this);
         findViews();
@@ -54,7 +56,6 @@ public class LoginActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         authManager.passActivityResultToFacebookSDK(requestCode, resultCode, data);
-
     }
 
     @Override
@@ -63,9 +64,7 @@ public class LoginActivity extends BaseActivity {
         EventBus.getDefault().register(this);
         if (authManager.userIsLoggedIn()) {
             NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
-            Intent intent = new Intent (this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            WebServiceManager.getInstance(this).login();
         }
     }
 

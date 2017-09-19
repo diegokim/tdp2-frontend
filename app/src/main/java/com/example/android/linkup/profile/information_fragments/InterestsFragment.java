@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
+import com.facebook.FacebookSdk;
 
 import java.util.ArrayList;
 import java.util.Observable;

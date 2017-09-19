@@ -24,14 +24,14 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
     private static final String PROFILE_PHOTO_KEY = "photo";
     private static final String PHOTOS_KEY = "photos";
     private static final String NAME_KEY = "name";
-    private static final String BIRTHDAY_KEY = "birthday";
+    private static final String AGE_KEY = "age";
 
     @Override
     public void onResponse(JSONObject response) {
         Profile profile = new Profile();
         try {
-            String birthday = response.getString(BIRTHDAY_KEY);
-            profile.age = getAgeFromBirthDay(birthday);
+
+            profile.age = response.getInt(AGE_KEY);
 
             profile.name = response.getString(NAME_KEY);
             profile.description = response.getString(DESCRIPTION_KEY);
@@ -54,29 +54,6 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
         }
     }
 
-
-    public int getAgeFromBirthDay(String birthdate) {
-        String partsOfBirthdate[] = birthdate.split("/");
-        int day = Integer.parseInt(partsOfBirthdate[0]);
-        int month = Integer.parseInt(partsOfBirthdate[1]);
-        int year = Integer.parseInt(partsOfBirthdate[2]);
-        return getAge(year, month, day) + 1;
-    }
-
-    private int getAge(int year, int month, int day){
-        Calendar dob = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
-
-        dob.set(year, month, day);
-
-        int age = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR);
-
-        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)){
-            age--;
-        }
-
-        return age;
-    }
 
     public String[] getStringArrayFrom(JSONArray jsonArr) throws JSONException {
         String arr[] = new String[jsonArr.length()];

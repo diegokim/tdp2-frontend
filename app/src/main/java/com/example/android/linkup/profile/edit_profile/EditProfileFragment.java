@@ -11,12 +11,16 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.utils.Base64Converter;
+
+import org.greenrobot.eventbus.Subscribe;
 
 
 public class EditProfileFragment extends Fragment {
@@ -75,7 +79,7 @@ public class EditProfileFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String description = descriptionInput.getText().toString();
-//                WebServiceManager.updateProfile(profilePhotoSelected, description);
+                WebServiceManager.getInstance(getContext()).updateProfile(profilePhotoSelected, description);
             }
         });
         return view;
@@ -90,5 +94,22 @@ public class EditProfileFragment extends Fragment {
             profilePhoto.setImageBitmap(profilePhotoBitmap);
         }
     }
+
+
+
+    @Subscribe
+    public void onEditProfileSuccess(EditProfileRequestGenerator.EditProfileResponseListener.EditProfileSuccessEvent event) {
+        profile.description = descriptionInput.getText().toString();
+        profile.profilePhoto = profilePhotoSelected;
+        profile.commitChanges();
+    }
+
+    @Subscribe
+    public void onErrorMessageEvent(WebServiceManager.ErrorMessageEvent event) {
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(getContext(), event.message, duration);
+        toast.show();
+    }
+
 
 }
