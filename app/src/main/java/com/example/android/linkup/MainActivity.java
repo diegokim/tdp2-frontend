@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
-                                startActivity(new Intent (MainActivity.this,SettingsActivity.class));
+                                startActivity(new Intent (MainActivity.this,PreferencesActivity.class));
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
