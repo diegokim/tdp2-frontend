@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:padding="@dimen/md_keylines">
     <ImageView
-        android:id="@+id/profile_picture"
+        android:id="@+id/nav_header_profile_picture"
         android:layout_width="91dp"
         android:layout_gravity="center"
         android:layout_height="81dp"
@@ -17,12 +17,14 @@
     <TextView
         android:layout_width="match_parent"
         android:textAlignment="center"
+        android:id="@+id/nav_header_profile_name"
         android:layout_height="wrap_content"
         android:text="Nombre"
         android:textColor="@color/white"/>
     <TextView
         android:layout_width="match_parent"
         android:textAlignment="center"
+        android:id="@+id/nav_header_profile_age"
         android:layout_height="wrap_content"
         android:text="Edad"
         android:textColor="@color/white"/>

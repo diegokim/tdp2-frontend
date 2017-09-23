@@ -1,6 +1,8 @@
 package com.example.android.linkup;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.support.design.widget.NavigationView;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -13,25 +15,32 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.login.LoginActivity;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
+import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
     private DrawerLayout mDrawerLayout;
     protected FrameLayout fragmentContainer;
     protected Menu menu;
+    private Base64Converter converter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+
+
 
         // Create Navigation drawer and inlfate layout
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -88,6 +99,21 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+
+        View navHeader = navigationView.getHeaderView(0);
+        TextView name = (TextView) navHeader.findViewById(R.id.nav_header_profile_name);
+        name.setText(Session.getInstance().myProfile.name);
+
+//        TextView age = (TextView) navHeader.findViewById(R.id.nav_header_profile_age);
+//        age.setText(Session.getInstance().myProfile.age);
+
+        converter = new Base64Converter();
+        ImageView profilePhoto = (ImageView) navHeader.findViewById(R.id.nav_header_profile_picture);
+        String base64Photo = Session.getInstance().myProfile.profilePhoto;
+        Bitmap bitmap = converter.Base64ToBitmap(base64Photo);
+        bitmap = converter.getRoundedCornerBitmap(bitmap, Color.GRAY,16,5,this);
+        profilePhoto.setImageBitmap(bitmap);
+
         showCandidatesFragment();
     }
 

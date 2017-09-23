@@ -39,8 +39,11 @@ import com.example.android.linkup.utils.Base64Converter;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Observable;
+import java.util.Observer;
 
-public class ProfileActivity extends BaseActivity {
+
+public class ProfileActivity extends BaseActivity implements Observer {
 
     private static final String PROFILE_APP_BAR_TEXT = "Mi Perfil" ;
 
@@ -58,6 +61,7 @@ public class ProfileActivity extends BaseActivity {
         setContentView(R.layout.activity_profile);
         this.photoConverter = new Base64Converter();
         this.profile = Session.getInstance().myProfile;
+        profile.addObserver(this);
         findAndInitializeViews();
         setUpTabLayout();
         EventBus.getDefault().register(this);
@@ -162,4 +166,15 @@ public class ProfileActivity extends BaseActivity {
         EventBus.getDefault().unregister(this);
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        if (profile.name != null) {
+            Bitmap bitmap = photoConverter.Base64ToBitmap(profile.profilePhoto);
+            bitmap = photoConverter.getRoundedCornerBitmap(bitmap,Color.WHITE,16,5,this);
+            photo.setImageBitmap(bitmap);
+            name.setText(profile.name);
+            age.setText(Integer.toString(profile.age) + " Años");
+            gender.setText(profile.gender);
+        }
+    }
 }
