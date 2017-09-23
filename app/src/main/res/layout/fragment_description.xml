@@ -12,13 +12,11 @@
         android:paddingRight="32dp"
         android:orientation="vertical">
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="20dp" />
-
 
         <TextView
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
+            android:id="@+id/work_title"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:text="Trabaja en"
@@ -39,6 +37,7 @@
             android:layout_height="match_parent"
             android:layout_marginTop="32dp"
             android:layout_gravity="center"
+            android:id="@+id/education_title"
             android:text="Estudio en"
             android:textColor="@color/titleText"
             android:textSize="14sp" />

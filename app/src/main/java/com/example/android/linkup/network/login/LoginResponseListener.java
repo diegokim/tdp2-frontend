@@ -16,7 +16,6 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
-        Log.e("ERR RESPONSE: ", response.toString());
         Photos photos = new Photos();
         try {
             JSONArray photosJSON = response.getJSONArray(PHOTOS_KEY);
@@ -25,8 +24,7 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
             }
             EventBus.getDefault().post(new PhotosEvent(photos));
         } catch (Exception e) {
-            EventBus.getDefault().post(new RegisterRequestGenerator.RegisterResponseListener.RegisterSuccessEvent());
-            Log.e("ERROR12345", e.toString());
+            EventBus.getDefault().post(new RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent());
         }
     }
 

@@ -25,6 +25,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 
+import org.greenrobot.eventbus.EventBus;
+
 
 public class AuthManager {
 
@@ -98,7 +100,7 @@ public class AuthManager {
                 .addOnCompleteListener(activity,  new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        WebServiceManager.getInstance(activity).login();
+                        EventBus.getDefault().post(new OnFacebookAuthCompleteEvent());
                     }
                 });
     }
@@ -120,4 +122,6 @@ public class AuthManager {
         return AccessToken.getCurrentAccessToken().getToken();
     }
 
+    public class OnFacebookAuthCompleteEvent {
+    }
 }

@@ -19,7 +19,9 @@ public class DescriptionFragment extends Fragment implements Observer {
 
     private final Profile profile;
     private TextView descriptionView;
+    private TextView workTitleView;
     private TextView workView;
+    private TextView educationTitleView;
     private TextView educationView;
 
     public DescriptionFragment (Profile profile) {
@@ -36,12 +38,27 @@ public class DescriptionFragment extends Fragment implements Observer {
         descriptionView = (TextView) view.findViewById(R.id.description_fragment_text);
         workView = (TextView) view.findViewById(R.id.work_text);
         educationView = (TextView) view.findViewById(R.id.education_text);
-        workView.setText(profile.work);
-        educationView.setText(profile.education);
+        workTitleView = (TextView) view.findViewById(R.id.work_title);
+        educationTitleView = (TextView) view.findViewById(R.id.education_title);
+
+        if (profile.work.equals("")) {
+            workTitleView.setVisibility(View.GONE);
+            workView.setVisibility(View.GONE);
+        } else {
+            workView.setText(profile.work);
+        }
+
+        if (profile.education.equals("")) {
+            educationTitleView.setVisibility(View.GONE);
+            educationView.setVisibility(View.GONE);
+        } else {
+            educationView.setText(profile.education);
+        }
+
 
         if (profile.description != null) {
             if (profile.description.equals("")) {
-                descriptionView.setText("Por favor aniade una descripcion.");
+                descriptionView.setText("Por favor añade una descripcion.");
             } else {
                 descriptionView.setText(profile.description);
             }

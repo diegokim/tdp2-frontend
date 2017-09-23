@@ -13,6 +13,7 @@ public class Profile extends Observable {
     public String education;
     public String photos[];
     public String profilePhoto;
+    public String id;
 
 
     public Profile () {
@@ -25,6 +26,7 @@ public class Profile extends Observable {
         photos = new String[0];
         profilePhoto = "";
         age = 18;
+        id = "";
     }
 
     public void commitChanges() {
@@ -42,6 +44,7 @@ public class Profile extends Observable {
         this.photos = profile.photos;
         this.profilePhoto = profile.profilePhoto;
         this.age = profile.age;
+        this.id = profile.id;
 
     }
 }

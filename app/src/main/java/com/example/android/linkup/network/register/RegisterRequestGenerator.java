@@ -34,6 +34,10 @@ public class RegisterRequestGenerator {
             }
             obj.put(PHOTOS_KEY, photosArr);
             obj.put(DESCRIPTION_KEY, data.description);
+            JSONObject location = new JSONObject();
+            location.put("latitude", data.location.getLatitude());
+            location.put("longitude", data.location.getLongitude());
+            obj.put("location", location);
         } catch (Exception e) {
 
         }
@@ -56,10 +60,11 @@ public class RegisterRequestGenerator {
 
         @Override
         public void onResponse(JSONObject response) {
-            EventBus.getDefault().post(new RegisterSuccessEvent());
+            EventBus.getDefault().post(new OnLoginSuccessEvent());
         }
 
-        public static class RegisterSuccessEvent {}
+        public static class OnLoginSuccessEvent {
+        }
     }
 
 }
