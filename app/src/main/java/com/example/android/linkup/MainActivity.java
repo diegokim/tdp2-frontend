@@ -3,6 +3,7 @@ package com.example.android.linkup;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.annotation.ColorRes;
 import android.support.design.widget.NavigationView;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -35,12 +36,16 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.w3c.dom.Text;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Observable;
+import java.util.Observer;
+
+public class MainActivity extends AppCompatActivity implements Observer{
 
     private DrawerLayout mDrawerLayout;
     protected FrameLayout fragmentContainer;
     protected Menu menu;
     private Base64Converter converter;
+    private NavigationView navView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
 
-
+        Session.getInstance().myProfile.addObserver(this);
 
         // Create Navigation drawer and inlfate layout
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -100,19 +105,8 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-        View navHeader = navigationView.getHeaderView(0);
-        TextView name = (TextView) navHeader.findViewById(R.id.nav_header_profile_name);
-        name.setText(Session.getInstance().myProfile.name);
-
-//        TextView age = (TextView) navHeader.findViewById(R.id.nav_header_profile_age);
-//        age.setText(Session.getInstance().myProfile.age);
-
-        converter = new Base64Converter();
-        ImageView profilePhoto = (ImageView) navHeader.findViewById(R.id.nav_header_profile_picture);
-        String base64Photo = Session.getInstance().myProfile.profilePhoto;
-        Bitmap bitmap = converter.Base64ToBitmap(base64Photo);
-        bitmap = converter.getRoundedCornerBitmap(bitmap, Color.GRAY,16,5,this);
-        profilePhoto.setImageBitmap(bitmap);
+        navView = navigationView;
+        updateNavHeaderView();
 
         showCandidatesFragment();
     }
@@ -123,6 +117,19 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.fragment_container, candidatesFragment).commit();
     }
 
+
+    private void updateNavHeaderView() {
+        View navHeader = navView.getHeaderView(0);
+        TextView name = (TextView) navHeader.findViewById(R.id.nav_header_profile_name);
+        name.setText(Session.getInstance().myProfile.name + ", " + Integer.toString(Session.getInstance().myProfile.age));
+
+        converter = new Base64Converter();
+        ImageView profilePhoto = (ImageView) navHeader.findViewById(R.id.nav_header_profile_picture);
+        String base64Photo = Session.getInstance().myProfile.profilePhoto;
+        Bitmap bitmap = converter.Base64ToBitmap(base64Photo);
+        bitmap = converter.getRoundedCornerBitmap(bitmap,Color.parseColor("#607D8B"),12,1,this);
+        profilePhoto.setImageBitmap(bitmap);
+    }
 
 
     @Override
@@ -150,4 +157,8 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void update(Observable o, Object arg) {
+        updateNavHeaderView();
+    }
 }

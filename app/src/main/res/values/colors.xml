@@ -8,10 +8,10 @@
     <!--<color name="background">#ffffff</color>-->
     <!--<color name="facebook">#3b5998</color>-->
 
-    <color name="colorPrimary">#607d8b</color>
-    <color name="colorPrimaryDark">#00695C</color>
+    <color name="colorPrimary">#607D8B</color>
+    <color name="colorPrimaryDark">#455A64</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorLight">#B2DFDB</color>
+    <color name="colorLight">#B0BEC5</color>
     <color name="logoTextBackground">#465565</color>
     <color name="textColorPrimary">@android:color/black</color>
     <color name="background">#ffffff</color>
