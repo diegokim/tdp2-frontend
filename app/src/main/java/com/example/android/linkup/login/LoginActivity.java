@@ -1,13 +1,18 @@
 package com.example.android.linkup.login;
 
+import android.Manifest;
 import android.content.Intent;
 
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,12 +44,14 @@ import org.greenrobot.eventbus.Subscribe;
 public class LoginActivity extends BaseActivity {
 
     private static final String TAG = "FacebookLogin";
+    private static final int ACCESS_FINE_REQUEST_CODE = 1;
     private AuthManager authManager;
     private LoginButton loginButton;
     private TextView title;
     private Location mLocation;
     private LocationManager mLocationManager;
     private LocationListener locationListener;
+    private Button allowLocationButton;
     private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
@@ -56,39 +63,52 @@ public class LoginActivity extends BaseActivity {
         authManager = AuthManager.getInstance(this);
         findViews();
         authManager.initializeFacebookLoginButton(loginButton);
-        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                mLocation = location;
-            }
 
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
+        allowLocationButton = (Button) findViewById(R.id.allow_location_button);
 
-            }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            allowLocationButton.setVisibility(View.VISIBLE);
+            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1);
+        } else {
+            allowLocationButton.setVisibility(View.INVISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
+            mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    mLocation = location;
+                }
 
-            @Override
-            public void onProviderEnabled(String provider) {
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
 
-            }
+                }
 
-            @Override
-            public void onProviderDisabled(String provider) {
+                @Override
+                public void onProviderEnabled(String provider) {
 
-            }
-        };
-        mLocationManager.requestLocationUpdates("gps",1,10000, locationListener);
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            mLocation = location;
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+
+                }
+            };
+
+            mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                mLocation = location;
+                            }
                         }
-                    }
-                });
+                    });
+        }
+
+
     }
 
     private void findViews() {
@@ -162,6 +182,11 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Subscribe
+    public void onRegisterSuccessEvent(RegisterRequestGenerator.RegisterResponseListener.OnRegisterSuccessEvent event) {
+        login();
+    }
+
+    @Subscribe
     public void onLoginSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
         Intent intent = new Intent(this, MainActivity.class);
@@ -177,4 +202,23 @@ public class LoginActivity extends BaseActivity {
         finish();
     }
 
+    public void setLocationPermission(View view) {
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},ACCESS_FINE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case ACCESS_FINE_REQUEST_CODE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    allowLocationButton.setVisibility(View.INVISIBLE);
+                    loginButton.setVisibility(View.VISIBLE);
+                }
+                return;
+            }
+        }
+    }
 }

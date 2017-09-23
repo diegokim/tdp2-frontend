@@ -68,6 +68,7 @@
             android:id="@+id/button_facebook_login"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_centerInParent="true"
             android:paddingBottom="11dp"
             android:paddingEnd="11dp"
@@ -75,6 +76,21 @@
             android:paddingTop="11dp"
 
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/allow_location_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="11dp"
+            android:paddingEnd="11dp"
+            android:paddingLeft="11dp"
+            android:paddingTop="11dp"
+            android:backgroundTint="@color/com_facebook_blue"
+            android:textColor="@color/white"
+            android:text="Configurar Ubicacion"
+            android:textSize="14sp"
+            android:onClick="setLocationPermission"/>
 
     </LinearLayout>
 

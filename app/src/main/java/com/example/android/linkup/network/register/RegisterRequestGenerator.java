@@ -66,18 +66,19 @@ public class RegisterRequestGenerator {
         public void onResponse(JSONObject response) {
 
             try {
-                JSONObject profileJSON = response.getJSONObject("profile");
-                Profile profile = JSONParser.getProfile(profileJSON);
-                OnLoginSuccessEvent event = new OnLoginSuccessEvent();
-                event.profile = profile;
+                OnRegisterSuccessEvent event = new OnRegisterSuccessEvent();
                 EventBus.getDefault().post(event);
             } catch (Exception e) {
+                Log.e("RegisterRespListener", e.getStackTrace().toString());
                 e.printStackTrace();
             }
         }
 
         public static class OnLoginSuccessEvent {
             public Profile profile;
+        }
+
+        public class OnRegisterSuccessEvent {
         }
     }
 
