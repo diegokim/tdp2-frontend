@@ -16,6 +16,7 @@ import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
 
 import com.example.android.linkup.login.register_parameters_selection.SelectPhotosCommand;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
@@ -162,6 +163,7 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onLoginSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event) {
+        Session.getInstance().myProfile.update(event.profile);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();

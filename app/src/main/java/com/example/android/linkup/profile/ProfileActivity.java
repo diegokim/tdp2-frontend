@@ -60,7 +60,6 @@ public class ProfileActivity extends BaseActivity {
         this.profile = Session.getInstance().myProfile;
         findAndInitializeViews();
         setUpTabLayout();
-        showProgressDialog();
         EventBus.getDefault().register(this);
         Toolbar bar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(bar);
@@ -76,8 +75,16 @@ public class ProfileActivity extends BaseActivity {
             supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        WebServiceManager.getInstance(this).getProfile();
-
+        //WebServiceManager.getInstance(this).getProfile();
+        this.profile.commitChanges();
+        if (profile.name != null) {
+            Bitmap bitmap = photoConverter.Base64ToBitmap(profile.profilePhoto);
+            bitmap = photoConverter.getRoundedCornerBitmap(bitmap,Color.WHITE,16,5,this);
+            photo.setImageBitmap(bitmap);
+            name.setText(profile.name);
+            age.setText(Integer.toString(profile.age) + " Años");
+            gender.setText(profile.gender);
+        }
 
     }
 
@@ -147,14 +154,6 @@ public class ProfileActivity extends BaseActivity {
             age.setText(Integer.toString(profile.age) + " Años");
             gender.setText(profile.gender);
         }
-    }
-
-    @Subscribe
-    public void onErrorMessageEvent(WebServiceManager.ErrorMessageEvent error) {
-        hideProgressDialog();
-        int duration = Toast.LENGTH_SHORT;
-        Toast toast = Toast.makeText(this, error.message, duration);
-        toast.show();
     }
 
     @Override

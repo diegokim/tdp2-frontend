@@ -1,11 +1,15 @@
 package com.example.android.linkup.network.register;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.utils.JSONParser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -60,10 +64,20 @@ public class RegisterRequestGenerator {
 
         @Override
         public void onResponse(JSONObject response) {
-            EventBus.getDefault().post(new OnLoginSuccessEvent());
+
+            try {
+                JSONObject profileJSON = response.getJSONObject("profile");
+                Profile profile = JSONParser.getProfile(profileJSON);
+                OnLoginSuccessEvent event = new OnLoginSuccessEvent();
+                event.profile = profile;
+                EventBus.getDefault().post(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         public static class OnLoginSuccessEvent {
+            public Profile profile;
         }
     }
 

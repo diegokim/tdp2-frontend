@@ -8,6 +8,7 @@ import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,10 +22,12 @@ import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.utils.Base64Converter;
 
+import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 
@@ -121,7 +124,7 @@ public class EditProfileActivity extends BaseActivity {
         profile.description = descriptionInput.getText().toString();
         profile.profilePhoto = profilePhotoSelected;
         profile.commitChanges();
-        finish();
+        this.finish();
     }
 
     @Subscribe
@@ -129,6 +132,19 @@ public class EditProfileActivity extends BaseActivity {
         int duration = Toast.LENGTH_SHORT;
         Toast toast = Toast.makeText(this, event.message, duration);
         toast.show();
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
 
