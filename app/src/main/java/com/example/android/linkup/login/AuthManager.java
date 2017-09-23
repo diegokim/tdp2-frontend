@@ -32,7 +32,7 @@ public class AuthManager {
 
     private static String TAG = "Auth Manager";
     private static AuthManager instance;
-    private final BaseActivity activity;
+    public BaseActivity activity;
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
 
@@ -48,6 +48,7 @@ public class AuthManager {
         if (instance == null) {
             instance = new AuthManager(activity);
         }
+        instance.activity = activity;
         return instance;
     }
 
