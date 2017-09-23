@@ -1,6 +1,8 @@
 package com.example.android.linkup.network.edit_profile;
 
 
+import android.util.Log;
+
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -28,6 +30,7 @@ public class EditProfileRequestGenerator  {
             obj.put("description",description);
             obj.put("photo", photo);
         } catch (JSONException e) {
+            Log.e("REQUEST: ", "ERROR IN GENERATE EDIT PROFILE");
             e.printStackTrace();
         }
 
@@ -49,6 +52,7 @@ public class EditProfileRequestGenerator  {
     private static class EditProfileErrorListener implements Response.ErrorListener {
         @Override
         public void onErrorResponse(VolleyError error) {
+            Log.e("REQUEST: ", "ERROR IN RESPONSE EDIT PROFILE");
             EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Ha ocurrido un error! por favor intenta nuevamente mas tarde"));
         }
     }

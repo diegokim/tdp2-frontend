@@ -13,6 +13,8 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder> {
@@ -55,6 +57,9 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 candidates.remove(profile);
+                                if (candidates.size() == 0) {
+                                    EventBus.getDefault().post(new OnNoCandidatesEvent());
+                                }
                                 CandidatesAdapter.this.notifyDataSetChanged();
                             }
                         });
@@ -73,6 +78,9 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
                                 candidates.remove(profile);
+                                if (candidates.size() == 0) {
+                                    EventBus.getDefault().post(new OnNoCandidatesEvent());
+                                }
                                 CandidatesAdapter.this.notifyDataSetChanged();
                             }
                         });
@@ -83,5 +91,8 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
     @Override
     public int getItemCount() {
         return candidates.size();
+    }
+
+    public static class OnNoCandidatesEvent {
     }
 }

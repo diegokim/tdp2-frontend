@@ -53,14 +53,16 @@ public class AuthManager {
 
     public void signOut() {
         Log.d(TAG,"SignOut...");
-        mAuth.signOut();
+        FirebaseAuth.getInstance().signOut();
         LoginManager.getInstance().logOut();
     }
 
 
 
     public void initializeFacebookLoginButton(LoginButton loginButton) {
-        mCallbackManager = CallbackManager.Factory.create();
+        if (mCallbackManager == null) {
+            mCallbackManager = CallbackManager.Factory.create();
+        }
         loginButton.setReadPermissions("email",
                 "public_profile","user_photos",
                 "user_birthday","user_location"
