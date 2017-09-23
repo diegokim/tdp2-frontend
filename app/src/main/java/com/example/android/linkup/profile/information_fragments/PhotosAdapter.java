@@ -43,7 +43,6 @@ public class PhotosAdapter extends PagerAdapter{
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.photo_layout, null);
         ImageView photo = (ImageView) view.findViewById(R.id.photo_image_view);
-        Log.e("POSITION: ", Integer.toString(position));
         photo.setImageBitmap(photos.get(position));
 
         ViewPager viewPager = (ViewPager) container;

@@ -3,7 +3,8 @@
     package="com.example.android.linkup">
 
     <uses-permission android:name="android.permission.INTERNET" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-feature android:name="android.hardware.location.gps" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -38,10 +39,12 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
-        <activity android:name=".profile.ProfileFragment" />
+        <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".MainActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity android:name=".profile.edit_profile.EditProfileActivity"
+            />
         <activity
             android:name=".SettingsActivity"
             android:label="@string/title_activity_settings"

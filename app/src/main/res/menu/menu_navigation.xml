@@ -3,17 +3,17 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/item_profile"
-            android:icon="@drawable/ic_home_black_24dp"
+            android:icon="@drawable/ic_account_box_black_24dp"
             android:tint="@color/button_grey"
             android:title="Mi perfil" />
         <item
             android:id="@+id/item_prefs"
-            android:icon="@drawable/ic_favorite_black_24dp"
+            android:icon="@drawable/ic_settings_applications_black_24dp"
             android:tint="@color/button_grey"
             android:title="Mis Preferencias" />
         <item
             android:id="@+id/item_logout"
-            android:icon="@drawable/ic_bookmark_border_black_24dp"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
             android:tint="@color/button_grey"
             android:title="Cerrar Sesion" />
     </group>

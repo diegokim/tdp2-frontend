@@ -2,6 +2,7 @@ package com.example.android.linkup.login.register_parameters_selection;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.location.Location;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -30,16 +31,18 @@ public class SelectPhotosCommand implements Command {
     private ArrayList<String> photosSelected;
     private String profilePhoto;
     private String description;
+    private Location location;
 
     private android.app.AlertDialog mDialog;
 
-    public SelectPhotosCommand (BaseActivity activity, Photos photos) {
+    public SelectPhotosCommand (BaseActivity activity, Photos photos, Location location) {
         this.photos = photos;
         this.activity = activity;
         this.photosSelected = new ArrayList<>();
         this.profilePhoto = "";
         this.description = "";
         this.inflater = activity.getLayoutInflater();
+        this.location = location;
     }
 
     @Override
@@ -170,6 +173,7 @@ public class SelectPhotosCommand implements Command {
                 data.description = description;
                 data.photos = photosSelected;
                 data.profilePhoto = profilePhoto;
+                data.location = location;
 
                 WebServiceManager.getInstance(activity).register(data);
             }

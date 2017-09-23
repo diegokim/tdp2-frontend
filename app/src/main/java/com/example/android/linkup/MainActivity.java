@@ -16,12 +16,11 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.login.LoginActivity;
-import com.example.android.linkup.models.Session;
-import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
-import com.example.android.linkup.profile.ProfileFragment;
-import com.example.android.linkup.profile.edit_profile.EditProfileFragment;
+import com.example.android.linkup.profile.ProfileActivity;
+import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -68,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
                         switch (id) {
                             case R.id.item_profile:
-                                showProfileFragment();
+                                startActivity(new Intent (MainActivity.this,ProfileActivity.class));
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
@@ -89,34 +88,16 @@ public class MainActivity extends AppCompatActivity {
                         return true;
                     }
                 });
+        showCandidatesFragment();
     }
 
-    public void showProfileFragment () {
-        ProfileFragment firstFragment = new ProfileFragment();
+    private void showCandidatesFragment() {
+        CandidatesFragment candidatesFragment = new CandidatesFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, firstFragment).commit();
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Mi Perfil");
-        menu.clear();
-        MenuItem item = menu.add("Editar Perfil");
-        item.setIcon(R.drawable.com_facebook_button_icon);
-        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                showEditProfileFragment();
-                return false;
-            }
-        });
+                .replace(R.id.fragment_container, candidatesFragment).commit();
     }
 
-    public void showEditProfileFragment () {
-        menu.clear();
-        EditProfileFragment fragment = new EditProfileFragment();
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, fragment).commit();
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle("Editar perfil");
-    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -143,21 +124,4 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void onEditProfileSuccess(EditProfileRequestGenerator.EditProfileResponseListener.EditProfileSuccessEvent event) {
-        showProfileFragment();
-    }
 }

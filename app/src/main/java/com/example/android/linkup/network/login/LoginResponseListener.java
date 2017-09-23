@@ -4,11 +4,15 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.example.android.linkup.login.Photos;
+import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
+import com.example.android.linkup.utils.JSONParser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 public class LoginResponseListener implements Response.Listener<JSONObject> {
@@ -16,7 +20,6 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
 
     @Override
     public void onResponse(JSONObject response) {
-        Log.e("ERR RESPONSE: ", response.toString());
         Photos photos = new Photos();
         try {
             JSONArray photosJSON = response.getJSONArray(PHOTOS_KEY);
@@ -25,8 +28,19 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
             }
             EventBus.getDefault().post(new PhotosEvent(photos));
         } catch (Exception e) {
-            EventBus.getDefault().post(new RegisterRequestGenerator.RegisterResponseListener.RegisterSuccessEvent());
-            Log.e("ERROR12345", e.toString());
+            RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event;
+            event = new RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent();
+            JSONObject profileJSON = null;
+            try {
+                profileJSON = response.getJSONObject("profile");
+                Profile profile = JSONParser.getProfile(profileJSON);
+                event.profile = profile;
+                EventBus.getDefault().post(event);
+            } catch (JSONException e1) {
+                e1.printStackTrace();
+                EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkConfiguration.SERVER_REQUEST_ERROR));
+            }
+
         }
     }
 

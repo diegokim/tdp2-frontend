@@ -26,7 +26,6 @@ public class SyncListAdapter<T> extends RecyclerView.Adapter<SyncListViewHolder>
 
     @Override
     public SyncListViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d("LASKJDLAKSJD","ASJLDJASLKDJASLKDJASLKDJLKASDJKL");
         View v = View.inflate(context, R.layout.sync_list_item, null);
         return new SyncListViewHolder(v);
     }

@@ -1,11 +1,15 @@
 package com.example.android.linkup.network.register;
 
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.utils.JSONParser;
 
 import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
@@ -34,6 +38,10 @@ public class RegisterRequestGenerator {
             }
             obj.put(PHOTOS_KEY, photosArr);
             obj.put(DESCRIPTION_KEY, data.description);
+            JSONObject location = new JSONObject();
+            location.put("latitude", data.location.getLatitude());
+            location.put("longitude", data.location.getLongitude());
+            obj.put("location", location);
         } catch (Exception e) {
 
         }
@@ -56,10 +64,21 @@ public class RegisterRequestGenerator {
 
         @Override
         public void onResponse(JSONObject response) {
-            EventBus.getDefault().post(new RegisterSuccessEvent());
+
+            try {
+                JSONObject profileJSON = response.getJSONObject("profile");
+                Profile profile = JSONParser.getProfile(profileJSON);
+                OnLoginSuccessEvent event = new OnLoginSuccessEvent();
+                event.profile = profile;
+                EventBus.getDefault().post(event);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        public static class RegisterSuccessEvent {}
+        public static class OnLoginSuccessEvent {
+            public Profile profile;
+        }
     }
 
 }

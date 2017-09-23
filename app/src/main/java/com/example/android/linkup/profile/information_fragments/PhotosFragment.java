@@ -48,10 +48,8 @@ public class PhotosFragment extends Fragment implements Observer{
         ArrayList<Bitmap> result = new ArrayList<>();
         if (profile.photos != null) {
             for (int i = 0; i < profile.photos.length; i++) {
-                Log.e("ALSDJALSKDJ","ALSKJDALSKDJ");
                 Base64Converter converter = new Base64Converter();
                 Bitmap bitmap = converter.Base64ToBitmap(profile.photos[i]);
-                //bitmap = converter.resizeBitmap(bitmap, 600);
                 result.add(bitmap);
             }
         }
