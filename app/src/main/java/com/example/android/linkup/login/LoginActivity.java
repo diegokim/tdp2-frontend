@@ -216,6 +216,40 @@ public class LoginActivity extends BaseActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     allowLocationButton.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
+                    mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+                    locationListener = new LocationListener() {
+                        @Override
+                        public void onLocationChanged(Location location) {
+                            mLocation = location;
+                        }
+
+                        @Override
+                        public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                        }
+
+                        @Override
+                        public void onProviderEnabled(String provider) {
+
+                        }
+
+                        @Override
+                        public void onProviderDisabled(String provider) {
+
+                        }
+                    };
+
+                    mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
+                    mFusedLocationClient.getLastLocation()
+                            .addOnSuccessListener(new OnSuccessListener<Location>() {
+                                @Override
+                                public void onSuccess(Location location) {
+                                    if (location != null) {
+                                        mLocation = location;
+                                    }
+                                }
+                            });
                 }
                 return;
             }

@@ -38,9 +38,9 @@ public class RegisterRequestGenerator {
             }
             obj.put(PHOTOS_KEY, photosArr);
             obj.put(DESCRIPTION_KEY, data.description);
-            JSONObject location = new JSONObject();
-            location.put("latitude", data.location.getLatitude());
-            location.put("longitude", data.location.getLongitude());
+            JSONArray location = new JSONArray();
+            location.put( data.location.getLatitude());
+            location.put(data.location.getLongitude());
             obj.put("location", location);
         } catch (Exception e) {
 
