@@ -24,11 +24,15 @@ import android.widget.Toast;
 import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 import com.example.android.linkup.settings.SettingsActivity;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -156,4 +160,21 @@ public class MainActivity extends AppCompatActivity implements Observer{
         updateNavHeaderView();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void settingsChanged(SaveSettingsResponseListener.SaveSettingsSuccessEvent event) {
+        //updateCandidatesList();
+        Log.d("Debug: ", "Settings Changed executed...");
+    }
 }

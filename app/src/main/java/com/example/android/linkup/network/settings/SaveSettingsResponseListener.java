@@ -23,7 +23,6 @@ public class SaveSettingsResponseListener implements Response.Listener<JSONObjec
         public Settings settings;
         public SaveSettingsSuccessEvent(Settings settings) {
             this.settings = settings;
-            //TODO: RELOAD CANDIDATES IN MAIN ACTIVITY
         }
     }
 }
