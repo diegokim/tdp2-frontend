@@ -2,8 +2,10 @@ package com.example.android.linkup.candidates;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +29,7 @@ public class CandidatesFragment extends Fragment {
     private View view;
     private TextView noCandidatesText;
     private ImageView noCandidatesImage;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,6 +37,21 @@ public class CandidatesFragment extends Fragment {
         // Inflate the layout for this fragment
         //TODO: Get Candidates
         view = inflater.inflate(R.layout.fragment_list_of_candidates, container, false);
+        swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.candidates_refresh_layout);
+
+        swipeRefreshLayout.setOnRefreshListener(
+                new SwipeRefreshLayout.OnRefreshListener() {
+                    @Override
+                    public void onRefresh() {
+                        Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
+                        WebServiceManager.getInstance(view.getContext()).getCandidates();
+                        // This method performs the actual data-refresh operation.
+                        // The method calls setRefreshing(false) when it's finished.
+                    }
+                }
+        );
+
+
         noCandidatesImage = (ImageView) view.findViewById(R.id.no_candidates_image);
         noCandidatesText = (TextView) view.findViewById(R.id.no_candidates_text);
         WebServiceManager.getInstance(view.getContext()).getCandidates();
@@ -58,12 +76,30 @@ public class CandidatesFragment extends Fragment {
 
     @Subscribe
     public void onGetCandidatesSuccess (ArrayList<Profile> profiles) {
+        if (swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
+        if (profiles.size() == 0) {
+            showNoCandidates(true);
+        } else {
+            showNoCandidates(false);
+        }
         candidatesView.setAdapter(new CandidatesAdapter(profiles,getActivity()));
+    }
+
+    public void showNoCandidates(boolean show) {
+        if (show) {
+            noCandidatesText.setVisibility(View.VISIBLE);
+            noCandidatesImage.setVisibility(View.VISIBLE);
+        } else {
+            noCandidatesText.setVisibility(View.INVISIBLE);
+            noCandidatesImage.setVisibility(View.INVISIBLE);
+        }
+
     }
 
     @Subscribe
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
-        noCandidatesText.setVisibility(View.VISIBLE);
-        noCandidatesImage.setVisibility(View.VISIBLE);
+        showNoCandidates(true);
     }
 }

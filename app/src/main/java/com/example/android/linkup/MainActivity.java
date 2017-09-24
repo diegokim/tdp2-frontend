@@ -3,11 +3,16 @@ package com.example.android.linkup;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.ColorRes;
+
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -23,26 +28,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.linkup.candidates.CandidatesFragment;
+import com.example.android.linkup.links.LinksFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
-import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.profile.ProfileActivity;
-import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
-
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
 public class MainActivity extends AppCompatActivity implements Observer{
 
     private DrawerLayout mDrawerLayout;
-    protected FrameLayout fragmentContainer;
+    protected ViewPager fragmentContainer;
     protected Menu menu;
     private Base64Converter converter;
     private NavigationView navView;
@@ -54,7 +56,10 @@ public class MainActivity extends AppCompatActivity implements Observer{
         // Adding Toolbar to Main screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        fragmentContainer = (FrameLayout) findViewById(R.id.fragment_container);
+        fragmentContainer = (ViewPager) findViewById(R.id.fragment_container);
+        setupViewPager(fragmentContainer);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.setupWithViewPager(fragmentContainer);
 
         Session.getInstance().myProfile.addObserver(this);
 
@@ -138,6 +143,43 @@ public class MainActivity extends AppCompatActivity implements Observer{
         getMenuInflater().inflate(R.menu.menu_main, menu);
         this.menu = menu;
         return true;
+    }
+
+    // Add Fragments to Tabs
+    private void setupViewPager(ViewPager viewPager) {
+        Adapter adapter = new Adapter(getSupportFragmentManager());
+        adapter.addFragment(new CandidatesFragment(), "Personas");
+        adapter.addFragment(new LinksFragment(), "Links");
+        viewPager.setAdapter(adapter);
+    }
+
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
+
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
     @Override

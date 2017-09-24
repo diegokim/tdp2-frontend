@@ -42,7 +42,7 @@
         <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/AppTheme" />
         <activity android:name=".profile.edit_profile.EditProfileActivity"
             />
         <activity

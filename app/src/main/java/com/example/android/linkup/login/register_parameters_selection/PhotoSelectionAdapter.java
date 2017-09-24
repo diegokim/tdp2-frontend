@@ -51,6 +51,7 @@ public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionVi
         Bitmap photo = photos.get(position);
         String base64Photo = base64Photos.get(position);
         holder.bind(base64Photo, photo, mListener);
+        holder.setIsRecyclable(false);
     }
 
     @Override

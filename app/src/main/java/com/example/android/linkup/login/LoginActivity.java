@@ -74,8 +74,6 @@ public class LoginActivity extends BaseActivity {
             loginButton.setVisibility(View.VISIBLE);
             getLocation();
         }
-
-
     }
 
     private void findViews() {
