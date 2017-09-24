@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.JSONParser;
 
@@ -43,7 +44,7 @@ public class RegisterRequestGenerator {
             location.put(data.location.getLongitude());
             obj.put("location", location);
         } catch (Exception e) {
-
+            Log.e(NetworkErrorMessages.REGISTER_TAG, e.getMessage() );
         }
         RegisterErrorListener errorListener = new RegisterErrorListener();
         RegisterResponseListener responseListener = new RegisterResponseListener();
@@ -56,7 +57,8 @@ public class RegisterRequestGenerator {
         @Override
         public void onErrorResponse(VolleyError error) {
             //TODO: handle error message
-            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("error"));
+            Log.e(NetworkErrorMessages.REGISTER_TAG, error.toString());
+            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
         }
     }
 
@@ -69,7 +71,7 @@ public class RegisterRequestGenerator {
                 OnRegisterSuccessEvent event = new OnRegisterSuccessEvent();
                 EventBus.getDefault().post(event);
             } catch (Exception e) {
-                Log.e("RegisterRespListener", e.getStackTrace().toString());
+                Log.e(NetworkErrorMessages.REGISTER_TAG, e.getMessage());
                 e.printStackTrace();
             }
         }

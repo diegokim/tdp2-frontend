@@ -6,6 +6,7 @@ import com.android.volley.Response;
 import com.example.android.linkup.login.Photos;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 import com.example.android.linkup.utils.JSONParser;
@@ -37,6 +38,7 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
                 event.profile = profile;
                 EventBus.getDefault().post(event);
             } catch (JSONException e1) {
+                Log.e(NetworkErrorMessages.LOGIN_TAG, e1.getMessage());
                 e1.printStackTrace();
                 EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkConfiguration.SERVER_REQUEST_ERROR));
             }

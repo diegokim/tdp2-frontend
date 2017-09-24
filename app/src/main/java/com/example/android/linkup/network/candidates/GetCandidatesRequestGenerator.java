@@ -8,6 +8,7 @@ import com.android.volley.VolleyError;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.JSONParser;
 
@@ -42,7 +43,7 @@ public class GetCandidatesRequestGenerator {
                             profiles.add(profile);
                     }
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
                 }
                 EventBus.getDefault().post(profiles);
             }
@@ -50,7 +51,8 @@ public class GetCandidatesRequestGenerator {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Error"));
+                Log.e(NetworkErrorMessages.CANDIDATES_TAG, error.toString());
+                EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
             }
         };
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_CANDIDATES_METHOD, url, obj, responseListener, errorListener);
