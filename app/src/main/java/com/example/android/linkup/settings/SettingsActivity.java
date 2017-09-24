@@ -1,8 +1,7 @@
-package com.example.android.linkup.preferences;
+package com.example.android.linkup.settings;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -17,7 +16,7 @@ import com.example.android.linkup.models.Settings;
 
 import io.apptik.widget.MultiSlider;
 
-public class PreferencesActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity {
 
     private MultiSlider age_slider = null;
     private SeekBar distance_slider = null;
@@ -152,9 +151,9 @@ public class PreferencesActivity extends AppCompatActivity {
         }
     }
 
-    public void sendPreferences (View view) {
+    public void sendSettings(View view) {
         if (view.getId() == R.id.guardar_cambios) {
-            mySettings.updateSettings(PreferencesActivity.this);
+            mySettings.updateSettings(SettingsActivity.this);
         }
     }
 }

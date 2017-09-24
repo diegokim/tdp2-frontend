@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
-import com.example.android.linkup.preferences.PreferencesActivity;
+import com.example.android.linkup.settings.SettingsActivity;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
-                                startActivity(new Intent (MainActivity.this,PreferencesActivity.class));
+                                startActivity(new Intent (MainActivity.this,SettingsActivity.class));
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",

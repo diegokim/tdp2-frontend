@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.android.linkup.preferences.PreferencesActivity">
+    tools:context="com.example.android.linkup.settings.SettingsActivity">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -171,7 +171,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:text="Guardar Cambios"
-            android:onClick="sendPreferences"
+            android:onClick="sendSettings"
             android:layout_marginBottom="8dp" />
 
     </LinearLayout>
