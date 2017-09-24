@@ -31,7 +31,6 @@ public class Settings {
     }
 
     public void updateSettings(final Context context) {
-        Log.d("Settings: ", "Updating.....");
         JSONObject params = new JSONObject();
         JSONObject distRange = new JSONObject();
         JSONObject ageRange = new JSONObject();
@@ -64,13 +63,11 @@ public class Settings {
                 @Override
                 public void onResponse(JSONObject response) {
                     Toast.makeText(context,"Configuración guardada con éxito!",Toast.LENGTH_LONG).show();
-                    Log.d("Settings: ",response.toString());
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
                     Toast.makeText(context,"Ups! Ha ocurrido un error :(",Toast.LENGTH_LONG).show();
-                    Log.d("Settings: ","error");
                 }
             });
 

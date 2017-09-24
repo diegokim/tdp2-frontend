@@ -47,14 +47,14 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
         <activity android:name=".profile.edit_profile.EditProfileActivity" />
         <activity
-            android:name=".SettingsActivity"
+            android:name=".UnusedActivity"
             android:label="@string/title_activity_settings"
             android:parentActivityName=".MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.linkup.MainActivity" />
         </activity>
-        <activity android:name=".PreferencesActivity"></activity>
+        <activity android:name=".preferences.PreferencesActivity"></activity>
     </application>
 
 </manifest>

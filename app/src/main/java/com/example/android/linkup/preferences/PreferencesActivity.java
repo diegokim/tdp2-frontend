@@ -1,9 +1,7 @@
-package com.example.android.linkup;
+package com.example.android.linkup.preferences;
 
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SwitchCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.CheckBox;
@@ -12,8 +10,8 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.example.android.linkup.R;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
 
@@ -156,7 +154,6 @@ public class PreferencesActivity extends AppCompatActivity {
 
     public void sendPreferences (View view) {
         if (view.getId() == R.id.guardar_cambios) {
-            Log.d("Settings: ", "Button presed");
             mySettings.updateSettings(PreferencesActivity.this);
         }
     }

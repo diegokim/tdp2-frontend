@@ -3,7 +3,6 @@ package com.example.android.linkup;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
-import android.support.annotation.ColorRes;
 import android.support.design.widget.NavigationView;
 import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.content.res.ResourcesCompat;
@@ -25,16 +24,11 @@ import android.widget.Toast;
 import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
-import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
+import com.example.android.linkup.preferences.PreferencesActivity;
 import com.example.android.linkup.profile.ProfileActivity;
-import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.w3c.dom.Text;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -161,4 +155,5 @@ public class MainActivity extends AppCompatActivity implements Observer{
     public void update(Observable o, Object arg) {
         updateNavHeaderView();
     }
+
 }
