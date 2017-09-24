@@ -98,6 +98,12 @@ public class CandidatesFragment extends Fragment {
 
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        WebServiceManager.getInstance(view.getContext()).getCandidates();
+    }
+
     @Subscribe
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
         showNoCandidates(true);

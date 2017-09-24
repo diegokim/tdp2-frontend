@@ -44,7 +44,9 @@ public class GetLinksRequestGenerator {
                 } catch (JSONException e) {
                     Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
                 }
-                EventBus.getDefault().post(profiles);
+                OnGetLinksSuccessEvent event = new OnGetLinksSuccessEvent();
+                event.profiles = profiles;
+                EventBus.getDefault().post(event);
             }
         };
 
@@ -55,5 +57,10 @@ public class GetLinksRequestGenerator {
             }
         };
         return new CustomJsonObjectRequest(GET_LINKS_METHOD,url,obj,responseListener,errorListener);
+    }
+
+
+    public static class OnGetLinksSuccessEvent {
+        public ArrayList<Profile> profiles;
     }
 }

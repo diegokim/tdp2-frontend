@@ -4,10 +4,12 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,11 +37,14 @@ public class LinksFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
-//        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(),
-//                DividerItemDecoration.VERTICAL);
-//        recyclerView.addItemDecoration(dividerItemDecoration);
         WebServiceManager.getInstance(getActivity()).getLinks();
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        WebServiceManager.getInstance(getActivity()).getLinks();
     }
 
     @Override
@@ -54,8 +60,8 @@ public class LinksFragment extends Fragment {
     }
 
     @Subscribe
-    public void onGetLinksSuccessEvent (ArrayList<Profile> links) {
-        recyclerView.setAdapter(new LinksAdapter(getActivity(),links));
+    public void onGetLinksSuccessEvent (GetLinksRequestGenerator.OnGetLinksSuccessEvent links) {
+        recyclerView.setAdapter(new LinksAdapter(getActivity(),links.profiles));
     }
 
 }

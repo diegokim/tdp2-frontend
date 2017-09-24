@@ -31,6 +31,7 @@ import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.links.LinksFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
@@ -60,6 +61,33 @@ public class MainActivity extends AppCompatActivity implements Observer{
         setupViewPager(fragmentContainer);
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.setupWithViewPager(fragmentContainer);
+
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                String title = tab.getText().toString();
+                if ( title.equals("Links")) {
+                    WebServiceManager.getInstance(MainActivity.this).getLinks();
+                } else if (title.equals("Personas")){
+                    WebServiceManager.getInstance(MainActivity.this).getCandidates();
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+                String title = tab.getText().toString();
+                if ( title.equals("Links")) {
+                    WebServiceManager.getInstance(MainActivity.this).getLinks();
+                } else if (title.equals("Personas")){
+                    WebServiceManager.getInstance(MainActivity.this).getCandidates();
+                }
+            }
+        });
 
         Session.getInstance().myProfile.addObserver(this);
 
@@ -165,6 +193,8 @@ public class MainActivity extends AppCompatActivity implements Observer{
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
+
+
 
         @Override
         public int getCount() {

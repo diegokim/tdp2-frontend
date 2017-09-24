@@ -10,23 +10,35 @@ import com.example.android.linkup.R;
 
 public class PhotoSelectionViewHolder extends RecyclerView.ViewHolder {
     public ImageView photoImageView;
+    public Boolean isSelected;
 
     public PhotoSelectionViewHolder(View itemView) {
         super(itemView);
         photoImageView = (ImageView) itemView.findViewById(R.id.photo);
-        //this.isSelected = false;
+        photoImageView.setTag(this);
     }
 
-    public void bind(final String item, Bitmap photo, final PhotoSelectionAdapter.Listener listener) {
+    public void bind(final String item, Boolean isSelected, Bitmap photo, final PhotoSelectionAdapter.Listener listener) {
         this.photoImageView.setImageBitmap(photo);
-
+        this.isSelected = isSelected;
+        if (this.isSelected) {
+            photoImageView.setImageAlpha(160);
+        }
         this.photoImageView.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 listener.onItemClick(item, photoImageView);
 
             }
         });
+    }
 
+    public void update (boolean isSelected) {
+        this.isSelected = isSelected;
+        if (this.isSelected) {
+            photoImageView.setImageAlpha(160);
+        } else {
+            photoImageView.setImageAlpha(255);
+        }
     }
 
 
