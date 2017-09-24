@@ -16,6 +16,10 @@
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
         <item name="android:statusBarColor">@color/textColorPrimary</item>
+        <item name="multiSliderStyle">@style/Widget.MultiSlider</item>
+    </style>
+
+    <style name="Widget.MultiSlider" parent="android:Widget">
     </style>
 
     <!-- Activity with no Title -->
@@ -55,6 +59,8 @@
         <item name="android:gravity">center</item>
         <item name="android:textSize">36sp</item>
     </style>
+
+
 
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>

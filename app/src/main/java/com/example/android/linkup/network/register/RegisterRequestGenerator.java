@@ -6,6 +6,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
@@ -76,6 +77,7 @@ public class RegisterRequestGenerator {
 
         public static class OnLoginSuccessEvent {
             public Profile profile;
+            public Settings settings;
         }
 
         public class OnRegisterSuccessEvent {

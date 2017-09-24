@@ -189,6 +189,7 @@ public class LoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
+        Session.getInstance().mySettings.update(event.settings);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
