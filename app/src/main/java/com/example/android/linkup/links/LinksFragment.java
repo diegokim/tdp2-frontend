@@ -27,6 +27,7 @@ import java.util.ArrayList;
 public class LinksFragment extends Fragment {
 
     private RecyclerView recyclerView;
+    private View noLinksView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,7 +38,9 @@ public class LinksFragment extends Fragment {
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
+        noLinksView = (View) view.findViewById(R.id.no_links_layout);
         WebServiceManager.getInstance(getActivity()).getLinks();
+
         return view;
     }
 
@@ -61,6 +64,11 @@ public class LinksFragment extends Fragment {
 
     @Subscribe
     public void onGetLinksSuccessEvent (GetLinksRequestGenerator.OnGetLinksSuccessEvent links) {
+        if (links.profiles.size() == 0) {
+            noLinksView.setVisibility(View.VISIBLE);
+        } else {
+            noLinksView.setVisibility(View.INVISIBLE);
+        }
         recyclerView.setAdapter(new LinksAdapter(getActivity(),links.profiles));
     }
 
