@@ -48,7 +48,7 @@ public class SettingsActivity extends AppCompatActivity {
         final TextView min_age_status = (TextView) findViewById(R.id.min_age_value);
         final TextView max_age_status = (TextView) findViewById(R.id.max_age_value);
         age_slider = (MultiSlider) findViewById(R.id.edad_bar);
-        age_slider.setMax(99);
+        age_slider.setMax(150);
         age_slider.setMin(18);
         age_slider.getThumb(0).setValue(mySettings.age_from);
         age_slider.getThumb(1).setValue(mySettings.age_to);
