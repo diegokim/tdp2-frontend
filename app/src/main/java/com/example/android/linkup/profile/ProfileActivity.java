@@ -65,18 +65,12 @@ public class ProfileActivity extends BaseActivity implements Observer {
         findAndInitializeViews();
         setUpTabLayout();
         EventBus.getDefault().register(this);
-        Toolbar bar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setTitle(PROFILE_APP_BAR_TEXT);
-
-        if (supportActionBar != null) {
-            VectorDrawableCompat indicator
-                    = VectorDrawableCompat.create(getResources(), R.drawable.ic_account_box_black_24dp  , getTheme());
-            indicator.setTint(ResourcesCompat.getColor(getResources(),R.color.white,getTheme()));
-            supportActionBar.setHomeAsUpIndicator(indicator);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
         //WebServiceManager.getInstance(this).getProfile();
@@ -90,6 +84,16 @@ public class ProfileActivity extends BaseActivity implements Observer {
             gender.setText(profile.gender);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
