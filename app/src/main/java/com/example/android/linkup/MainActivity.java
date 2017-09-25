@@ -78,7 +78,6 @@ public class MainActivity extends AppCompatActivity implements Observer{
                 if ( title.equals("Links")) {
                     WebServiceManager.getInstance(MainActivity.this).getLinks();
                 } else if (title.equals("Personas")){
-                    WebServiceManager.getInstance(MainActivity.this).getCandidates();
                 }
             }
 

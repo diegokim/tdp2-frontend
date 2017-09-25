@@ -88,6 +88,7 @@ public class JSONParser {
             result.work = profile.getString(OCUPATION_KEY);
             result.education = profile.getString(EDUCATION_KEY);
             result.profilePhoto = profile.getString(PROFILE_PHOTO_KEY);
+
             result.id = profile.getString(ID_KEY);
             JSONArray interests = profile.getJSONArray(INTERESTS_KEY);
             result.interests = getStringArrayFrom(interests);

@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Candidate;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
@@ -33,19 +34,27 @@ public class GetCandidatesRequestGenerator {
             @Override
             public void onResponse(JSONObject response) {
                 Log.e("Response ", response.toString());
-                ArrayList<Profile> profiles = new ArrayList<>();
+                ArrayList<Candidate> candidates = new ArrayList<>();
+
                 try {
                     JSONArray profilesJSON = response.getJSONArray("profiles");
                     for (int i = 0 ; i < profilesJSON.length() ; i ++) {
                         JSONObject profileJSON = profilesJSON.getJSONObject(i);
-                        Profile profile = JSONParser.getProfileWithoutPhotos(profileJSON);
-                        if (profile != null )
-                            profiles.add(profile);
+                        Profile profile = JSONParser.getProfile(profileJSON);
+                        int distance = profileJSON.getInt("distance");
+                        if (profile != null ){
+                            Candidate candidate = new Candidate();
+                            candidate.profile = profile;
+                            candidate.distance = distance;
+                            candidates.add(candidate);
+                        }
+
+
                     }
                 } catch (JSONException e) {
                     Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
                 }
-                EventBus.getDefault().post(profiles);
+                EventBus.getDefault().post(candidates);
             }
         } ;
         Response.ErrorListener errorListener = new Response.ErrorListener() {

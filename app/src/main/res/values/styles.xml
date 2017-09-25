@@ -11,6 +11,7 @@
 
         <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="multiSliderStyle">@style/Widget.MultiSlider</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
     <style name="Widget.MultiSlider" parent="android:Widget">

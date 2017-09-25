@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.utils.Base64Converter;
 
 import java.util.ArrayList;
 
@@ -25,6 +26,13 @@ public class PhotosAdapter extends PagerAdapter{
     public PhotosAdapter(Context context, ArrayList<Bitmap> photos) {
         this.context = context;
         this.photos = photos;
+    }
+
+    public void updatePhotos (ArrayList<Bitmap> photos) {
+        if (!this.photos.contains(photos)) {
+            this.photos = photos;
+            notifyDataSetChanged();
+        }
     }
 
     @Override

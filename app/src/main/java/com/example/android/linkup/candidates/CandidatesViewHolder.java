@@ -1,14 +1,21 @@
 package com.example.android.linkup.candidates;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.SystemClock;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.models.CandidateSelectedProfile;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.WebServiceManager;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -26,10 +33,12 @@ public class CandidatesViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         view = itemView;
         header = (TextView) itemView.findViewById(R.id.candidate_header);
-        photo = (ImageView) itemView.findViewById(R.id.card_image);
+        photo = (ImageView) itemView.findViewById(R.id.profile_picture);
         reject = (ImageButton) itemView.findViewById(R.id.reject_button);
         link = (ImageButton) itemView.findViewById(R.id.link_button);
         superlink = (ImageButton) itemView.findViewById(R.id.superlink_button);
+
+        photo.setTag(this);
     }
 
 }

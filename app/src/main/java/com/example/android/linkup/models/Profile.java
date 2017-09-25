@@ -1,9 +1,10 @@
 package com.example.android.linkup.models;
 
 
+import java.io.Serializable;
 import java.util.Observable;
 
-public class Profile extends Observable {
+public class Profile extends Observable implements Serializable {
     public String name;
     public String interests[];
     public String description;

@@ -1,6 +1,8 @@
 package com.example.android.linkup.candidates;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +16,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.models.Candidate;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.utils.Base64Converter;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -30,6 +35,8 @@ public class CandidatesFragment extends Fragment {
     private TextView noCandidatesText;
     private ImageView noCandidatesImage;
     private SwipeRefreshLayout swipeRefreshLayout;
+    private CandidatesAdapter mAdapter;
+    private long mLastClickTime;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,10 +50,7 @@ public class CandidatesFragment extends Fragment {
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        Log.i("REFRESH", "onRefresh called from SwipeRefreshLayout");
                         WebServiceManager.getInstance(view.getContext()).getCandidates();
-                        // This method performs the actual data-refresh operation.
-                        // The method calls setRefreshing(false) when it's finished.
                     }
                 }
         );
@@ -58,6 +62,11 @@ public class CandidatesFragment extends Fragment {
         candidatesView = (RecyclerView) view.findViewById(R.id.recommendations_list);
         candidatesView.setHasFixedSize(true);
         candidatesView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mAdapter = new CandidatesAdapter(new ArrayList<Candidate>(),getActivity());
+        candidatesView.setAdapter(mAdapter);
+
+        mLastClickTime = 0;
         return view;
     }
 
@@ -75,16 +84,16 @@ public class CandidatesFragment extends Fragment {
 
 
     @Subscribe
-    public void onGetCandidatesSuccess (ArrayList<Profile> profiles) {
+    public void onGetCandidatesSuccess (ArrayList<Candidate> candidates) {
         if (swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);
         }
-        if (profiles.size() == 0) {
+        if (candidates.size() == 0) {
             showNoCandidates(true);
         } else {
             showNoCandidates(false);
         }
-        candidatesView.setAdapter(new CandidatesAdapter(profiles,getActivity()));
+        mAdapter.updateCandidates(candidates);
     }
 
     public void showNoCandidates(boolean show) {
@@ -98,14 +107,18 @@ public class CandidatesFragment extends Fragment {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        WebServiceManager.getInstance(view.getContext()).getCandidates();
-    }
 
     @Subscribe
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
         showNoCandidates(true);
+    }
+
+    @Subscribe
+    public void onCandidatePhotoClicked(Profile profile) {
+        if (SystemClock.elapsedRealtime() - mLastClickTime > 1000) {
+            Log.e("ASJKLDJASLKD",Long.toString(mLastClickTime));
+            mLastClickTime = SystemClock.elapsedRealtime();
+
+        }
     }
 }

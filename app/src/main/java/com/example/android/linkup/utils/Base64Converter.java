@@ -16,16 +16,12 @@ import android.util.TypedValue;
 
 import java.io.ByteArrayOutputStream;
 
-/**
- * Created by diegokim on 9/10/17.
- */
-
 public class Base64Converter {
 
     private static final String TAG = "Base64Converter";
 
     /* Convert Bitmap in base 64 string */
-    public String bitmapToBase64(Bitmap bitmap) {
+    public static String bitmapToBase64(Bitmap bitmap) {
         Log.d(TAG, "bitmapToBase64");
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
@@ -34,13 +30,13 @@ public class Base64Converter {
     }
 
     /* Convert base 64 string in bitmap */
-    public Bitmap Base64ToBitmap(String base64) {
+    public static Bitmap Base64ToBitmap(String base64) {
         Log.d(TAG, "base64ToBitmap");
         byte[] imageAsBytes = Base64.decode(base64.getBytes(),Base64.NO_WRAP);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
-    public Bitmap getResizedBitmap(Bitmap bm, int newWidth) {
+    public static Bitmap getResizedBitmap(Bitmap bm, int newWidth) {
         int width = bm.getWidth();
         int height = bm.getHeight();
         float scaleWidth = ((float) newWidth) / width;
@@ -57,7 +53,7 @@ public class Base64Converter {
         return resizedBitmap;
     }
 
-    public Bitmap resizeBitmap (Bitmap oldBitmap, int newWidth) {
+    public static Bitmap resizeBitmap (Bitmap oldBitmap, int newWidth) {
 
         float aspectRatio = oldBitmap.getWidth() /
                 (float) oldBitmap.getHeight();
@@ -67,6 +63,12 @@ public class Base64Converter {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(
                 oldBitmap, newWidth, height, false);
         return resizedBitmap;
+    }
+
+    public static String getResizedBase64(String image, int width) {
+        Bitmap bitmap = Base64ToBitmap(image);
+        bitmap = resizeBitmap(bitmap,width);
+        return bitmapToBase64(bitmap);
     }
 
     public static Bitmap getRoundedCornerBitmap(Bitmap bitmap, int color, int cornerDips, int borderDips, Context context) {
