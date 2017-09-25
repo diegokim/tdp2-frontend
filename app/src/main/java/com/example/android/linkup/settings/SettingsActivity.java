@@ -1,5 +1,6 @@
 package com.example.android.linkup.settings;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -27,6 +28,7 @@ import io.apptik.widget.MultiSlider;
 
 public class SettingsActivity extends AppCompatActivity {
 
+    private static final int REQUEST_UPDATE_SETTINGS = 1;
     private MultiSlider age_slider = null;
     private SeekBar distance_slider = null;
     private Switch invisible_switch = null;
@@ -151,15 +153,28 @@ public class SettingsActivity extends AppCompatActivity {
     public void onCheckboxClicked (View view) {
         boolean checked = ((CheckBox) view).isChecked();
         RadioButton solo_amigos = (RadioButton) findViewById(R.id.solo_amigos_radioButton);
+        CheckBox hombres = (CheckBox) findViewById(R.id.hombres_checkbox);
+        CheckBox mujeres = (CheckBox) findViewById(R.id.mujeres_checkbox);
         if (!solo_amigos.isChecked()) {
             switch(view.getId()) {
                 case R.id.mujeres_checkbox:
                     if (checked)
                         mySettings.mujeres = true;
+                    else if (!mySettings.hombres) {
+                        mujeres.setChecked(true);
+                    } else {
+                        mySettings.mujeres = false;
+                    }
+
                     break;
                 case R.id.hombres_checkbox:
                     if (checked)
                         mySettings.hombres = true;
+                    else if (!mySettings.mujeres) {
+                        hombres.setChecked(true);
+                    } else {
+                        mySettings.hombres = false;
+                    }
                     break;
 
             }
@@ -170,6 +185,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void sendSettings(View view) {
         if (view.getId() == R.id.guardar_cambios) {
+
             mySettings.updateSettings(SettingsActivity.this);
         }
     }
@@ -207,6 +223,7 @@ public class SettingsActivity extends AppCompatActivity {
     public void onUpdateSettingsSuccess (SaveSettingsResponseListener.SaveSettingsSuccessEvent event) {
         Toast.makeText(this,"Configuración guardada con éxito!",Toast.LENGTH_LONG).show();
         Session.getInstance().mySettings.update(event.settings);
+        setResult(RESULT_OK);
         finish();
     }
 }

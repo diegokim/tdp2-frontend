@@ -31,6 +31,7 @@ import com.example.android.linkup.links.LinksFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
 
+import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
 
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
@@ -51,13 +52,15 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.Observable;
 import java.util.Observer;
 
-public class MainActivity extends AppCompatActivity implements Observer{
+public class MainActivity extends BaseActivity implements Observer{
 
+    private static final int REQUEST_UPDATE_SETTINGS = 1;
     private DrawerLayout mDrawerLayout;
     protected ViewPager fragmentContainer;
     protected Menu menu;
     private Base64Converter converter;
     private NavigationView navView;
+    private CandidatesFragment candidatesFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements Observer{
                                 break;
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
-                                startActivity(new Intent (MainActivity.this,SettingsActivity.class));
+                                startActivityForResult(new Intent (MainActivity.this,SettingsActivity.class),REQUEST_UPDATE_SETTINGS);
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
@@ -149,7 +152,22 @@ public class MainActivity extends AppCompatActivity implements Observer{
         navView = navigationView;
         updateNavHeaderView();
 
-        showCandidatesFragment();
+//        showCandidatesFragment();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // Check which request we're responding to
+        if (requestCode == REQUEST_UPDATE_SETTINGS) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                candidatesFragment.showProgressDialog();
+                WebServiceManager.getInstance(this).getCandidates();
+                // Do something with the contact here (bigger example below)
+            }
+        }
     }
 
     private void showCandidatesFragment() {
@@ -184,7 +202,8 @@ public class MainActivity extends AppCompatActivity implements Observer{
     // Add Fragments to Tabs
     private void setupViewPager(ViewPager viewPager) {
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new CandidatesFragment(), "Personas");
+        candidatesFragment = new CandidatesFragment();
+        adapter.addFragment(candidatesFragment, "Personas");
         adapter.addFragment(new LinksFragment(), "Links");
         viewPager.setAdapter(adapter);
     }
@@ -241,4 +260,5 @@ public class MainActivity extends AppCompatActivity implements Observer{
     public void update(Observable o, Object arg) {
         updateNavHeaderView();
     }
+
 }

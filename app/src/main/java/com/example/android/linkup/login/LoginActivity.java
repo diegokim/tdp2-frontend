@@ -148,6 +148,7 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onRegisterSuccessEvent(RegisterRequestGenerator.RegisterResponseListener.OnRegisterSuccessEvent event) {
+        showProgressDialog();
         login();
     }
 

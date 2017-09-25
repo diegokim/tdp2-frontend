@@ -15,10 +15,12 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.android.linkup.BaseFragment;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Candidate;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
+import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
 
@@ -27,7 +29,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-public class CandidatesFragment extends Fragment {
+public class CandidatesFragment extends BaseFragment {
 
 
     private RecyclerView candidatesView;
@@ -43,6 +45,7 @@ public class CandidatesFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //TODO: Get Candidates
+        showProgressDialog();
         view = inflater.inflate(R.layout.fragment_list_of_candidates, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.candidates_refresh_layout);
 
@@ -85,6 +88,7 @@ public class CandidatesFragment extends Fragment {
 
     @Subscribe
     public void onGetCandidatesSuccess (ArrayList<Candidate> candidates) {
+        hideProgressDialog();
         if (swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -107,18 +111,12 @@ public class CandidatesFragment extends Fragment {
 
     }
 
-
     @Subscribe
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
+        hideProgressDialog();
         showNoCandidates(true);
     }
 
-    @Subscribe
-    public void onCandidatePhotoClicked(Profile profile) {
-        if (SystemClock.elapsedRealtime() - mLastClickTime > 1000) {
-            Log.e("ASJKLDJASLKD",Long.toString(mLastClickTime));
-            mLastClickTime = SystemClock.elapsedRealtime();
 
-        }
-    }
+
 }
