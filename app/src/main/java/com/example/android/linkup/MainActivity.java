@@ -30,14 +30,24 @@ import com.example.android.linkup.candidates.CandidatesFragment;
 import com.example.android.linkup.links.LinksFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
+
 import com.example.android.linkup.network.WebServiceManager;
+
+import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
+import com.example.android.linkup.settings.SettingsActivity;
+
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
 
+
 import java.util.ArrayList;
 import java.util.List;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
 import java.util.Observable;
 import java.util.Observer;
 

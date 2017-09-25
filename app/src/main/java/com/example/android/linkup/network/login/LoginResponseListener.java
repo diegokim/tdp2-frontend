@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Response;
 import com.example.android.linkup.login.Photos;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
@@ -32,10 +33,43 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
             RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event;
             event = new RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent();
             JSONObject profileJSON = null;
+            JSONObject settingsJSON = null;
             try {
                 profileJSON = response.getJSONObject("profile");
                 Profile profile = JSONParser.getProfile(profileJSON);
                 event.profile = profile;
+
+                //SETTINGS SETUP
+                settingsJSON = response.getJSONObject("settings");
+                Settings mysettings = new Settings();
+                mysettings.age_from = settingsJSON.getJSONObject("ageRange").getInt("min");
+                mysettings.age_to = settingsJSON.getJSONObject("ageRange").getInt("max");
+                mysettings.range = settingsJSON.getJSONObject("distRange").getInt("max");
+                mysettings.invisible = settingsJSON.getBoolean("invisible");
+                String interestType = settingsJSON.getString("interestType");
+                if (interestType.equals("friends")) {
+                    mysettings.hombres = false;
+                    mysettings.mujeres = false;
+                    mysettings.pareja = false;
+                    mysettings.just_friends = true;
+                } else {
+                    mysettings.pareja = true;
+                    mysettings.just_friends = false;
+                    if (interestType.equals("both")) {
+                        mysettings.hombres = true;
+                        mysettings.mujeres = true;
+                    } else {
+                        if (interestType.equals("male")) {
+                            mysettings.hombres = true;
+                            mysettings.mujeres = false;
+                        } else {
+                            mysettings.hombres = false;
+                            mysettings.mujeres = true;
+                        }
+                    }
+                }
+
+                event.settings = mysettings;
                 EventBus.getDefault().post(event);
             } catch (JSONException e1) {
                 Log.e(NetworkErrorMessages.LOGIN_TAG, e1.getMessage());

@@ -1,5 +1,6 @@
 package com.example.android.linkup.network.login;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
@@ -20,6 +21,11 @@ public class LoginRequestGenerator {
         LoginResponseListener responseListener = new LoginResponseListener();
 
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
+
+        request.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
         return request;
     }
 }

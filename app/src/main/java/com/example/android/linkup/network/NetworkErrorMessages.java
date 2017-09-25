@@ -13,5 +13,6 @@ public class NetworkErrorMessages {
     public static final String UPDATE_LOCATION_TAG = "REQ: UPDT LOCATION";
     public static final String LOGIN_TAG = "REQ: LOGIN";
         public static final String REGISTER_TAG = "REQ: REGISTER";
+    public static final String SETTINGS_TAG = "REQ: SETTINGS";
 //    public static final String
 }
