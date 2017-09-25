@@ -170,6 +170,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:progress="20"
+                android:max="500"
                 android:secondaryProgress="20" />
 
             <Switch
