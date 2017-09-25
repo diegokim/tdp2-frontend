@@ -78,6 +78,13 @@ public class JSONParser {
             result.name = profile.getString(NAME_KEY);
             result.description = profile.getString(DESCRIPTION_KEY);
             result.gender = profile.getString(GENDER_KEY);
+            if (result.gender.equals("male")) {
+                result.gender = "Hombre";
+            } else if (result.gender.equals("female")){
+                result.gender = "Mujer";
+            } else {
+                result.gender = "Otro";
+            }
             result.work = profile.getString(OCUPATION_KEY);
             result.education = profile.getString(EDUCATION_KEY);
             result.profilePhoto = profile.getString(PROFILE_PHOTO_KEY);
