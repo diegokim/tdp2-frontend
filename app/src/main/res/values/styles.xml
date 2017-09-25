@@ -3,19 +3,13 @@
     <!-- Base application theme. -->
     <!--<style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
-        <!--<item name="colorPrimary">@color/colorPrimary</item>-->
-        <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
-        <!--<item name="colorAccent">@color/colorAccent</item>-->
-        <!--<item name="android:windowBackground">@color/background</item>-->
-        <!--<item name="android:textColorPrimary">@color/textColorPrimary</item>-->
-
-        <item name="colorPrimary">#009688</item>
-        <item name="colorPrimaryDark">#00695C</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#607D8B</item>
+        <item name="colorPrimaryDark">#455A64</item>
+        <item name="colorAccent">#FF4081</item>
         <item name="android:windowBackground">@color/background</item>
         <item name="android:textColorPrimary">@color/textColorPrimary</item>
-        <item name="android:statusBarColor">@color/textColorPrimary</item>
+
+        <item name="android:statusBarColor">@color/colorPrimaryDark</item>
         <item name="multiSliderStyle">@style/Widget.MultiSlider</item>
     </style>
 
@@ -60,6 +54,10 @@
         <item name="android:textSize">36sp</item>
     </style>
 
+    <style name="Divider">
+        <item name="android:layout_height">0.01dp</item>
+        <item name="android:background">@color/colorLight</item>
+    </style>
 
 
     <dimen name="icon_top_margin">24dp</dimen>

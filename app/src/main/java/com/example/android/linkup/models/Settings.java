@@ -10,8 +10,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.NetworkRequestQueue;
+import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,12 +66,16 @@ public class Settings {
             CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/settings", params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    Toast.makeText(context,"Configuración guardada con éxito!",Toast.LENGTH_LONG).show();
+
+                    SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(Settings.this);
+                   EventBus.getDefault().post(event);
                 }
             }, new Response.ErrorListener() {
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    Toast.makeText(context,"Ups! Ha ocurrido un error :(",Toast.LENGTH_LONG).show();
+                    Log.e(NetworkErrorMessages.SETTINGS_TAG,error.toString());
+                    WebServiceManager.ErrorMessageEvent event = new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER);
+                    EventBus.getDefault().post(event);
                 }
             });
 

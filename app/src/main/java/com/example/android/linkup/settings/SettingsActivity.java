@@ -3,6 +3,7 @@ package com.example.android.linkup.settings;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -11,10 +12,16 @@ import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
+import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import io.apptik.widget.MultiSlider;
 
@@ -175,5 +182,31 @@ public class SettingsActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onErrorMessageEvent(WebServiceManager.ErrorMessageEvent event) {
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, event.message, duration);
+        toast.show();
+    }
+
+    @Subscribe
+    public void onUpdateSettingsSuccess (SaveSettingsResponseListener.SaveSettingsSuccessEvent event) {
+        Toast.makeText(this,"Configuración guardada con éxito!",Toast.LENGTH_LONG).show();
+        Session.getInstance().mySettings.update(event.settings);
+        finish();
     }
 }

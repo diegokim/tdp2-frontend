@@ -16,17 +16,21 @@ public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionVi
 
     public interface Listener {
         void onItemClick(String item, ImageView view);
+        void setAdapter(PhotoSelectionAdapter adapter);
     }
 
     private ArrayList<Bitmap> photos;
     private ArrayList<String> base64Photos;
+    public ArrayList<Boolean> isSelectedList;
     private Context context;
     private PhotoSelectionAdapter.Listener mListener;
 
 
     public PhotoSelectionAdapter (ArrayList<String> base64Photos, Context context, PhotoSelectionAdapter.Listener listener) {
         this.photos = new ArrayList<>();
+        this.isSelectedList = new ArrayList<>();
         this.base64Photos = base64Photos;
+
 
         for (int i = 0 ; i < base64Photos.size() ; i++) {
             String photo = base64Photos.get(i);
@@ -34,6 +38,7 @@ public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionVi
             Bitmap bitmap = converter.Base64ToBitmap(photo);
             bitmap = converter.resizeBitmap(bitmap,600);
             photos.add(bitmap);
+            isSelectedList.add(false);
         }
 
         this.context = context;
@@ -50,7 +55,8 @@ public class PhotoSelectionAdapter extends RecyclerView.Adapter<PhotoSelectionVi
     public void onBindViewHolder(PhotoSelectionViewHolder holder, int position) {
         Bitmap photo = photos.get(position);
         String base64Photo = base64Photos.get(position);
-        holder.bind(base64Photo, photo, mListener);
+        holder.bind(base64Photo, isSelectedList.get(position) , photo, mListener);
+        holder.setIsRecyclable(false);
     }
 
     @Override

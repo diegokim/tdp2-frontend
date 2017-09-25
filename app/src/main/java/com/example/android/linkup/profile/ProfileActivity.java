@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -173,6 +174,7 @@ public class ProfileActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (profile.name != null) {
+            Log.i("USER ID:", profile.id);
             Bitmap bitmap = photoConverter.Base64ToBitmap(profile.profilePhoto);
             bitmap = photoConverter.getRoundedCornerBitmap(bitmap,Color.WHITE,16,5,this);
             photo.setImageBitmap(bitmap);

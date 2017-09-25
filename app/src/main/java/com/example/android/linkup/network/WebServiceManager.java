@@ -7,6 +7,7 @@ import android.location.Location;
 import com.android.volley.Request;
 import com.example.android.linkup.network.candidates.GetCandidatesRequestGenerator;
 import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
+import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.network.get_profile.GetProfileRequestGenerator;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
@@ -52,6 +53,11 @@ public class WebServiceManager {
     }
     public void link(String id) {
         Request request = ActionOnCandidateRequestGenerator.generate(id, "link");
+        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void getLinks() {
+        Request request = GetLinksRequestGenerator.generate();
         NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
     }
 

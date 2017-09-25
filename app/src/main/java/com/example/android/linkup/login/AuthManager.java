@@ -36,9 +36,6 @@ public class AuthManager {
     private FirebaseAuth mAuth;
     private CallbackManager mCallbackManager;
 
-
-
-
     private AuthManager(BaseActivity activity) {
         mAuth = FirebaseAuth.getInstance();
         this.activity = activity;

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.android.volley.Response;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.JSONParser;
 
@@ -23,7 +24,8 @@ public class GetProfileResponseListener implements Response.Listener<JSONObject>
         if (profile != null) {
             EventBus.getDefault().post(new GetProfileSuccessEvent(profile));
         } else {
-            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("ERROR ALSKJDALSKDJASLKDJLK"));
+            Log.e(NetworkErrorMessages.GET_PROFILE_TAG, NetworkErrorMessages.NO_PROFILE_ERROR);
+            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
         }
     }
 

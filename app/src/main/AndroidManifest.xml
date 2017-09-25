@@ -3,10 +3,8 @@
     package="com.example.android.linkup">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-feature android:name="android.hardware.location.gps" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -44,9 +42,17 @@
         <activity android:name=".profile.ProfileActivity" />
         <activity
             android:name=".MainActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-        <activity android:name=".profile.edit_profile.EditProfileActivity" />
-        <activity android:name=".settings.SettingsActivity"></activity>
+            android:theme="@style/AppTheme" />
+        <activity android:name=".profile.edit_profile.EditProfileActivity"
+            />
+        <activity
+            android:name=".settings.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.android.linkup.MainActivity" />
+        </activity>
     </application>
 
 </manifest>
