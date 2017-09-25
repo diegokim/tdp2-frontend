@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
+import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -193,6 +194,13 @@ public class SettingsActivity extends AppCompatActivity {
     public void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onErrorMessageEvent(WebServiceManager.ErrorMessageEvent event) {
+        int duration = Toast.LENGTH_SHORT;
+        Toast toast = Toast.makeText(this, event.message, duration);
+        toast.show();
     }
 
     @Subscribe
