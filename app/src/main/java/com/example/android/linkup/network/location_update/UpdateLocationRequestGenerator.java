@@ -27,8 +27,8 @@ public class UpdateLocationRequestGenerator {
         JSONObject obj = new JSONObject();
         try {
             JSONArray mLocation = new JSONArray();
-            mLocation.put( location.getLatitude());
             mLocation.put(location.getLongitude());
+            mLocation.put( location.getLatitude());
             obj.put("location", location);
         } catch (JSONException e) {
             Log.e(NetworkErrorMessages.UPDATE_LOCATION_TAG, e.getMessage());

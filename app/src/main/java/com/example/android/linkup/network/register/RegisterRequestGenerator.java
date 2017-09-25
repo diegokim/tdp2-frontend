@@ -41,8 +41,8 @@ public class RegisterRequestGenerator {
             obj.put(PHOTOS_KEY, photosArr);
             obj.put(DESCRIPTION_KEY, data.description);
             JSONArray location = new JSONArray();
-            location.put( data.location.getLatitude());
             location.put(data.location.getLongitude());
+            location.put( data.location.getLatitude());
             obj.put("location", location);
         } catch (Exception e) {
             Log.e(NetworkErrorMessages.REGISTER_TAG, e.getMessage() );
