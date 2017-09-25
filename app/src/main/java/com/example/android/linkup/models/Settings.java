@@ -20,14 +20,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Settings {
-    public int age_from = 18;
-    public int age_to = 99;
-    public int range = 100;
+    public int age_from;
+    public int age_to;
+    public int range;
     public boolean just_friends;
-    public boolean pareja = true;
-    public boolean hombres = true;
-    public boolean mujeres = true;
-    public boolean solo_amigos = false;
+    public boolean pareja;
+    public boolean hombres;
+    public boolean mujeres;
+    public boolean solo_amigos;
     public boolean invisible;
 
     public Settings (){
@@ -66,7 +66,6 @@ public class Settings {
             CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/settings", params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-
                     SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(Settings.this);
                    EventBus.getDefault().post(event);
                 }

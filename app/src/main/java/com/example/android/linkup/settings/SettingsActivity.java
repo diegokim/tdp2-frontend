@@ -51,7 +51,8 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        mySettings = Session.getInstance().mySettings;
+        mySettings = new Settings();
+        mySettings.update(Session.getInstance().mySettings);
 
         //EDAD
         final TextView min_age_status = (TextView) findViewById(R.id.min_age_value);
@@ -112,15 +113,21 @@ public class SettingsActivity extends AppCompatActivity {
 
         //ENCONTRAR PAREJA
         findCouple_radioButton = (RadioButton) findViewById(R.id.pareja_radioButton);
+        just_friends_radioButton = (RadioButton) findViewById(R.id.solo_amigos_radioButton);
+
         men_checkbox = (CheckBox) findViewById(R.id.hombres_checkbox);
         women_checkbox = (CheckBox) findViewById(R.id.mujeres_checkbox);
-        findCouple_radioButton.setChecked(mySettings.pareja);
-        men_checkbox.setChecked(mySettings.hombres);
-        women_checkbox.setChecked(mySettings.mujeres);
 
-        //SOLO AMIGOS
-        just_friends_radioButton = (RadioButton) findViewById(R.id.solo_amigos_radioButton);
-        just_friends_radioButton.setChecked(mySettings.just_friends);
+        if (mySettings.pareja) {
+            findCouple_radioButton.setChecked(true);
+            men_checkbox.setChecked(mySettings.hombres);
+            women_checkbox.setChecked(mySettings.mujeres);
+        } else {
+            //SOLO AMIGOS
+            just_friends_radioButton.setChecked(true);
+        }
+
+
     }
 
     public void onRadioButtonClicked(View view) {
@@ -130,22 +137,24 @@ public class SettingsActivity extends AppCompatActivity {
         CheckBox mujeres = (CheckBox) findViewById(R.id.mujeres_checkbox);
         switch(view.getId()) {
             case R.id.pareja_radioButton:
-                if (checked)
+                if (checked){
                     mySettings.pareja = true;
                     mySettings.solo_amigos = false;
                     hombres.setChecked(true);
                     mySettings.hombres = true;
                     mujeres.setChecked(true);
                     mySettings.mujeres = true;
-                    break;
+                }
+                break;
             case R.id.solo_amigos_radioButton:
-                if (checked)
+                if (checked){
                     mySettings.pareja = false;
                     mySettings.solo_amigos = true;
                     hombres.setChecked(false);
                     mySettings.hombres = false;
                     mujeres.setChecked(false);
                     mySettings.mujeres = false;
+                }
                 break;
         }
     }
@@ -158,22 +167,30 @@ public class SettingsActivity extends AppCompatActivity {
         if (!solo_amigos.isChecked()) {
             switch(view.getId()) {
                 case R.id.mujeres_checkbox:
-                    if (checked)
+                    if (checked){
                         mySettings.mujeres = true;
-                    else if (!mySettings.hombres) {
-                        mujeres.setChecked(true);
-                    } else {
-                        mySettings.mujeres = false;
+                    }
+                    else {
+                        if (hombres.isChecked()) {
+                            mySettings.mujeres = false;
+                        } else {
+                            mySettings.mujeres = true;
+                            mujeres.setChecked(true);
+                        }
                     }
 
                     break;
                 case R.id.hombres_checkbox:
-                    if (checked)
+                    if (checked){
                         mySettings.hombres = true;
-                    else if (!mySettings.mujeres) {
-                        hombres.setChecked(true);
-                    } else {
-                        mySettings.hombres = false;
+                    }
+                    else {
+                        if (mujeres.isChecked()) {
+                            mySettings.hombres = false;
+                        } else {
+                            mySettings.hombres = true;
+                            hombres.setChecked(true);
+                        }
                     }
                     break;
 
@@ -185,7 +202,6 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void sendSettings(View view) {
         if (view.getId() == R.id.guardar_cambios) {
-
             mySettings.updateSettings(SettingsActivity.this);
         }
     }
