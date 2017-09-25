@@ -72,43 +72,8 @@ public class LoginActivity extends BaseActivity {
         } else {
             allowLocationButton.setVisibility(View.INVISIBLE);
             loginButton.setVisibility(View.VISIBLE);
-            mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-            mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-            locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(Location location) {
-                    mLocation = location;
-                }
-
-                @Override
-                public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                }
-
-                @Override
-                public void onProviderEnabled(String provider) {
-
-                }
-
-                @Override
-                public void onProviderDisabled(String provider) {
-
-                }
-            };
-
-            mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                mLocation = location;
-                            }
-                        }
-                    });
+            getLocation();
         }
-
-
     }
 
     private void findViews() {
@@ -189,6 +154,7 @@ public class LoginActivity extends BaseActivity {
     @Subscribe
     public void onLoginSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
+        Session.getInstance().mySettings.update(event.settings);
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
         finish();
@@ -216,43 +182,47 @@ public class LoginActivity extends BaseActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     allowLocationButton.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
-                    mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-                    mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
-                    locationListener = new LocationListener() {
-                        @Override
-                        public void onLocationChanged(Location location) {
-                            mLocation = location;
-                        }
-
-                        @Override
-                        public void onStatusChanged(String provider, int status, Bundle extras) {
-
-                        }
-
-                        @Override
-                        public void onProviderEnabled(String provider) {
-
-                        }
-
-                        @Override
-                        public void onProviderDisabled(String provider) {
-
-                        }
-                    };
-
-                    mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
-                    mFusedLocationClient.getLastLocation()
-                            .addOnSuccessListener(new OnSuccessListener<Location>() {
-                                @Override
-                                public void onSuccess(Location location) {
-                                    if (location != null) {
-                                        mLocation = location;
-                                    }
-                                }
-                            });
+                    getLocation();
                 }
                 return;
             }
         }
+    }
+
+    public void getLocation() {
+        mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                mLocation = location;
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+
+            }
+        };
+
+        mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            mLocation = location;
+                        }
+                    }
+                });
     }
 }

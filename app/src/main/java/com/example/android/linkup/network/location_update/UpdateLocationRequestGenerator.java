@@ -2,15 +2,18 @@ package com.example.android.linkup.network.location_update;
 
 
 import android.location.Location;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,11 +26,12 @@ public class UpdateLocationRequestGenerator {
         url += PROFILE_ENDPOINT;
         JSONObject obj = new JSONObject();
         try {
-            JSONObject jsonLocation = new JSONObject();
-            jsonLocation.put("latitude", location.getLatitude());
-            jsonLocation.put("longitude", location.getLongitude());
-            obj.put("location", jsonLocation);
+            JSONArray mLocation = new JSONArray();
+            mLocation.put( location.getLatitude());
+            mLocation.put(location.getLongitude());
+            obj.put("location", location);
         } catch (JSONException e) {
+            Log.e(NetworkErrorMessages.UPDATE_LOCATION_TAG, e.getMessage());
             e.printStackTrace();
         }
 
@@ -40,6 +44,7 @@ public class UpdateLocationRequestGenerator {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.e(NetworkErrorMessages.UPDATE_LOCATION_TAG,error.toString());
                 EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Error"));
             }
         };

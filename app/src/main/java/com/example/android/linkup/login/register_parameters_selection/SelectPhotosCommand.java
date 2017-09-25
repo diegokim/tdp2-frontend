@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
 import com.example.android.linkup.login.Photos;
+import com.example.android.linkup.profile.information_fragments.PhotosAdapter;
 import com.example.android.linkup.utils.Command;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.register.RegisterData;
@@ -51,15 +52,27 @@ public class SelectPhotosCommand implements Command {
     }
 
     public class FivePhotosSelectionListener implements PhotoSelectionAdapter.Listener {
+        private PhotoSelectionAdapter adapter;
+
         @Override
         public void onItemClick(String item, ImageView view) {
+            PhotoSelectionViewHolder viewHolder = (PhotoSelectionViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
             if (photosSelected.contains(item)) {
                 photosSelected.remove(item);
-                view.setImageAlpha(255);
+                adapter.isSelectedList.set(position,false);
+                viewHolder.update(false);
             } else if (photosSelected.size() < 5) {
                 photosSelected.add(item);
                 view.setImageAlpha(160);
+                adapter.isSelectedList.set(position,true);
+                viewHolder.update(true);
             }
+        }
+
+        @Override
+        public void setAdapter(PhotoSelectionAdapter adapter) {
+            this.adapter = adapter;
         }
     }
 
@@ -70,7 +83,7 @@ public class SelectPhotosCommand implements Command {
         RecyclerView mRecyclerView = (RecyclerView) mView.findViewById(R.id.photo_selection_recyclerview);
 
         PhotoSelectionAdapter adapter = new PhotoSelectionAdapter(photos.getPhotos(),activity, onPhotoClickListener);
-
+        onPhotoClickListener.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -131,14 +144,25 @@ public class SelectPhotosCommand implements Command {
 
 
     public class ProfilePhotoSelectionListener implements PhotoSelectionAdapter.Listener {
+
+        private PhotoSelectionAdapter adapter;
+
+        public void setAdapter (PhotoSelectionAdapter adapter) {
+            this.adapter = adapter;
+        }
+
         @Override
         public void onItemClick(String item, ImageView view) {
+            PhotoSelectionViewHolder viewHolder = (PhotoSelectionViewHolder) view.getTag();
+            int position = viewHolder.getAdapterPosition();
             if (profilePhoto.equals(item)) {
                 profilePhoto = "";
-                view.setImageAlpha(255);
+                adapter.isSelectedList.set(position,false);
+                viewHolder.update(false);
             } else if (profilePhoto.equals("")) {
                 profilePhoto = item;
-                view.setImageAlpha(160);
+                adapter.isSelectedList.set(position,true);
+                viewHolder.update(true);
             }
         }
     }

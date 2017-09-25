@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_margin="@dimen/activity_horizontal_margin"
+    tools:context="com.example.android.linkup.links.LinksFragment">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/no_links_layout"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:id="@+id/no_links_image"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:tint="@color/button_grey"
+            android:src="@drawable/ic_style_black_170dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_height="wrap_content"
+            android:textSize="24sp"
+            android:text="Aun no tienes links."
+            android:layout_centerHorizontal="true"
+            android:id="@+id/title_text"
+            android:layout_below="@id/no_links_image"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/title_text"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:text="Ve a la seccion de personas \n para que te recomendemos \n algunas!"/>
+
+
+    </RelativeLayout>
+
+    <!-- TODO: Update blank fragment layout -->
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_height="match_parent"
+        android:layout_width="match_parent" />
+
+</RelativeLayout>

@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.get_profile.GetProfileErrorListener;
 import com.example.android.linkup.network.get_profile.GetProfileResponseListener;
@@ -30,8 +31,7 @@ public class EditProfileRequestGenerator  {
             obj.put("description",description);
             obj.put("photo", photo);
         } catch (JSONException e) {
-            Log.e("REQUEST: ", "ERROR IN GENERATE EDIT PROFILE");
-            e.printStackTrace();
+            Log.e(NetworkErrorMessages.EDIT_PROFILE_TAG, e.getMessage());
         }
 
         Response.Listener responseListener = new EditProfileResponseListener();
@@ -52,7 +52,7 @@ public class EditProfileRequestGenerator  {
     private static class EditProfileErrorListener implements Response.ErrorListener {
         @Override
         public void onErrorResponse(VolleyError error) {
-            Log.e("REQUEST: ", "ERROR IN RESPONSE EDIT PROFILE");
+            Log.e(NetworkErrorMessages.EDIT_PROFILE_TAG, error.toString());
             EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Ha ocurrido un error! por favor intenta nuevamente mas tarde"));
         }
     }

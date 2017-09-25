@@ -16,6 +16,7 @@ import android.support.v4.view.ViewPager;
 
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -65,18 +66,12 @@ public class ProfileActivity extends BaseActivity implements Observer {
         findAndInitializeViews();
         setUpTabLayout();
         EventBus.getDefault().register(this);
-        Toolbar bar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(bar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.setTitle(PROFILE_APP_BAR_TEXT);
-
-        if (supportActionBar != null) {
-            VectorDrawableCompat indicator
-                    = VectorDrawableCompat.create(getResources(), R.drawable.ic_account_box_black_24dp  , getTheme());
-            indicator.setTint(ResourcesCompat.getColor(getResources(),R.color.white,getTheme()));
-            supportActionBar.setHomeAsUpIndicator(indicator);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
         //WebServiceManager.getInstance(this).getProfile();
@@ -90,6 +85,16 @@ public class ProfileActivity extends BaseActivity implements Observer {
             gender.setText(profile.gender);
         }
 
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // handle arrow click here
+        if (item.getItemId() == android.R.id.home) {
+            finish(); // close this activity and return to preview activity
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -169,6 +174,7 @@ public class ProfileActivity extends BaseActivity implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (profile.name != null) {
+            Log.i("USER ID:", profile.id);
             Bitmap bitmap = photoConverter.Base64ToBitmap(profile.profilePhoto);
             bitmap = photoConverter.getRoundedCornerBitmap(bitmap,Color.WHITE,16,5,this);
             photo.setImageBitmap(bitmap);

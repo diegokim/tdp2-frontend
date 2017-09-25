@@ -1,6 +1,7 @@
 package com.example.android.linkup.utils;
 
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Settings;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,6 +19,45 @@ public class JSONParser {
     private static final String NAME_KEY = "name";
     private static final String AGE_KEY = "age";
     private static final String ID_KEY = "id";
+
+    public static Settings getSettings (JSONObject settings) {
+        Settings result = new Settings();
+        try {
+            result.invisible = settings.getBoolean("invisible");
+            result.range = settings.getJSONObject("distRange").getInt("max");
+            result.age_from = settings.getJSONObject("ageRange").getInt("min");
+            result.age_to = settings.getJSONObject("ageRange").getInt("max");
+            String interestType = settings.getString("interestType");
+            if (interestType.equals("male")) {
+                result.just_friends = false;
+                result.pareja = true;
+                result.hombres = true;
+                result.mujeres = false;
+            } else {
+                if (interestType.equals("female")) {
+                    result.just_friends = false;
+                    result.pareja = true;
+                    result.hombres = false;
+                    result.mujeres = true;
+                } else {
+                    if (interestType.equals("both")) {
+                        result.just_friends = false;
+                        result.pareja = true;
+                        result.hombres = true;
+                        result.mujeres = true;
+                    } else {
+                        result.just_friends = true;
+                        result.pareja = false;
+                        result.hombres = false;
+                        result.mujeres = false;
+                    }
+                }
+            }
+            return  result;
+        } catch (Exception e) {
+            return null;
+        }
+    }
 
     public static Profile getProfile (JSONObject profile) {
         Profile result;
