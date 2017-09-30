@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class GetLinksRequestGenerator {
     private static final int GET_LINKS_METHOD = Request.Method.GET;
-    private static final String GET_LINKS_ENDPOINT = "/user/links";
+    private static final String GET_LINKS_ENDPOINT = "/users/me/links";
 
     public static Request generate() {
 

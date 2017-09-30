@@ -19,7 +19,7 @@ public class ActionOnCandidateRequestGenerator {
 
     public static Request generate(String id, String action) {
         String url = NetworkConfiguration.getInstance().serverAddr;
-        url += "/user/" + id + "/link" ;
+        url += "/users/" + id + "/actions" ;
         JSONObject obj = new JSONObject();
         try {
             obj.put("action",action);
@@ -34,7 +34,7 @@ public class ActionOnCandidateRequestGenerator {
         Response.ErrorListener errorListener = new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e(NetworkErrorMessages.CANDIDATES_TAG, error.getMessage());
+                Log.e(NetworkErrorMessages.CANDIDATES_TAG, error.toString());
                 EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
             }
         };

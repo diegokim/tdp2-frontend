@@ -66,7 +66,7 @@ public class Settings {
             }
             final Settings settings = new Settings();
             settings.update(this);
-            CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/settings", params, new Response.Listener<JSONObject>() {
+            CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
                     SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(settings);

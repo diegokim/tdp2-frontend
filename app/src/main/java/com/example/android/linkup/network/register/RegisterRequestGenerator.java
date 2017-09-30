@@ -21,7 +21,7 @@ import java.util.ArrayList;
 
 public class RegisterRequestGenerator {
 
-    private static final String REGISTER_ENDPOINT = "/profile";
+    private static final String REGISTER_ENDPOINT = "/users/me/profile";
     private static final int REGISTER_METHOD = Request.Method.PATCH;
     private static final String PROFILE_PHOTO_KEY = "photo";
     private static final String PHOTOS_KEY = "photos" ;

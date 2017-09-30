@@ -112,6 +112,11 @@ public class CandidatesFragment extends BaseFragment {
     }
 
     @Subscribe
+    public void onErrorMessage(WebServiceManager.ErrorMessageEvent event) {
+        hideProgressDialog();
+    }
+
+    @Subscribe
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
         hideProgressDialog();
         showNoCandidates(true);

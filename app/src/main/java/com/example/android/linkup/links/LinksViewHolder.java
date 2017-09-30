@@ -7,17 +7,19 @@ import android.widget.TextView;
 
 import com.example.android.linkup.R;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class LinksViewHolder extends RecyclerView.ViewHolder{
 
     public View view;
-    public ImageView profilePhoto;
+    public CircleImageView profilePhoto;
     public TextView header;
     public TextView lastMessage;
 
     public LinksViewHolder(View itemView) {
         super(itemView);
         view = itemView;
-        profilePhoto = (ImageView) view.findViewById(R.id.link_image);
+        profilePhoto = (CircleImageView) view.findViewById(R.id.link_image);
         header = (TextView) view.findViewById(R.id.link_header);
         lastMessage = (TextView) view.findViewById(R.id.link_last_message);
     }

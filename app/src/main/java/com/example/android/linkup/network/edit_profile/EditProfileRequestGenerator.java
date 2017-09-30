@@ -20,7 +20,7 @@ import org.json.JSONObject;
 
 public class EditProfileRequestGenerator  {
 
-    private static final String PROFILE_ENDPOINT = "/profile";
+    private static final String PROFILE_ENDPOINT = "/users/me/profile";
     private static final int EDIT_PROFILE_METHOD = Request.Method.PATCH;
 
     public static Request generate(String description, String photo) {

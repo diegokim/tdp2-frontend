@@ -13,6 +13,7 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.utils.Base64Converter;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
@@ -41,7 +42,8 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         //photo = converter.getRoundedCornerBitmap(photo, Color.WHITE,360,1,context);
         holder.profilePhoto.setImageBitmap(photo);
         holder.header.setText(profile.name + ", " + Integer.toString(profile.age));
-        holder.lastMessage.setText("LAKSJDLKASJDLKASJDLKASDJ...");
+        holder.lastMessage.setText("Hola como estas?");
+        holder.profilePhoto.setBorderColor(23123);
     }
 
     @Override

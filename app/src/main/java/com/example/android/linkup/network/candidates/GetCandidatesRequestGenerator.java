@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class GetCandidatesRequestGenerator {
 
     private static final int GET_CANDIDATES_METHOD = Request.Method.GET;
-    private static final String CANDIDATES_ENDPOINT = "/user/candidates";
+    private static final String CANDIDATES_ENDPOINT = "/users/me/candidates";
 
     public static Request generate() {
         String url = NetworkConfiguration.getInstance().serverAddr;

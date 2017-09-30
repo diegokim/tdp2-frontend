@@ -8,7 +8,7 @@ import org.json.JSONObject;
 
 public class GetProfileRequestGenerator {
     private static final int GET_PROFILE_METHOD = Request.Method.GET;
-    private static final String PROFILE_ENDPOINT = "/profile";
+    private static final String PROFILE_ENDPOINT = "/users/me/profile";
 
     public static Request generate() {
         String url = NetworkConfiguration.getInstance().serverAddr;
