@@ -115,7 +115,9 @@ public class LoginActivity extends BaseActivity {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
-                                mLocation = location;
+                                if (mLocation == null) {
+                                    mLocation = location;
+                                }
                                 login();
                             } else {
                                 Log.e("Get Location ERROR", "Cant get location");
@@ -215,13 +217,15 @@ public class LoginActivity extends BaseActivity {
             }
         };
 
-        mLocationManager.requestLocationUpdates("gps", 1, 10000, locationListener);
+        mLocationManager.requestLocationUpdates("gps", 1, 500, locationListener);
         mFusedLocationClient.getLastLocation()
                 .addOnSuccessListener(new OnSuccessListener<Location>() {
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
-                            mLocation = location;
+                            if (mLocation == null) {
+                                mLocation = location;
+                            }
                         }
                     }
                 });

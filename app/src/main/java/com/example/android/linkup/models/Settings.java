@@ -30,6 +30,8 @@ public class Settings {
     public boolean solo_amigos;
     public boolean invisible;
 
+
+
     public Settings (){
 
     }
@@ -39,13 +41,13 @@ public class Settings {
         JSONObject distRange = new JSONObject();
         JSONObject ageRange = new JSONObject();
         try {
-            distRange.put("min",1);
+            distRange.put("min",0);
             distRange.put("max",range);
 
             ageRange.put("min",age_from);
             ageRange.put("max",age_to);
 
-            params.put("disRange",distRange);
+            params.put("distRange",distRange);
             params.put("ageRange",ageRange);
 
             params.put("invisible",invisible);
@@ -62,11 +64,12 @@ public class Settings {
                     }
                 }
             }
-
+            final Settings settings = new Settings();
+            settings.update(this);
             CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/settings", params, new Response.Listener<JSONObject>() {
                 @Override
                 public void onResponse(JSONObject response) {
-                    SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(Settings.this);
+                    SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(settings);
                    EventBus.getDefault().post(event);
                 }
             }, new Response.ErrorListener() {
@@ -98,5 +101,6 @@ public class Settings {
         this.mujeres = s.mujeres;
         this.pareja = s.pareja;
         this.just_friends = s.just_friends;
+        this.solo_amigos =s.solo_amigos;
     }
 }
