@@ -16,10 +16,11 @@ public class ActionOnCandidateRequestGenerator {
     private static final String DELETE = "delete";
 
     private static String getURL (String id, String action) {
+        String addr = NetworkConfiguration.getInstance().serverAddr;
         if (action.equals(DELETE)) {
-            return "/users/" + id;
+            return addr + "/users/" + id;
         } else {
-            return "/users/" + id + "/actions" ;
+            return addr + "/users/" + id + "/actions" ;
         }
     }
 

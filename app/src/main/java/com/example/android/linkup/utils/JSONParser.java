@@ -1,5 +1,7 @@
 package com.example.android.linkup.utils;
 
+import android.util.Log;
+
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Settings;
 
@@ -55,6 +57,7 @@ public class JSONParser {
             }
             return  result;
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -67,6 +70,7 @@ public class JSONParser {
             result.photos = getStringArrayFrom(photos);
             return  result;
         } catch (Exception e) {
+            Log.e("ERROR", e.getStackTrace().toString());
             return null;
         }
     }
@@ -95,6 +99,8 @@ public class JSONParser {
             return  result;
 
         } catch (Exception e) {
+            e.printStackTrace();
+            Log.e("ERROR", e.getStackTrace().toString());
             return null;
         }
     }

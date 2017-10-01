@@ -28,7 +28,7 @@ class GetLinksResponseListener implements Response.Listener<JSONObject> {
                         profiles.add(profile);
                 }
             } catch (JSONException e) {
-                Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
+                Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.toString());
             }
             GetLinksRequestGenerator.OnGetLinksSuccessEvent event = new GetLinksRequestGenerator.OnGetLinksSuccessEvent();
             event.profiles = profiles;
