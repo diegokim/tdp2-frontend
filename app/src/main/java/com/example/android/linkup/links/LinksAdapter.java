@@ -3,13 +3,17 @@ package com.example.android.linkup.links;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
 
 import java.util.ArrayList;
@@ -37,13 +41,48 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
     @Override
     public void onBindViewHolder(LinksViewHolder holder, int position) {
-        Profile profile = links.get(position);
+        final Profile profile = links.get(position);
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
-        //photo = converter.getRoundedCornerBitmap(photo, Color.WHITE,360,1,context);
+
         holder.profilePhoto.setImageBitmap(photo);
         holder.header.setText(profile.name + ", " + Integer.toString(profile.age));
+        // TODO: Set the real last chat message
         holder.lastMessage.setText("Hola como estas?");
-        holder.profilePhoto.setBorderColor(23123);
+        holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
+    }
+
+    public static class LinkManagementPopUpClickListener implements View.OnClickListener{
+        private Profile profile;
+
+        public LinkManagementPopUpClickListener (Profile profile) {
+            this.profile = profile;
+        }
+        @Override
+        public void onClick(View v) {
+            final Context context = v.getContext();
+            final PopupMenu popup = new PopupMenu(context, v);
+
+            popup.getMenuInflater()
+                    .inflate(R.menu.links_menu, popup.getMenu());
+
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                public boolean onMenuItemClick(MenuItem item) {
+                    if (item.getTitle().equals("Eliminar")){
+                        // TODO: Send delete link request
+                        WebServiceManager.getInstance(context).deleteLink(profile.id);
+                    } else if (item.getTitle().equals("Bloquear")) {
+                        // TODO: send block user request
+                        WebServiceManager.getInstance(context).blockUser(profile.id);
+                    } else if (item.getTitle().equals("Reportar")) {
+                        // TODO: open dialog asking for reason and then send report request
+                        String reason = "razon";
+                        WebServiceManager.getInstance(context).reportUser(profile.id,reason);
+                    }
+                    return true;
+                }
+            });
+            popup.show();
+        }
     }
 
     @Override

@@ -12,7 +12,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/link_image"
-        app:civ_border_width="2dp"
+        app:civ_border_width="1dp"
+        app:civ_border_color="@color/colorAccent"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:scaleType="centerCrop"
@@ -21,7 +22,7 @@
 
     <TextView
         android:id="@+id/link_header"
-        android:layout_width="match_parent"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/md_keylines"
         android:layout_marginTop="8dp"
@@ -32,7 +33,7 @@
 
     <TextView
         android:id="@+id/link_last_message"
-        android:layout_width="match_parent"
+        android:layout_width="210dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/link_header"
         android:layout_marginLeft="@dimen/md_keylines"
@@ -44,7 +45,7 @@
         android:textAppearance="?attr/textAppearanceListItem"
         android:textSize="11sp" />
     <Space
-        android:layout_width="match_parent"
+        android:layout_width="210dp"
         android:layout_height="24dp"
         android:id="@+id/spacer"
         android:layout_below="@+id/link_last_message"
@@ -54,4 +55,14 @@
         android:layout_marginLeft="16dp"
         android:layout_below="@+id/spacer"
         android:layout_toRightOf="@+id/link_image" />
+
+    <ImageView
+        android:id="@+id/more_vert"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:foregroundGravity="right"
+        android:tint="@color/button_grey"
+        android:paddingTop="16dp"
+        android:layout_toRightOf="@+id/link_last_message"
+        android:src="@drawable/ic_more_vert_black_24dp"/>
 </RelativeLayout>

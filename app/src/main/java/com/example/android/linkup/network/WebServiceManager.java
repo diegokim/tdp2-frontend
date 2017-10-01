@@ -27,38 +27,56 @@ public class WebServiceManager {
         return instance;
     }
 
-    public void login() {
-        Request request = LoginRequestGenerator.generate();
+    public void sendRequest (Request request) {
         NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+    }
+
+    public void login() {
+        sendRequest(LoginRequestGenerator.generate());
     }
 
     public void updateProfile(String profilePhotoSelected, String description) {
         Request request = EditProfileRequestGenerator.generate(description, profilePhotoSelected);
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
     }
 
     public void updateLocation(Location location) {
         Request request = UpdateLocationRequestGenerator.generate(location);
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
     }
 
     public void getCandidates() {
         Request request = GetCandidatesRequestGenerator.generate();
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
     }
 
     public void reject(String id) {
         Request request = ActionOnCandidateRequestGenerator.generate(id, "reject");
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
     }
     public void link(String id) {
         Request request = ActionOnCandidateRequestGenerator.generate(id, "link");
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
     }
 
     public void getLinks() {
         Request request = GetLinksRequestGenerator.generate();
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(request);
+        sendRequest(request);
+    }
+
+    public void deleteLink(String id) {
+        Request deleteLink = ActionOnCandidateRequestGenerator.generate(id, "delete");
+        sendRequest(deleteLink);
+    }
+
+    public void blockUser(String id) {
+        Request blockUser = ActionOnCandidateRequestGenerator.generate(id,"block");
+        sendRequest(blockUser);
+    }
+
+    public void reportUser(String id, String reason) {
+        Request request = ActionOnCandidateRequestGenerator.generate(id,"block",reason);
+        sendRequest(request);
     }
 
     public static class ErrorMessageEvent {
@@ -69,11 +87,11 @@ public class WebServiceManager {
     }
     public void getProfile () {
         Request getProfile = GetProfileRequestGenerator.generate();
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(getProfile);
+        sendRequest(getProfile);
     }
 
     public void register (RegisterData data) {
         Request registerRequest = RegisterRequestGenerator.generate(data);
-        NetworkRequestQueue.getInstance(context).addToRequestQueue(registerRequest);
+        sendRequest(registerRequest);
     }
  }

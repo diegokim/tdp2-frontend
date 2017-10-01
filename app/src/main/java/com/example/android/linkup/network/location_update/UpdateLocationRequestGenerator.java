@@ -10,6 +10,7 @@ import com.android.volley.VolleyError;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
+import com.example.android.linkup.network.ServerErrorListener;
 import com.example.android.linkup.network.WebServiceManager;
 
 import org.greenrobot.eventbus.EventBus;
@@ -41,13 +42,7 @@ public class UpdateLocationRequestGenerator {
                 EventBus.getDefault().post(new OnUpdateLocationSuccessEvent());
             }
         };
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e(NetworkErrorMessages.UPDATE_LOCATION_TAG,error.toString());
-                EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Error"));
-            }
-        };
+        Response.ErrorListener errorListener = new ServerErrorListener(NetworkErrorMessages.UPDATE_LOCATION_TAG);
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(EDIT_PROFILE_METHOD, url, obj, responseListener, errorListener);
         return request;
     }

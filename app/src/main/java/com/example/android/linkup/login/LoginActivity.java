@@ -27,6 +27,7 @@ import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
 import com.example.android.linkup.network.login.LoginResponseListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
+import com.example.android.linkup.network.register.RegisterResponseListener;
 import com.facebook.FacebookSdk;
 
 import com.facebook.login.widget.LoginButton;
@@ -149,13 +150,13 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void onRegisterSuccessEvent(RegisterRequestGenerator.RegisterResponseListener.OnRegisterSuccessEvent event) {
+    public void onRegisterSuccessEvent(RegisterResponseListener.OnRegisterSuccessEvent event) {
         showProgressDialog();
         login();
     }
 
     @Subscribe
-    public void onLoginSuccessEvent (RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event) {
+    public void onLoginSuccessEvent (RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
         Session.getInstance().mySettings.update(event.settings);
         Intent intent = new Intent(this, MainActivity.class);

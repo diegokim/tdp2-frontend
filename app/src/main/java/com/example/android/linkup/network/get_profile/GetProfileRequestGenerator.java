@@ -1,8 +1,11 @@
 package com.example.android.linkup.network.get_profile;
 
 import com.android.volley.Request;
+import com.android.volley.Response;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
+import com.example.android.linkup.network.ServerErrorListener;
 
 import org.json.JSONObject;
 
@@ -15,7 +18,7 @@ public class GetProfileRequestGenerator {
         url += PROFILE_ENDPOINT;
         JSONObject obj = new JSONObject();
         GetProfileResponseListener responseListener = new GetProfileResponseListener();
-        GetProfileErrorListener errorListener = new GetProfileErrorListener();
+        Response.ErrorListener errorListener = new ServerErrorListener(NetworkErrorMessages.GET_PROFILE_TAG);
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
         return request;
     }

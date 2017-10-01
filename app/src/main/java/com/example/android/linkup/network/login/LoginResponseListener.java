@@ -10,6 +10,7 @@ import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
+import com.example.android.linkup.network.register.RegisterResponseListener;
 import com.example.android.linkup.utils.JSONParser;
 
 import org.greenrobot.eventbus.EventBus;
@@ -30,8 +31,8 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
             }
             EventBus.getDefault().post(new PhotosEvent(photos));
         } catch (Exception e) {
-            RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent event;
-            event = new RegisterRequestGenerator.RegisterResponseListener.OnLoginSuccessEvent();
+            RegisterResponseListener.OnLoginSuccessEvent event;
+            event = new RegisterResponseListener.OnLoginSuccessEvent();
             JSONObject profileJSON = null;
             JSONObject settingsJSON = null;
             try {

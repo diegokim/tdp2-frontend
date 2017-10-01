@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
+import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
 import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
 
 import org.greenrobot.eventbus.EventBus;
@@ -29,6 +31,7 @@ public class LinksFragment extends Fragment {
     private RecyclerView recyclerView;
     private View noLinksView;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class LinksFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         noLinksView = (View) view.findViewById(R.id.no_links_layout);
+
         WebServiceManager.getInstance(getActivity()).getLinks();
 
         return view;
@@ -70,6 +74,11 @@ public class LinksFragment extends Fragment {
             noLinksView.setVisibility(View.INVISIBLE);
         }
         recyclerView.setAdapter(new LinksAdapter(getActivity(),links.profiles));
+    }
+
+    @Subscribe
+    public void onActionSuccessEvent(ActionOnCandidateResponseListener.OnActionSuccessEvent event) {
+        WebServiceManager.getInstance(getActivity()).getLinks();
     }
 
 }

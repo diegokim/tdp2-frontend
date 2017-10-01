@@ -25,6 +25,7 @@ import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
+import com.example.android.linkup.network.edit_profile.EditProfileResponseListener;
 import com.example.android.linkup.utils.Base64Converter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,7 +121,8 @@ public class EditProfileActivity extends BaseActivity {
 
 
     @Subscribe
-    public void onEditProfileSuccess(EditProfileRequestGenerator.EditProfileResponseListener.EditProfileSuccessEvent event) {
+    public void onEditProfileSuccess(EditProfileResponseListener.EditProfileSuccessEvent event) {
+        Toast.makeText(this, "Tu perfil ha sido actualizado con éxito!", Toast.LENGTH_SHORT).show();
         profile.description = descriptionInput.getText().toString();
         profile.profilePhoto = profilePhotoSelected;
         profile.commitChanges();

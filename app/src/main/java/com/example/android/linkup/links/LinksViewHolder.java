@@ -15,6 +15,7 @@ public class LinksViewHolder extends RecyclerView.ViewHolder{
     public CircleImageView profilePhoto;
     public TextView header;
     public TextView lastMessage;
+    public ImageView moreVert;
 
     public LinksViewHolder(View itemView) {
         super(itemView);
@@ -22,5 +23,6 @@ public class LinksViewHolder extends RecyclerView.ViewHolder{
         profilePhoto = (CircleImageView) view.findViewById(R.id.link_image);
         header = (TextView) view.findViewById(R.id.link_header);
         lastMessage = (TextView) view.findViewById(R.id.link_last_message);
+        moreVert = (ImageView) view.findViewById(R.id.more_vert);
     }
 }

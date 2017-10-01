@@ -10,6 +10,7 @@ import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
+import com.example.android.linkup.network.ServerErrorListener;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.JSONParser;
 
@@ -47,43 +48,10 @@ public class RegisterRequestGenerator {
         } catch (Exception e) {
             Log.e(NetworkErrorMessages.REGISTER_TAG, e.getMessage() );
         }
-        RegisterErrorListener errorListener = new RegisterErrorListener();
+        Response.ErrorListener errorListener = new ServerErrorListener(NetworkErrorMessages.REGISTER_TAG);
         RegisterResponseListener responseListener = new RegisterResponseListener();
         Request request = new CustomJsonObjectRequest(REGISTER_METHOD, url, obj,responseListener, errorListener);
         return request;
-    }
-
-    public static class RegisterErrorListener implements Response.ErrorListener {
-
-        @Override
-        public void onErrorResponse(VolleyError error) {
-            //TODO: handle error message
-            Log.e(NetworkErrorMessages.REGISTER_TAG, error.toString());
-            EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
-        }
-    }
-
-    public static class RegisterResponseListener implements Response.Listener<JSONObject> {
-
-        @Override
-        public void onResponse(JSONObject response) {
-
-            try {
-                OnRegisterSuccessEvent event = new OnRegisterSuccessEvent();
-                EventBus.getDefault().post(event);
-            } catch (Exception e) {
-                Log.e(NetworkErrorMessages.REGISTER_TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-
-        public static class OnLoginSuccessEvent {
-            public Profile profile;
-            public Settings settings;
-        }
-
-        public class OnRegisterSuccessEvent {
-        }
     }
 
 }
