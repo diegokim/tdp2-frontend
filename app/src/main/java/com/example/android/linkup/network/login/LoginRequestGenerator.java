@@ -22,7 +22,7 @@ public class LoginRequestGenerator {
 
         CustomJsonObjectRequest request = new CustomJsonObjectRequest(GET_PROFILE_METHOD, url, obj, responseListener, errorListener);
 
-        request.setRetryPolicy(new DefaultRetryPolicy(10000,
+        request.setRetryPolicy(new DefaultRetryPolicy(20000,
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

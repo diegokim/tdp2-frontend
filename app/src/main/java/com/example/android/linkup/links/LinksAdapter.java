@@ -1,6 +1,7 @@
 package com.example.android.linkup.links;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.PopupMenu;
@@ -12,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.chat.ChatActivity;
+import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
@@ -49,6 +52,13 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         // TODO: Set the real last chat message
         holder.lastMessage.setText("Hola como estas?");
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActiveChatProfile.getInstance().update(profile);
+                context.startActivity(new Intent(context, ChatActivity.class));
+            }
+        });
     }
 
     public static class LinkManagementPopUpClickListener implements View.OnClickListener{
