@@ -17,7 +17,8 @@ public class ServerErrorListener implements Response.ErrorListener {
     }
     @Override
     public void onErrorResponse(VolleyError error) {
-        Log.e(NetworkErrorMessages.CANDIDATES_TAG, error.toString());
+        Log.e(tag, error.toString());
+        error.printStackTrace(System.err);
         EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER));
     }
 }

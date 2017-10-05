@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.models.Link;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
@@ -21,12 +22,12 @@ import java.util.Random;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
-    ArrayList<Profile> links;
+    ArrayList<Link> links;
     LayoutInflater inflater;
     Base64Converter converter;
     Context context;
 
-    public LinksAdapter (Context context, ArrayList<Profile> links) {
+    public LinksAdapter (Context context, ArrayList<Link> links) {
         this.links = links;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.context = context;
@@ -41,7 +42,9 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
     @Override
     public void onBindViewHolder(LinksViewHolder holder, int position) {
-        final Profile profile = links.get(position);
+        Link link = links.get(position);
+        final Profile profile = link.profile;
+
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
 
         holder.profilePhoto.setImageBitmap(photo);
@@ -49,6 +52,12 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         // TODO: Set the real last chat message
         holder.lastMessage.setText("Hola como estas?");
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
+
+        if ( link.type.equals("friends")) {
+            holder.profilePhoto.setBorderColor(context.getResources().getColor(R.color.just_friends));
+        } else {
+            holder.profilePhoto.setBorderColor(context.getResources().getColor(R.color.couple));
+        }
     }
 
     public static class LinkManagementPopUpClickListener implements View.OnClickListener{

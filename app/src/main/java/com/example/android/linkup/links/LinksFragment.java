@@ -1,30 +1,20 @@
 package com.example.android.linkup.links;
 
-import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.linkup.R;
-import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
-import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
-import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
+import com.example.android.linkup.network.candidates.GetLinksResponseListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-
-import java.util.ArrayList;
 
 public class LinksFragment extends Fragment {
 
@@ -67,13 +57,13 @@ public class LinksFragment extends Fragment {
     }
 
     @Subscribe
-    public void onGetLinksSuccessEvent (GetLinksRequestGenerator.OnGetLinksSuccessEvent links) {
-        if (links.profiles.size() == 0) {
+    public void onGetLinksSuccessEvent (GetLinksResponseListener.OnGetLinksSuccessEvent links) {
+        if (links.links.size() == 0) {
             noLinksView.setVisibility(View.VISIBLE);
         } else {
             noLinksView.setVisibility(View.INVISIBLE);
         }
-        recyclerView.setAdapter(new LinksAdapter(getActivity(),links.profiles));
+        recyclerView.setAdapter(new LinksAdapter(getActivity(),links.links));
     }
 
     @Subscribe

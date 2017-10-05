@@ -133,7 +133,8 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
         });
         holder.setIsRecyclable(false);
         holder.photo.setImageBitmap(photos.get(position));
-        holder.header.setText(profile.name + ", " + profile.age +", " + candidate.distance + " km");
+        holder.header.setText(profile.name + ", " + profile.age +" Años" );
+        holder.distance.setText(candidate.distance + " Km");
     }
 
     @Override

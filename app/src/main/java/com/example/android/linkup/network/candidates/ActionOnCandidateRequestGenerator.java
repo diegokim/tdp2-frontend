@@ -62,7 +62,4 @@ public class ActionOnCandidateRequestGenerator {
         }
         return baseRequest(id, action, obj);
     }
-
-
-
 }

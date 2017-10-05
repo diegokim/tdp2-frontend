@@ -6,6 +6,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Link;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
@@ -33,9 +34,5 @@ public class GetLinksRequestGenerator {
 
         Response.ErrorListener errorListener = new ServerErrorListener(NetworkErrorMessages.CANDIDATES_TAG);
         return new CustomJsonObjectRequest(GET_LINKS_METHOD,url,obj,responseListener,errorListener);
-    }
-
-    public static class OnGetLinksSuccessEvent {
-        public ArrayList<Profile> profiles;
     }
 }

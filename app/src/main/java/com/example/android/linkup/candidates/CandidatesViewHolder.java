@@ -18,6 +18,7 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
 
 import org.greenrobot.eventbus.EventBus;
+import org.w3c.dom.Text;
 
 
 public class CandidatesViewHolder extends RecyclerView.ViewHolder {
@@ -28,6 +29,7 @@ public class CandidatesViewHolder extends RecyclerView.ViewHolder {
     public ImageButton reject;
     public ImageButton link;
     public ImageButton superlink;
+    public TextView distance;
 
     public CandidatesViewHolder(View itemView) {
         super(itemView);
@@ -37,7 +39,7 @@ public class CandidatesViewHolder extends RecyclerView.ViewHolder {
         reject = (ImageButton) itemView.findViewById(R.id.reject_button);
         link = (ImageButton) itemView.findViewById(R.id.link_button);
         superlink = (ImageButton) itemView.findViewById(R.id.superlink_button);
-
+        distance = (TextView) itemView.findViewById(R.id.distance);
         photo.setTag(this);
     }
 
