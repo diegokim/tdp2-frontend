@@ -28,6 +28,7 @@ import com.example.android.linkup.network.location_update.UpdateLocationRequestG
 import com.example.android.linkup.network.login.LoginResponseListener;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 import com.example.android.linkup.network.register.RegisterResponseListener;
+import com.example.android.linkup.utils.Command;
 import com.facebook.FacebookSdk;
 
 import com.facebook.login.widget.LoginButton;
@@ -58,6 +59,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(this);
         setContentView(R.layout.activity_login);
@@ -73,7 +75,12 @@ public class LoginActivity extends BaseActivity {
         } else {
             allowLocationButton.setVisibility(View.INVISIBLE);
             loginButton.setVisibility(View.VISIBLE);
-            getLocation();
+            getLocation(new Command() {
+                @Override
+                public void excecute() {
+
+                }
+            });
         }
     }
 
@@ -108,28 +115,20 @@ public class LoginActivity extends BaseActivity {
 
     @Subscribe
     public void onFacebookAuthCompleteEvent (AuthManager.OnFacebookAuthCompleteEvent event) {
-        if (mLocation != null) {
-            login();
-        } else {
-            mFusedLocationClient.getLastLocation()
-                    .addOnSuccessListener(new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                if (mLocation == null) {
-                                    mLocation = location;
-                                }
-                                login();
-                            } else {
-                                Log.e("Get Location ERROR", "Cant get location");
-                            }
-                        }
-                    });
-        }
+        login();
     }
 
     private void login() {
-        WebServiceManager.getInstance(this).login();
+        if (mLocation != null) {
+            WebServiceManager.getInstance(this).login();
+        } else {
+            getLocation(new Command() {
+                @Override
+                public void excecute() {
+                    WebServiceManager.getInstance(getApplicationContext()).login();
+                }
+            });
+        }
     }
 
     @Subscribe
@@ -159,10 +158,10 @@ public class LoginActivity extends BaseActivity {
     public void onLoginSuccessEvent (RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
         Session.getInstance().mySettings.update(event.settings);
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-        finish();
-        //WebServiceManager.getInstance(this).updateLocation(mLocation);
+//        Intent intent = new Intent(this, MainActivity.class);
+//        startActivity(intent);
+//        finish();
+        WebServiceManager.getInstance(this).updateLocation(mLocation);
     }
 
     @Subscribe
@@ -186,20 +185,27 @@ public class LoginActivity extends BaseActivity {
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     allowLocationButton.setVisibility(View.INVISIBLE);
                     loginButton.setVisibility(View.VISIBLE);
-                    getLocation();
+                    getLocation(new Command() {
+                        @Override
+                        public void excecute() {
+
+                        }
+                    });
                 }
                 return;
             }
         }
     }
 
-    public void getLocation() {
+    public void getLocation(final Command command) {
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 mLocation = location;
+                command.excecute();
+                mLocationManager.removeUpdates(locationListener);
             }
 
             @Override
@@ -218,17 +224,6 @@ public class LoginActivity extends BaseActivity {
             }
         };
 
-        mLocationManager.requestLocationUpdates("gps", 1, 500, locationListener);
-        mFusedLocationClient.getLastLocation()
-                .addOnSuccessListener(new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-                            if (mLocation == null) {
-                                mLocation = location;
-                            }
-                        }
-                    }
-                });
+        mLocationManager.requestLocationUpdates("gps", 0, 0, locationListener);
     }
 }

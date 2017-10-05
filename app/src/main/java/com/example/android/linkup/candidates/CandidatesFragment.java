@@ -63,11 +63,10 @@ public class CandidatesFragment extends BaseFragment {
         noCandidatesText = (TextView) view.findViewById(R.id.no_candidates_text);
         WebServiceManager.getInstance(view.getContext()).getCandidates();
         candidatesView = (RecyclerView) view.findViewById(R.id.recommendations_list);
-        candidatesView.setHasFixedSize(true);
-        candidatesView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
         mAdapter = new CandidatesAdapter(new ArrayList<Candidate>(),getActivity());
         candidatesView.setAdapter(mAdapter);
+        candidatesView.setHasFixedSize(true);
+        candidatesView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mLastClickTime = 0;
         return view;

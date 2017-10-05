@@ -19,7 +19,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class UpdateLocationRequestGenerator {
-    private static final String PROFILE_ENDPOINT = "/profile";
+    private static final String PROFILE_ENDPOINT = "/users/me/profile";
     private static final int EDIT_PROFILE_METHOD = Request.Method.PATCH;
 
     public static Request generate(Location location) {
@@ -29,11 +29,11 @@ public class UpdateLocationRequestGenerator {
         try {
             JSONArray mLocation = new JSONArray();
             mLocation.put(location.getLongitude());
-            mLocation.put( location.getLatitude());
-            obj.put("location", location);
+            mLocation.put(location.getLatitude());
+            obj.put("location", mLocation);
         } catch (JSONException e) {
             Log.e(NetworkErrorMessages.UPDATE_LOCATION_TAG, e.getMessage());
-            e.printStackTrace();
+            e.printStackTrace(System.err);
         }
 
         Response.Listener responseListener = new Response.Listener() {
