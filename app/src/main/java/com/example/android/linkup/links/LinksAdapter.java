@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,8 +17,15 @@ import com.example.android.linkup.R;
 import com.example.android.linkup.chat.ChatActivity;
 import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -43,14 +51,35 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(LinksViewHolder holder, int position) {
+    public void onBindViewHolder(final LinksViewHolder holder, int position) {
         final Profile profile = links.get(position);
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
 
         holder.profilePhoto.setImageBitmap(photo);
         holder.header.setText(profile.name + ", " + Integer.toString(profile.age));
-        // TODO: Set the real last chat message
-        holder.lastMessage.setText("Hola como estas?");
+        // TODO: Set the real id
+        String myId = Session.getInstance().myProfile.id;
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+myId+"/messages/"+profile.id);
+
+        Query lastQuery = ref.orderByKey().limitToLast(1);
+
+        lastQuery.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.child("message").exists()) {
+                    String value = dataSnapshot.child("message").getValue().toString();
+                    holder.lastMessage.setText(value);
+                } else {
+                    holder.lastMessage.setText("No messages");
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                holder.lastMessage.setText("Could not read last msg");
+            }
+        });
+
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -3,7 +3,7 @@ package com.example.android.linkup.models;
 
 public class ActiveChatProfile {
     private static ActiveChatProfile instance;
-    private Profile profile;
+    public Profile profile;
 
     private ActiveChatProfile() {
         this.profile = new Profile();
