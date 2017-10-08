@@ -104,7 +104,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
         mBuilder.setView(mView);
         mBuilder.setTitle("Razon");
-        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String reason = descriptionTextView.getText().toString();

@@ -188,7 +188,7 @@ public class SelectPhotosCommand implements Command {
         descriptionTextView.setText("Soy una persona divertida, a la que le gusta arriesgarse y vivir la vida al máximo.");
         mBuilder.setView(mView);
         mBuilder.setTitle("Descripcion");
-        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
+        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 description = descriptionTextView.getText().toString();
