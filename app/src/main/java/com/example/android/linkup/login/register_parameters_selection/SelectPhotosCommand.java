@@ -77,12 +77,12 @@ public class SelectPhotosCommand implements Command {
     }
 
 
-    private void createPhotosDialog(String title, DialogInterface.OnShowListener onShowListener, PhotoSelectionAdapter.Listener onPhotoClickListener) {
+    private void createPhotosDialog(String title, DialogInterface.OnShowListener onShowListener, PhotoSelectionAdapter.Listener onPhotoClickListener, Photos photosToDisplay) {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(activity);
         View mView = inflater.inflate(R.layout.select_photo_dialog, null);
         RecyclerView mRecyclerView = (RecyclerView) mView.findViewById(R.id.photo_selection_recyclerview);
 
-        PhotoSelectionAdapter adapter = new PhotoSelectionAdapter(photos.getPhotos(),activity, onPhotoClickListener);
+        PhotoSelectionAdapter adapter = new PhotoSelectionAdapter(photosToDisplay.getPhotos(),activity, onPhotoClickListener);
         onPhotoClickListener.setAdapter(adapter);
         mRecyclerView.setAdapter(adapter);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(activity);
@@ -116,7 +116,7 @@ public class SelectPhotosCommand implements Command {
                 button.setOnClickListener(new FivePhotosSelectedOkListener());
             }
         },
-        new FivePhotosSelectionListener());
+        new FivePhotosSelectionListener(), photos);
     }
 
     class FivePhotosSelectedOkListener implements View.OnClickListener {
@@ -138,7 +138,7 @@ public class SelectPhotosCommand implements Command {
                 button.setOnClickListener(new ProfilePhotoSelectedOkListener());
             }
         },
-        new ProfilePhotoSelectionListener());
+        new ProfilePhotoSelectionListener(), new Photos(photosSelected));
     }
 
 
@@ -185,10 +185,10 @@ public class SelectPhotosCommand implements Command {
         View mView = inflater.inflate(R.layout.description_input_dialog, null);
 
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
-
+        descriptionTextView.setText("Soy una persona divertida, a la que le gusta arriesgarse y vivir la vida al máximo.");
         mBuilder.setView(mView);
         mBuilder.setTitle("Descripcion");
-        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 description = descriptionTextView.getText().toString();

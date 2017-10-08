@@ -1,17 +1,21 @@
 package com.example.android.linkup.links;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.login.AuthManager;
 import com.example.android.linkup.models.Link;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
@@ -60,7 +64,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         }
     }
 
-    public static class LinkManagementPopUpClickListener implements View.OnClickListener{
+    public class LinkManagementPopUpClickListener implements View.OnClickListener{
         private Profile profile;
 
         public LinkManagementPopUpClickListener (Profile profile) {
@@ -82,16 +86,34 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                     } else if (item.getTitle().equals("Bloquear")) {
                         // TODO: send block user request
                         WebServiceManager.getInstance(context).blockUser(profile.id);
-                    } else if (item.getTitle().equals("Reportar")) {
+                    } else if (item.getTitle().equals("Denunciar")) {
                         // TODO: open dialog asking for reason and then send report request
-                        String reason = "razon";
-                        WebServiceManager.getInstance(context).reportUser(profile.id,reason);
+                        createReportDialog(profile.id);
                     }
                     return true;
                 }
             });
             popup.show();
         }
+    }
+
+    private void createReportDialog(final String userId) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
+        View mView = inflater.inflate(R.layout.description_input_dialog, null);
+
+        final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
+        mBuilder.setView(mView);
+        mBuilder.setTitle("Razon");
+        mBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String reason = descriptionTextView.getText().toString();
+                WebServiceManager.getInstance(context).reportUser(userId, reason);
+            }
+        } );
+
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     @Override

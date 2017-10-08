@@ -120,7 +120,4 @@ public class CandidatesFragment extends BaseFragment {
         hideProgressDialog();
         showNoCandidates(true);
     }
-
-
-
 }
