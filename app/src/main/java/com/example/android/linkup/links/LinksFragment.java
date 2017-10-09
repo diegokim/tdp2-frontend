@@ -69,8 +69,10 @@ public class LinksFragment extends Fragment {
 
     @Subscribe
     public void onActionSuccessEvent(ActionOnCandidateResponseListener.OnActionSuccessEvent event) {
-        if (event.action.equals("delete") || event.action.equals("block") || event.action.equals("report") )
-                WebServiceManager.getInstance(getActivity()).getLinks();
+        if (event.action.equals("delete") || event.action.equals("block") || event.action.equals("report") ){
+            WebServiceManager.getInstance(getActivity()).getLinks();
+        }
+
     }
 
 }

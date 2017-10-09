@@ -3,6 +3,8 @@ package com.example.android.linkup.links;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,6 +22,7 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +31,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
@@ -51,23 +58,22 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
     @Override
     public void onBindViewHolder(final LinksViewHolder holder, int position) {
-        Link link = links.get(position);
+        final Link link = links.get(position);
         final Profile profile = link.profile;
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
 
         holder.profilePhoto.setImageBitmap(photo);
         holder.header.setText(profile.name + ", " + Integer.toString(profile.age));
-        // TODO: Set the real id
-        String myId = Session.getInstance().myProfile.id;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+myId+"/messages/"+profile.id);
+
+        final String myId = Session.getInstance().myProfile.id;
+        final DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+myId+"/messages/"+profile.id);
 
 
         Query lastQuery = ref.orderByKey().limitToLast(1);
 
-        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+        lastQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
 
                 if (dataSnapshot.getChildrenCount() == 0 ) {
                     holder.lastMessage.setText("Haz click para conversar!");
@@ -75,7 +81,27 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         //Log.d("user key",child.getKey());
                         //Log.d("user val",child.child("message").getValue().toString());
+                        String time = child.child("messageTime").getValue().toString();
+                        link.time = time;
                         holder.lastMessage.setText(child.child("message").getValue().toString());
+                        String lastMessageUser = child.child("messageUser").getValue().toString();
+                        if (! lastMessageUser.equals(Session.getInstance().myProfile.name)) {
+                            holder.lastMessage.setText(lastMessageUser + ": " + child.child("message").getValue().toString());
+                            Boolean viewed = (Boolean) child.child("viewed").getValue();
+                            if (! viewed ) {
+                                holder.lastMessage.setTypeface(null, Typeface.BOLD_ITALIC);
+                            }
+                        } else {
+                            holder.lastMessage.setText("yo: " + child.child("message").getValue().toString());
+                        }
+//                        links.sort(new Comparator<Link>() {
+//                            @Override
+//                            public int compare(Link o1, Link o2) {
+//
+//                                if ( o1.time > o2.time )
+//                                return 0;
+//                            }
+//                        });
                     }
                 }
             }
@@ -85,7 +111,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                 holder.lastMessage.setText("Error al obtener mensajes!");
             }
         });
-//
+
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
 
         if ( link.type.equals("friends")) {
@@ -96,8 +122,24 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(final View view) {
                 ActiveChatProfile.getInstance().update(profile);
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DatabaseReference innerRef = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            String key = child.getKey();
+                            innerRef.child(key).child("viewed").setValue(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
                 context.startActivity(new Intent(context, ChatActivity.class));
             }
         });

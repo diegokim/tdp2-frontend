@@ -54,7 +54,6 @@
         android:hint="IP:xxxx.xxxx.xxxxx.xxxx"
         android:inputType="text"
         android:text="172.20.10.2"
-
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
