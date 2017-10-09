@@ -63,20 +63,23 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
         Query lastQuery = ref.orderByKey().limitToLast(1);
 
-        lastQuery.addValueEventListener(new ValueEventListener() {
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child("message").exists()) {
-                    String value = dataSnapshot.child("message").getValue().toString();
-                    holder.lastMessage.setText(value);
+                if (dataSnapshot.getChildrenCount() == 0 ) {
+                    holder.lastMessage.setText("Haz click para conversar!");
                 } else {
-                    holder.lastMessage.setText("No messages");
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        //Log.d("user key",child.getKey());
+                        //Log.d("user val",child.child("message").getValue().toString());
+                        holder.lastMessage.setText(child.child("message").getValue().toString());
+                    }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                holder.lastMessage.setText("Could not read last msg");
+                holder.lastMessage.setText("Error al obtener mensajes!");
             }
         });
 

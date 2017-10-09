@@ -16,12 +16,15 @@ public class ChatMessage {
     private boolean highlight;
     private String to;
 
-    public ChatMessage(String messageText, String messageUser) {
+    public ChatMessage(String messageText, String messageUser, String to, boolean highlight) {
         this.message = messageText;
         this.messageUser = messageUser;
 
         // Initialize to current time
         messageTime = new Date().getTime();
+        this.from = Session.getInstance().myProfile.id;
+        this.to = to;
+        this.highlight = highlight;
     }
 
     public ChatMessage(){
@@ -62,5 +65,25 @@ public class ChatMessage {
 
     public void unread() {
         this.viewed = false;
+    }
+
+    public boolean getHightlight() {
+        return this.highlight;
+    }
+
+    public String getTo() {
+        return this.to;
+    }
+
+    public void setTo(String to) {
+        this.to = to;
+    }
+
+    public void highlight() {
+        this.highlight = true;
+    }
+
+    public void unhighlight() {
+        this.highlight = false;
     }
 }

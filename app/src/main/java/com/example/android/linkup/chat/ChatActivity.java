@@ -42,21 +42,11 @@ public class ChatActivity extends AppCompatActivity {
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             // User Not signed In
             Toast.makeText(this,
-                    "Welcome Stranger!!!!!!",
+                    "Error de red!",
                     Toast.LENGTH_LONG)
                     .show();
             finish();
         } else {
-            // User is already signed in
-            /*
-            Toast.makeText(this,
-                    "Welcome " + FirebaseAuth.getInstance()
-                            .getCurrentUser()
-                            .getDisplayName(),
-                    Toast.LENGTH_LONG)
-                    .show();
-            */
-            // Load chat msgs
             displayChatMessages();
         }
 
@@ -70,30 +60,47 @@ public class ChatActivity extends AppCompatActivity {
                 String id_guest = ActiveChatProfile.getInstance().profile.id;
                 String id_host = Session.getInstance().myProfile.id;
 
-                // Read the input field and push a new instance
-                // of ChatMessage to the Firebase database
-                FirebaseDatabase.getInstance()
-                        .getReference("chats/"+id_host+"/messages/"+id_guest)
-                        .push()
-                        .setValue(new ChatMessage(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())
-                        );
+                boolean highlight = true;
 
-                FirebaseDatabase.getInstance()
-                        .getReference("chats/"+id_guest+"/messages/"+id_host)
-                        .push()
-                        .setValue(new ChatMessage(input.getText().toString(),
-                                FirebaseAuth.getInstance()
-                                        .getCurrentUser()
-                                        .getDisplayName())
-                        );
+                if (noForbbidenMessages(input)) {
+                    // Read the input field and push a new instance
+                    // of ChatMessage to the Firebase database
+                    FirebaseDatabase.getInstance()
+                            .getReference("chats/"+id_host+"/messages/"+id_guest)
+                            .push()
+                            .setValue(new ChatMessage(input.getText().toString(),
+                                    FirebaseAuth.getInstance()
+                                            .getCurrentUser()
+                                            .getDisplayName(),id_guest,highlight)
+                            );
 
-                // Clear the input
-                input.setText("");
+                    FirebaseDatabase.getInstance()
+                            .getReference("chats/"+id_guest+"/messages/"+id_host)
+                            .push()
+                            .setValue(new ChatMessage(input.getText().toString(),
+                                    FirebaseAuth.getInstance()
+                                            .getCurrentUser()
+                                            .getDisplayName(),id_guest,highlight)
+                            );
+
+                    // Clear the input
+                    input.setText("");
+                } else {
+                    if (!input.getText().toString().equals("")) {
+                        input.setText("Cochino!!!");
+                    }
+                }
             }
         });
+    }
+
+    private boolean noForbbidenMessages(EditText input) {
+        boolean respuesta = true;
+        if (input.getText().toString().equals("caca")) respuesta = false;
+        if (input.getText().toString().equals("")) respuesta = false;
+        if (input.getText().toString().equals("pedo")) respuesta = false;
+
+        return respuesta;
     }
 
     private void displayChatMessages() {
