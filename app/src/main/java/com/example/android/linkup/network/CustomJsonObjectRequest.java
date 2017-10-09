@@ -15,6 +15,8 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
 
     public CustomJsonObjectRequest(int method, String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
         super(method, url, jsonRequest, listener, errorListener);
+        Log.d("Req URL",url);
+        Log.d("Req Body", jsonRequest.toString());
     }
 
     @Override

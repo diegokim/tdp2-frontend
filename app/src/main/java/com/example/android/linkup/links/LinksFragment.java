@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,7 +69,8 @@ public class LinksFragment extends Fragment {
 
     @Subscribe
     public void onActionSuccessEvent(ActionOnCandidateResponseListener.OnActionSuccessEvent event) {
-        WebServiceManager.getInstance(getActivity()).getLinks();
+        if (event.action.equals("delete") || event.action.equals("block") || event.action.equals("report") )
+                WebServiceManager.getInstance(getActivity()).getLinks();
     }
 
 }

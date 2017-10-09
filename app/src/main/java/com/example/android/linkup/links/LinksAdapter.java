@@ -1,28 +1,33 @@
 package com.example.android.linkup.links;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+
 
 import com.example.android.linkup.R;
-import com.example.android.linkup.login.AuthManager;
+
 import com.example.android.linkup.models.Link;
+import com.example.android.linkup.chat.ChatActivity;
+import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
@@ -45,16 +50,39 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     }
 
     @Override
-    public void onBindViewHolder(LinksViewHolder holder, int position) {
+    public void onBindViewHolder(final LinksViewHolder holder, int position) {
         Link link = links.get(position);
         final Profile profile = link.profile;
-
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
 
         holder.profilePhoto.setImageBitmap(photo);
         holder.header.setText(profile.name + ", " + Integer.toString(profile.age));
-        // TODO: Set the real last chat message
-        holder.lastMessage.setText("Hola como estas?");
+        // TODO: Set the real id
+        String myId = Session.getInstance().myProfile.id;
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+myId+"/messages/"+profile.id);
+
+        Query lastQuery = ref.orderByKey().limitToLast(1);
+
+        lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildrenCount() == 0 ) {
+                    holder.lastMessage.setText("Haz click para conversar!");
+                } else {
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        //Log.d("user key",child.getKey());
+                        //Log.d("user val",child.child("message").getValue().toString());
+                        holder.lastMessage.setText(child.child("message").getValue().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                holder.lastMessage.setText("Error al obtener mensajes!");
+            }
+        });
+
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
 
         if ( link.type.equals("friends")) {
@@ -62,6 +90,14 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         } else {
             holder.profilePhoto.setBorderColor(context.getResources().getColor(R.color.couple));
         }
+
+        holder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ActiveChatProfile.getInstance().update(profile);
+                context.startActivity(new Intent(context, ChatActivity.class));
+            }
+        });
     }
 
     public class LinkManagementPopUpClickListener implements View.OnClickListener{
@@ -83,37 +119,12 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                     if (item.getTitle().equals("Eliminar")){
                         // TODO: Send delete link request
                         WebServiceManager.getInstance(context).deleteLink(profile.id);
-                    } else if (item.getTitle().equals("Bloquear")) {
-                        // TODO: send block user request
-                        WebServiceManager.getInstance(context).blockUser(profile.id);
-                    } else if (item.getTitle().equals("Denunciar")) {
-                        // TODO: open dialog asking for reason and then send report request
-                        createReportDialog(profile.id);
                     }
                     return true;
                 }
             });
             popup.show();
         }
-    }
-
-    private void createReportDialog(final String userId) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(context);
-        View mView = inflater.inflate(R.layout.description_input_dialog, null);
-
-        final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
-        mBuilder.setView(mView);
-        mBuilder.setTitle("Razon");
-        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String reason = descriptionTextView.getText().toString();
-                WebServiceManager.getInstance(context).reportUser(userId, reason);
-            }
-        } );
-
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
     }
 
     @Override

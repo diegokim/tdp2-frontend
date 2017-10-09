@@ -5,12 +5,4 @@
         android:id="@+id/one"
         android:title="Eliminar"/>
 
-    <item
-        android:id="@+id/two"
-        android:title="Bloquear"/>
-
-    <item
-        android:id="@+id/three"
-        android:title="Denunciar"/>
-
 </menu>

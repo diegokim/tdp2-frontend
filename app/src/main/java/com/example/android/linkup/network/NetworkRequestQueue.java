@@ -1,5 +1,6 @@
 package com.example.android.linkup.network;
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;

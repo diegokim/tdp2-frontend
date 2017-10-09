@@ -29,173 +29,222 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:visibility="visible"
-                android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:layout_marginStart="@dimen/activity_horizontal_margin"
-                android:layout_marginEnd="@dimen/activity_vertical_margin">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:text="Me interesa"
-                    android:textColor="@color/dark_grey"
-                    android:textSize="@dimen/settingsTitles" />
-
-                <RadioGroup
-                    android:id="@+id/radio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/dark_grey">
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Encontrar Pareja"
-                        android:textColor="@color/dark_grey"
-                        android:id="@+id/pareja_radioButton"
-                        android:layout_marginTop="5dp"
-                        android:checked="false"
-                        android:textSize="@dimen/radiobuttons"
-                        android:onClick="onRadioButtonClicked"/>
-
-                    <CheckBox
-                        android:id="@+id/hombres_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/dark_grey"
-                        android:onClick="onCheckboxClicked"
-                        android:layout_marginStart="20dp"
-                        android:text="Hombres"
-                        android:textSize="@dimen/checkbox"/>
-
-                    <CheckBox android:id="@+id/mujeres_checkbox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Mujeres"
-                        android:textColor="@color/dark_grey"
-                        android:onClick="onCheckboxClicked"
-                        android:layout_marginStart="20dp"
-                        android:textSize="@dimen/checkbox"/>
-
-                    <RadioButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Solo Amigos"
-                        android:textSize="@dimen/radiobuttons"
-                        android:textColor="@color/dark_grey"
-                        android:id="@+id/solo_amigos_radioButton"
-                        android:checked="false"
-                        android:onClick="onRadioButtonClicked"/>
-
-                </RadioGroup>
+                android:visibility="visible">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_marginEnd="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:paddingBottom="3dp"
+                    android:background="@color/com_facebook_button_background_color_focused"
+                    android:elevation="2dp"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/edad_title"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/textView3"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
                         android:padding="10dp"
-                        android:text="Edad"
+                        android:text="Me interesa"
                         android:textColor="@color/dark_grey"
                         android:textSize="@dimen/settingsTitles" />
 
-                    <TextView
-                        android:id="@+id/min_age_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:paddingLeft="10dp"
-                        android:text="min" />
+                    <RadioGroup
+                        android:id="@+id/radio"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:textColor="@color/dark_grey">
 
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_marginTop="10dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text=" - " />
+                        <RadioButton
+                            android:id="@+id/pareja_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:checked="false"
+                            android:onClick="onRadioButtonClicked"
+                            android:text="Encontrar Pareja"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/radiobuttons" />
 
-                    <TextView
-                        android:id="@+id/max_age_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:text="max" />
+                        <CheckBox
+                            android:id="@+id/hombres_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:onClick="onCheckboxClicked"
+                            android:text="Hombres"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/checkbox" />
 
+                        <CheckBox
+                            android:id="@+id/mujeres_checkbox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:onClick="onCheckboxClicked"
+                            android:text="Mujeres"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/checkbox" />
+
+                        <RadioButton
+                            android:id="@+id/solo_amigos_radioButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="false"
+                            android:onClick="onRadioButtonClicked"
+                            android:text="Solo Amigos"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/radiobuttons" />
+
+                    </RadioGroup>
                 </LinearLayout>
-
-                <io.apptik.widget.MultiSlider
-                    android:id="@+id/edad_bar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:thumbNumber="2"
-                    android:layout_margin="10dp"
-                    />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal">
+                    android:layout_marginEnd="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@color/com_facebook_button_background_color_focused"
+                    android:elevation="2dp"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/distancia_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:text="Distancia"
-                        android:textColor="@color/dark_grey"
-                        android:textSize="@dimen/settingsTitles" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/km_value"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:text="km" />
+                        <TextView
+                            android:id="@+id/edad_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:padding="10dp"
+                            android:text="Edad"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/settingsTitles" />
 
-                    <TextView
-                        android:id="@+id/km"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:id="@+id/min_age_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:paddingLeft="10dp"
+                            android:text="min" />
+
+                        <TextView
+                            android:id="@+id/textView6"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text=" - " />
+
+                        <TextView
+                            android:id="@+id/max_age_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:text="max" />
+
+                    </LinearLayout>
+
+                    <io.apptik.widget.MultiSlider
+                        android:id="@+id/edad_bar"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="10dp"
-                        android:text="km" />
+                        android:layout_margin="10dp"
+                        app:thumbNumber="2" />
                 </LinearLayout>
 
-                <SeekBar
-                    android:id="@+id/distancia_bar"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:progress="20"
-                    android:max="500"
-                    android:secondaryProgress="20" />
-
-                <Switch
-                    android:id="@+id/invisible_switch"
-                    android:layout_height="match_parent"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:padding="10dp"
-                    android:textColor="@color/dark_grey"
-                    android:text="Modo Invisible"
-                    android:textSize="@dimen/settingsTitles"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@color/com_facebook_button_background_color_focused"
+                    android:elevation="2dp"
+                    android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/guardar_cambios"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:text="Guardar Cambios"
-                    android:textSize="14dp"
-                    android:onClick="sendSettings"
-                    android:layout_marginTop="32dp"
-                    android:layout_marginBottom="32dp"
-                    style="@style/Widget.AppCompat.Button.Colored"/>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/distancia_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:padding="10dp"
+                            android:text="Distancia"
+                            android:textColor="@color/dark_grey"
+                            android:textSize="@dimen/settingsTitles" />
+
+                        <TextView
+                            android:id="@+id/km_value"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:text="km" />
+
+                        <TextView
+                            android:id="@+id/km"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:paddingLeft="10dp"
+                            android:text="km" />
+                    </LinearLayout>
+
+                    <SeekBar
+                        android:id="@+id/distancia_bar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:max="500"
+                        android:progress="20"
+                        android:secondaryProgress="20" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:background="@color/com_facebook_button_background_color_focused"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:elevation="2dp"
+                    android:orientation="vertical">
+
+                    <Switch
+                        android:id="@+id/invisible_switch"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="10dp"
+                        android:text="Modo Invisible"
+                        android:textColor="@color/dark_grey"
+                        android:textSize="@dimen/settingsTitles" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin">
+
+                    <Button
+                        android:id="@+id/guardar_cambios"
+                        style="@style/Widget.AppCompat.Button.Colored"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="sendSettings"
+                        android:text="Guardar Cambios"
+                        android:textSize="14dp" />
+                </LinearLayout>
 
             </LinearLayout>
 

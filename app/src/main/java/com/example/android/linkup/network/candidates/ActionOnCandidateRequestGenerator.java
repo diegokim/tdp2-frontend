@@ -5,6 +5,7 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.example.android.linkup.network.CustomJsonObjectRequest;
+import com.example.android.linkup.network.JsonObjectRequestWithNull;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.ServerErrorListener;
@@ -33,11 +34,11 @@ public class ActionOnCandidateRequestGenerator {
     }
 
     public static Request baseRequest (String id, String action, JSONObject params) {
-        Response.Listener responseListener = new ActionOnCandidateResponseListener();
+        Response.Listener responseListener = new ActionOnCandidateResponseListener(action);
         Response.ErrorListener errorListener = new ServerErrorListener(NetworkErrorMessages.CANDIDATES_TAG);
         String url = getURL(id,action);
         int method = getMethod(action);
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(method, url, params, responseListener, errorListener);
+        Request request = new JsonObjectRequestWithNull(method, url, params, responseListener, errorListener);
         return request;
     }
 
@@ -46,6 +47,7 @@ public class ActionOnCandidateRequestGenerator {
         try {
             obj.put("action",action);
         } catch (Exception e) {
+            e.printStackTrace(System.err);
             Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
         }
         return baseRequest(id, action,obj);
@@ -58,6 +60,7 @@ public class ActionOnCandidateRequestGenerator {
             obj.put("message", reason);
         } catch (Exception e ) {
             //TODO: handle error
+            e.printStackTrace(System.err);
             Log.e("ACTIONS", e.toString());
         }
         return baseRequest(id, action, obj);

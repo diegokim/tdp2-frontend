@@ -112,6 +112,9 @@ public class CandidatesFragment extends BaseFragment {
 
     @Subscribe
     public void onErrorMessage(WebServiceManager.ErrorMessageEvent event) {
+        if (swipeRefreshLayout.isRefreshing()){
+            swipeRefreshLayout.setRefreshing(false);
+        }
         hideProgressDialog();
     }
 
