@@ -61,11 +61,14 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         String myId = Session.getInstance().myProfile.id;
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+myId+"/messages/"+profile.id);
 
+
         Query lastQuery = ref.orderByKey().limitToLast(1);
 
         lastQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+
                 if (dataSnapshot.getChildrenCount() == 0 ) {
                     holder.lastMessage.setText("Haz click para conversar!");
                 } else {
@@ -82,7 +85,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                 holder.lastMessage.setText("Error al obtener mensajes!");
             }
         });
-
+//
         holder.moreVert.setOnClickListener(new LinkManagementPopUpClickListener(profile));
 
         if ( link.type.equals("friends")) {

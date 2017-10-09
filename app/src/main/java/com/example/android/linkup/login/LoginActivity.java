@@ -225,5 +225,17 @@ public class LoginActivity extends BaseActivity {
         };
 
         mLocationManager.requestLocationUpdates("gps", 0, 0, locationListener);
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (location != null) {
+                            // Logic to handle location object
+                            mLocation = location;
+                            command.excecute();
+                        }
+                    }
+                });
     }
 }
