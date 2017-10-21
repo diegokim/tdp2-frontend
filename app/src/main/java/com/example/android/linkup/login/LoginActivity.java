@@ -165,6 +165,7 @@ public class LoginActivity extends BaseActivity {
     @Subscribe
     public void onUpdateLocationSuccessEvent (UpdateLocationRequestGenerator.OnUpdateLocationSuccessEvent event) {
         Intent intent = new Intent(this, MainActivity.class);
+        hideProgressDialog();
         startActivity(intent);
         finish();
     }

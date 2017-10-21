@@ -42,7 +42,7 @@ public class ActiveChatProfileFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_profile,container, false);
+        View v = inflater.inflate(R.layout.activity_profile_other,container, false);
         this.photoConverter = new Base64Converter();
 
         profile = ActiveChatProfile.getInstance().profile;

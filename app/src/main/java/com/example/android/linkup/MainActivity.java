@@ -151,7 +151,6 @@ public class MainActivity extends BaseActivity implements Observer{
 
         navView = navigationView;
         updateNavHeaderView();
-
 //        showCandidatesFragment();
     }
 
