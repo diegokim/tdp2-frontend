@@ -10,12 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.models.Link;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
 import com.example.android.linkup.network.candidates.GetLinksResponseListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.ArrayList;
 
 public class LinksFragment extends Fragment {
 
@@ -29,6 +32,7 @@ public class LinksFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_links, container, false);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerview);
+        recyclerView.setAdapter(new LinksAdapter(getContext(), new ArrayList<Link>()));
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -42,7 +46,6 @@ public class LinksFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        WebServiceManager.getInstance(getActivity()).getLinks();
     }
 
     @Override

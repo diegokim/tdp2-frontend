@@ -22,18 +22,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-/**
- * Created by diegokim on 10/9/17.
- */
-
 public class ChatFragment extends Fragment {
 
     private FirebaseListAdapter<ChatMessage> adapter;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_chat,container, false);
+        final View v = inflater.inflate(R.layout.activity_chat,container, false);
         if(FirebaseAuth.getInstance().getCurrentUser() == null) {
             // User Not signed In
             Toast.makeText(getActivity(),
@@ -50,7 +47,7 @@ public class ChatFragment extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                EditText input = (EditText) view.findViewById(R.id.input);
+                EditText input = (EditText) v.findViewById(R.id.input);
 
                 String id_guest = ActiveChatProfile.getInstance().profile.id;
                 String id_host = Session.getInstance().myProfile.id;
