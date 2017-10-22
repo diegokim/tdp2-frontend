@@ -47,7 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentTop="true"
-
+            android:transcriptMode="alwaysScroll"
+            android:stackFromBottom="true"
             android:layout_above="@id/fab"
             android:dividerHeight="16dp"
             android:divider="@android:color/transparent"
