@@ -83,6 +83,11 @@ public class LoginActivity extends BaseActivity {
                 }
             });
         }
+        if (authManager.userIsLoggedIn()) {
+            NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
+            showProgressDialog();
+            login();
+        }
     }
 
     private void findViews() {
@@ -101,11 +106,6 @@ public class LoginActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        if (authManager.userIsLoggedIn()) {
-            NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
-            showProgressDialog();
-            login();
-        }
     }
 
     @Override

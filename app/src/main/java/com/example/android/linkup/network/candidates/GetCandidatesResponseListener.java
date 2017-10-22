@@ -1,11 +1,13 @@
 package com.example.android.linkup.network.candidates;
 
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.android.volley.Response;
 import com.example.android.linkup.models.Candidate;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.NetworkErrorMessages;
+import com.example.android.linkup.utils.Base64Converter;
 import com.example.android.linkup.utils.JSONParser;
 
 import org.greenrobot.eventbus.EventBus;
@@ -13,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -24,6 +27,8 @@ public class GetCandidatesResponseListener implements Response.Listener<JSONObje
     public void onResponse(JSONObject response) {
         Log.e("Response ", response.toString());
         ArrayList<Candidate> candidates = new ArrayList<>();
+        ArrayList<Bitmap> photos = new ArrayList<>();
+        Base64Converter converter = new Base64Converter();
 
         try {
             JSONArray profilesJSON = response.getJSONArray("profiles");
@@ -36,6 +41,7 @@ public class GetCandidatesResponseListener implements Response.Listener<JSONObje
                     candidate.profile = profile;
                     candidate.distance = distance;
                     candidates.add(candidate);
+                    photos.add(converter.Base64ToBitmap(candidate.profile.profilePhoto));
                 }
             }
         } catch (JSONException e) {
@@ -43,5 +49,10 @@ public class GetCandidatesResponseListener implements Response.Listener<JSONObje
             Log.e(NetworkErrorMessages.CANDIDATES_TAG, e.getMessage());
         }
         EventBus.getDefault().post(candidates);
+    }
+
+    public class OnGetCandidatesSuccessEvent {
+        ArrayList<Candidate> candidates;
+        ArrayList<Bitmap> profilePhotos;
     }
 }
