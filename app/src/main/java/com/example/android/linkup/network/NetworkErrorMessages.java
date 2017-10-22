@@ -7,6 +7,7 @@ package com.example.android.linkup.network;
 public class NetworkErrorMessages {
     public static final String CANDIDATES_TAG = "REQ: CANDIDATES";
     public static final String ERROR_COMMUNICATING_WITH_THE_SERVER = "Lo sentimos, ha ocurrido un error al comunicarnos con el servidor. Por favor intenta mas tarde.";
+    public static final String ERROR_BLOCKED_ACCOUNT = "Lo sentimos, su cuenta ha sido bloqueada.";
     public static final String EDIT_PROFILE_TAG = "REQ: EDIT PROFILE";
     public static final String GET_PROFILE_TAG = "REQ: GET PROFILE";
     public static final String NO_PROFILE_ERROR = "Get profile returned a non valid profile";
