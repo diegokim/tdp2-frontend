@@ -54,8 +54,14 @@ public class WebServiceManager {
         Request request = ActionOnCandidateRequestGenerator.generate(id, "reject");
         sendRequest(request);
     }
+
     public void link(String id) {
         Request request = ActionOnCandidateRequestGenerator.generate(id, "link");
+        sendRequest(request);
+    }
+
+    public void superLink(String id) {
+        Request request = ActionOnCandidateRequestGenerator.generate(id, "super-link");
         sendRequest(request);
     }
 

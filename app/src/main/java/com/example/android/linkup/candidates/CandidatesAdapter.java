@@ -6,16 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.SystemClock;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AlphaAnimation;
-import android.view.animation.Animation;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Candidate;
@@ -27,8 +23,6 @@ import com.example.android.linkup.utils.Base64Converter;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
-
-import static com.example.android.linkup.R.id.profile_picture;
 
 public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder> {
 
@@ -97,6 +91,28 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
             public void onClick(final View v) {
                 WebServiceManager.getInstance(context).link(profile.id);
                 holder.view.animate()
+                        .translationX(holder.view.getWidth())
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                candidates.remove(candidate);
+                                photos.remove(holder.getAdapterPosition());
+                                if (candidates.size() == 0) {
+                                    EventBus.getDefault().post(new OnNoCandidatesEvent());
+                                }
+                                CandidatesAdapter.this.notifyDataSetChanged();
+                            }
+                        });
+            }
+        });
+        holder.superlink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+                WebServiceManager.getInstance(context).superLink(profile.id);
+                holder.view.animate() // TODO: DEBERIA REMOVERSE SOLO SI EL SERVER RESPONDIO OK
                         .translationX(holder.view.getWidth())
                         .alpha(0.0f)
                         .setDuration(300)

@@ -9,7 +9,6 @@ import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.WebServiceManager;
-import com.example.android.linkup.network.register.RegisterRequestGenerator;
 import com.example.android.linkup.network.register.RegisterResponseListener;
 import com.example.android.linkup.utils.JSONParser;
 
@@ -47,6 +46,7 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
                 mysettings.age_to = settingsJSON.getJSONObject("ageRange").getInt("max");
                 mysettings.range = settingsJSON.getJSONObject("distRange").getInt("max");
                 mysettings.invisible = settingsJSON.getBoolean("invisible");
+                mysettings.accountType = settingsJSON.getString("accountType");
                 String interestType = settingsJSON.getString("interestType");
                 if (interestType.equals("friends")) {
                     mysettings.hombres = false;
