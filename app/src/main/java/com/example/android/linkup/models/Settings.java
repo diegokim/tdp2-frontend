@@ -2,7 +2,6 @@ package com.example.android.linkup.models;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -29,6 +28,7 @@ public class Settings {
     public boolean mujeres;
     public boolean solo_amigos;
     public boolean invisible;
+    public String accountType;
 
 
 
@@ -51,6 +51,9 @@ public class Settings {
             params.put("ageRange",ageRange);
 
             params.put("invisible",invisible);
+
+            params.put("accountType", accountType);
+
             if (solo_amigos) {
                 params.put("interestType","friends");
             } else {
@@ -97,6 +100,7 @@ public class Settings {
         this.age_to = s.age_to;
         this.range = s.range;
         this.invisible = s.invisible;
+        this.accountType = s.accountType;
         this.hombres = s.hombres;
         this.mujeres = s.mujeres;
         this.pareja = s.pareja;

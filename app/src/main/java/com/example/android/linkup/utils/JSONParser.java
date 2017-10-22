@@ -26,6 +26,7 @@ public class JSONParser {
         Settings result = new Settings();
         try {
             result.invisible = settings.getBoolean("invisible");
+            result.accountType = settings.getString("accountType");
             result.range = settings.getJSONObject("distRange").getInt("max");
             result.age_from = settings.getJSONObject("ageRange").getInt("min");
             result.age_to = settings.getJSONObject("ageRange").getInt("max");

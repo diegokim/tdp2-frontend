@@ -1,10 +1,8 @@
 package com.example.android.linkup.settings;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -32,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
     private MultiSlider age_slider = null;
     private SeekBar distance_slider = null;
     private Switch invisible_switch = null;
+    private Switch premium_switch = null;
     private RadioButton just_friends_radioButton = null;
     private RadioButton findCouple_radioButton = null;
     private CheckBox men_checkbox = null;
@@ -109,6 +108,22 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mySettings.invisible = b;
+            }
+        });
+
+        //PREMIUM
+        boolean isPremium = mySettings.accountType.equals("premium");
+
+        premium_switch = (Switch) findViewById(R.id.premium_account_switch);
+        premium_switch.setChecked(isPremium);
+        premium_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    mySettings.accountType = "premium";
+                } else {
+                    mySettings.accountType = "free";
+                }
             }
         });
 
