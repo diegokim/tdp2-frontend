@@ -6,6 +6,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.utils.Command;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -16,6 +17,7 @@ public class LinksViewHolder extends RecyclerView.ViewHolder{
     public TextView header;
     public TextView lastMessage;
     public ImageView moreVert;
+    public Command onLinkClickCommand;
 
     public LinksViewHolder(View itemView) {
         super(itemView);

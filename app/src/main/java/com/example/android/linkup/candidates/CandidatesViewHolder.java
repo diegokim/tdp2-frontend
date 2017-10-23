@@ -16,6 +16,7 @@ import com.example.android.linkup.R;
 import com.example.android.linkup.models.CandidateSelectedProfile;
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.utils.Command;
 
 import org.greenrobot.eventbus.EventBus;
 import org.w3c.dom.Text;
@@ -30,6 +31,7 @@ public class CandidatesViewHolder extends RecyclerView.ViewHolder {
     public ImageButton link;
     public ImageButton superlink;
     public TextView distance;
+
 
     public CandidatesViewHolder(View itemView) {
         super(itemView);

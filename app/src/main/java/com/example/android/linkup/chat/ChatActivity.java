@@ -2,6 +2,9 @@ package com.example.android.linkup.chat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -23,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,6 +57,8 @@ import org.greenrobot.eventbus.Subscribe;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatActivity extends AppCompatActivity {
 
 //    private FirebaseListAdapter<ChatMessage> adapter;
@@ -76,7 +82,6 @@ public class ChatActivity extends AppCompatActivity {
         }
 
         toolbar.setTitle(ActiveChatProfile.getInstance().profile.name);
-
         fragmentContainer = (ViewPager) findViewById(R.id.fragment_container);
         setupViewPager(fragmentContainer);
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);

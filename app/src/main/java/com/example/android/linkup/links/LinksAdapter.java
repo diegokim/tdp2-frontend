@@ -3,7 +3,6 @@ package com.example.android.linkup.links;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 
 import com.example.android.linkup.R;
@@ -22,7 +22,7 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
-import com.google.firebase.database.ChildEventListener;
+import com.example.android.linkup.utils.Command;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -43,6 +43,9 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     Base64Converter converter;
     Context context;
 
+    Command allowedChatCommand;
+    Command notAllowedChatCommand;
+
     public LinksAdapter (Context context, ArrayList<Link> links) {
         this.links = links;
         this.inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -60,6 +63,51 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     public void onBindViewHolder(final LinksViewHolder holder, int position) {
         final Link link = links.get(position);
         final Profile profile = link.profile;
+        final Boolean ladiesFirstApply;
+
+        allowedChatCommand = new Command() {
+            @Override
+            public void excecute() {
+                ActiveChatProfile.getInstance().update(profile);
+                final String myId = Session.getInstance().myProfile.id;
+                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
+                ref.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        DatabaseReference innerRef = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
+                        for (DataSnapshot child : dataSnapshot.getChildren()) {
+                            String key = child.getKey();
+                            innerRef.child(key).child("viewed").setValue(true);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+                context.startActivity(new Intent(context, ChatActivity.class));
+            }
+        };
+
+
+
+        notAllowedChatCommand = new Command() {
+            @Override
+            public void excecute() {
+                Toast toast = Toast.makeText(context,"Lo sentimos pero las mujeres deben ser quienes comiencen la conversacion!", Toast.LENGTH_LONG);
+                toast.show();
+            }
+        };
+
+        if ( link.profile.gender.equals("Mujer")  && Session.getInstance().myProfile.gender.equals("Hombre")){
+            ladiesFirstApply = true;
+            holder.onLinkClickCommand = notAllowedChatCommand;
+        } else {
+            ladiesFirstApply = false;
+            holder.onLinkClickCommand = allowedChatCommand;
+        }
+
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
 
         holder.profilePhoto.setImageBitmap(photo);
@@ -78,9 +126,10 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                 if (dataSnapshot.getChildrenCount() == 0 ) {
                     holder.lastMessage.setText("Haz click para conversar!");
                 } else {
+                    if (ladiesFirstApply ) {
+                        holder.onLinkClickCommand = allowedChatCommand;
+                    }
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
-                        //Log.d("user key",child.getKey());
-                        //Log.d("user val",child.child("message").getValue().toString());
                         String time = child.child("messageTime").getValue().toString();
                         link.time = time;
                         holder.lastMessage.setText(child.child("message").getValue().toString());
@@ -94,14 +143,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                         } else {
                             holder.lastMessage.setText("yo: " + child.child("message").getValue().toString());
                         }
-//                        links.sort(new Comparator<Link>() {
-//                            @Override
-//                            public int compare(Link o1, Link o2) {
-//
-//                                if ( o1.time > o2.time )
-//                                return 0;
-//                            }
-//                        });
+
                     }
                 }
             }
@@ -123,24 +165,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-                ActiveChatProfile.getInstance().update(profile);
-                DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
-                ref.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        DatabaseReference innerRef = FirebaseDatabase.getInstance().getReference("chats/"+ myId +"/messages/"+profile.id);
-                        for (DataSnapshot child : dataSnapshot.getChildren()) {
-                            String key = child.getKey();
-                            innerRef.child(key).child("viewed").setValue(true);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-                context.startActivity(new Intent(context, ChatActivity.class));
+                holder.onLinkClickCommand.excecute();
             }
         });
     }
