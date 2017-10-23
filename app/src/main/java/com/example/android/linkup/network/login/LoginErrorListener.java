@@ -23,13 +23,11 @@ public class LoginErrorListener implements Response.ErrorListener {
     public void onErrorResponse(VolleyError error) {
         Log.e(NetworkErrorMessages.LOGIN_TAG, error.toString());
 
-        String message;
-
-        if (error.networkResponse.statusCode == 403) {
-            message = NetworkErrorMessages.ERROR_BLOCKED_ACCOUNT;
-        } else {
-            message = NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER;
+        String  message = NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER;
+        if (error.networkResponse != null && error.networkResponse.statusCode == 403) {
+                message = NetworkErrorMessages.ERROR_BLOCKED_ACCOUNT;
         }
+
 
         NetworkResponse response = error.networkResponse;
         if(response != null && response.data != null ) {

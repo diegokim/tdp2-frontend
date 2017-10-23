@@ -18,6 +18,7 @@ public class LinksViewHolder extends RecyclerView.ViewHolder{
     public TextView lastMessage;
     public ImageView moreVert;
     public Command onLinkClickCommand;
+    Command allowedChatCommand;
 
     public LinksViewHolder(View itemView) {
         super(itemView);

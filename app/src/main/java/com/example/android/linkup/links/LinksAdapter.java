@@ -31,10 +31,6 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
@@ -43,7 +39,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     Base64Converter converter;
     Context context;
 
-    Command allowedChatCommand;
+
     Command notAllowedChatCommand;
 
     public LinksAdapter (Context context, ArrayList<Link> links) {
@@ -65,7 +61,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
         final Profile profile = link.profile;
         final Boolean ladiesFirstApply;
 
-        allowedChatCommand = new Command() {
+        holder.allowedChatCommand = new Command() {
             @Override
             public void excecute() {
                 ActiveChatProfile.getInstance().update(profile);
@@ -105,7 +101,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
             holder.onLinkClickCommand = notAllowedChatCommand;
         } else {
             ladiesFirstApply = false;
-            holder.onLinkClickCommand = allowedChatCommand;
+            holder.onLinkClickCommand = holder.allowedChatCommand;
         }
 
         Bitmap photo = converter.Base64ToBitmap(profile.profilePhoto);
@@ -127,7 +123,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                     holder.lastMessage.setText("Haz click para conversar!");
                 } else {
                     if (ladiesFirstApply ) {
-                        holder.onLinkClickCommand = allowedChatCommand;
+                        holder.onLinkClickCommand = holder.allowedChatCommand;
                     }
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         String time = child.child("messageTime").getValue().toString();

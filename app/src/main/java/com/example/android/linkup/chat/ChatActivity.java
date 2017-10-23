@@ -1,63 +1,32 @@
 package com.example.android.linkup.chat;
 
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.graphics.drawable.VectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
-import com.example.android.linkup.candidates.CandidatesFragment;
-import com.example.android.linkup.links.LinksFragment;
-import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.ActiveChatProfile;
-import com.example.android.linkup.models.ChatMessage;
-import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
-import com.example.android.linkup.profile.ProfileActivity;
-import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
-import com.example.android.linkup.settings.SettingsActivity;
 import com.example.android.linkup.utils.Base64Converter;
-import com.facebook.login.LoginManager;
-import com.firebase.ui.database.FirebaseListAdapter;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 

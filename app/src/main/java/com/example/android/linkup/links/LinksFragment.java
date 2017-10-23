@@ -38,8 +38,6 @@ public class LinksFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         noLinksView = (View) view.findViewById(R.id.no_links_layout);
 
-        WebServiceManager.getInstance(getActivity()).getLinks();
-
         return view;
     }
 
