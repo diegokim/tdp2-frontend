@@ -2,21 +2,40 @@ package com.example.android.linkup.chat;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.TabLayout;
+import android.support.graphics.drawable.VectorDrawableCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
+import com.example.android.linkup.candidates.CandidatesFragment;
+import com.example.android.linkup.links.LinksFragment;
+import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.models.ChatMessage;
 import com.example.android.linkup.models.Session;
@@ -24,6 +43,9 @@ import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
 import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
+import com.example.android.linkup.settings.SettingsActivity;
+import com.example.android.linkup.utils.Base64Converter;
+import com.facebook.login.LoginManager;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -32,16 +54,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class ChatActivity extends AppCompatActivity {
 
-    private FirebaseListAdapter<ChatMessage> adapter;
+//    private FirebaseListAdapter<ChatMessage> adapter;
+    private DrawerLayout mDrawerLayout;
+    protected ViewPager fragmentContainer;
+    protected Menu menu;
+    private Base64Converter converter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat);
+        setContentView(R.layout.chat_profile_activity);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle(ActiveChatProfile.getInstance().profile.name);
         setSupportActionBar(toolbar);
 
@@ -50,97 +81,68 @@ public class ChatActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayShowHomeEnabled(true);
         }
 
-        if(FirebaseAuth.getInstance().getCurrentUser() == null) {
-            // User Not signed In
-            Toast.makeText(this,
-                    "Error de red!",
-                    Toast.LENGTH_LONG)
-                    .show();
-            finish();
-        } else {
-            displayChatMessages();
-        }
+        toolbar.setTitle(ActiveChatProfile.getInstance().profile.name);
+        fragmentContainer = (ViewPager) findViewById(R.id.fragment_container);
+        setupViewPager(fragmentContainer);
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+        tabs.setupWithViewPager(fragmentContainer);
 
-        FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
-
-        fab.setOnClickListener(new View.OnClickListener() {
+        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
-            public void onClick(View view) {
-                EditText input = (EditText)findViewById(R.id.input);
+            public void onTabSelected(TabLayout.Tab tab) {
+            }
 
-                String id_guest = ActiveChatProfile.getInstance().profile.id;
-                String id_host = Session.getInstance().myProfile.id;
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
 
-                boolean highlight = true;
+            }
 
-                if (noForbbidenMessages(input)) {
-                    // Read the input field and push a new instance
-                    // of ChatMessage to the Firebase database
-                    FirebaseDatabase.getInstance()
-                            .getReference("chats/"+id_host+"/messages/"+id_guest)
-                            .push()
-                            .setValue(new ChatMessage(input.getText().toString(),
-                                    FirebaseAuth.getInstance()
-                                            .getCurrentUser()
-                                            .getDisplayName(),id_guest,highlight)
-                            );
-
-                    FirebaseDatabase.getInstance()
-                            .getReference("chats/"+id_guest+"/messages/"+id_host)
-                            .push()
-                            .setValue(new ChatMessage(input.getText().toString(),
-                                    FirebaseAuth.getInstance()
-                                            .getCurrentUser()
-                                            .getDisplayName(),id_guest,highlight)
-                            );
-
-                    // Clear the input
-                    input.setText("");
-                } else {
-                    if (!input.getText().toString().equals("")) {
-                        input.setText("Cochino!!!");
-                    }
-                }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+
+
     }
 
-    private boolean noForbbidenMessages(EditText input) {
-        boolean respuesta = true;
-        if (input.getText().toString().equals("caca")) respuesta = false;
-        if (input.getText().toString().equals("")) respuesta = false;
-        if (input.getText().toString().equals("pedo")) respuesta = false;
 
-        return respuesta;
+    // Add Fragments to Tabs
+    private void setupViewPager(ViewPager viewPager) {
+        ChatActivity.Adapter adapter = new ChatActivity.Adapter(getSupportFragmentManager());
+        adapter.addFragment(new ChatFragment(), "Chat");
+        adapter.addFragment(new ActiveChatProfileFragment(), "Perfil");
+        viewPager.setAdapter(adapter);
     }
 
-    private void displayChatMessages() {
-        ListView listOfMessages = (ListView)findViewById(R.id.list_of_messages);
+    static class Adapter extends FragmentPagerAdapter {
+        private final List<Fragment> mFragmentList = new ArrayList<>();
+        private final List<String> mFragmentTitleList = new ArrayList<>();
 
-        String id_guest = ActiveChatProfile.getInstance().profile.id;
-        String id_host = Session.getInstance().myProfile.id;
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("chats/"+id_host+"/messages/"+id_guest);
+        public Adapter(FragmentManager manager) {
+            super(manager);
+        }
 
-        adapter = new FirebaseListAdapter<ChatMessage>(this, ChatMessage.class,
-                R.layout.message, ref) {
-            @Override
-            protected void populateView(View v, ChatMessage model, int position) {
-                // Get references to the views of message.xml
-                TextView messageText = (TextView)v.findViewById(R.id.message_text);
-                TextView messageUser = (TextView)v.findViewById(R.id.message_user);
-                TextView messageTime = (TextView)v.findViewById(R.id.message_time);
+        @Override
+        public Fragment getItem(int position) {
+            return mFragmentList.get(position);
+        }
 
-                // Set their text
-                messageText.setText(model.getMessage());
-                messageUser.setText(model.getMessageUser());
 
-                // Format the date before showing it
-                messageTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                        model.getMessageTime()));
-            }
-        };
 
-        listOfMessages.setAdapter(adapter);
+        @Override
+        public int getCount() {
+            return mFragmentList.size();
+        }
+
+        public void addFragment(Fragment fragment, String title) {
+            mFragmentList.add(fragment);
+            mFragmentTitleList.add(title);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return mFragmentTitleList.get(position);
+        }
     }
 
 

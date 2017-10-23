@@ -3,6 +3,7 @@ package com.example.android.linkup.network;
 import android.util.Log;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.toolbox.JsonObjectRequest;
 
@@ -10,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class CustomJsonObjectRequest extends JsonObjectRequest {
 
@@ -17,6 +19,10 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         super(method, url, jsonRequest, listener, errorListener);
         Log.d("Req URL",url);
         Log.d("Req Body", jsonRequest.toString());
+        this.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(5000),
+                0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
     }
 
     @Override

@@ -69,7 +69,8 @@ public class LoginActivity extends BaseActivity {
 
         allowLocationButton = (Button) findViewById(R.id.allow_location_button);
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             allowLocationButton.setVisibility(View.VISIBLE);
             ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.ACCESS_COARSE_LOCATION},1);
         } else {
@@ -81,6 +82,11 @@ public class LoginActivity extends BaseActivity {
 
                 }
             });
+        }
+        if (authManager.userIsLoggedIn()) {
+            NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
+            showProgressDialog();
+            login();
         }
     }
 
@@ -100,11 +106,6 @@ public class LoginActivity extends BaseActivity {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        if (authManager.userIsLoggedIn()) {
-            NetworkConfiguration.getInstance().accessToken = authManager.getAccessToken();
-            showProgressDialog();
-            login();
-        }
     }
 
     @Override
@@ -158,15 +159,13 @@ public class LoginActivity extends BaseActivity {
     public void onLoginSuccessEvent (RegisterResponseListener.OnLoginSuccessEvent event) {
         Session.getInstance().myProfile.update(event.profile);
         Session.getInstance().mySettings.update(event.settings);
-//        Intent intent = new Intent(this, MainActivity.class);
-//        startActivity(intent);
-//        finish();
         WebServiceManager.getInstance(this).updateLocation(mLocation);
     }
 
     @Subscribe
     public void onUpdateLocationSuccessEvent (UpdateLocationRequestGenerator.OnUpdateLocationSuccessEvent event) {
         Intent intent = new Intent(this, MainActivity.class);
+        hideProgressDialog();
         startActivity(intent);
         finish();
     }
@@ -234,6 +233,8 @@ public class LoginActivity extends BaseActivity {
                             // Logic to handle location object
                             mLocation = location;
                             command.excecute();
+                        } else {
+                            Log.d("ASD","ASD");
                         }
                     }
                 });

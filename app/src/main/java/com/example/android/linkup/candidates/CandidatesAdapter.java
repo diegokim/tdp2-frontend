@@ -43,6 +43,7 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
     }
 
     public void updateCandidates (ArrayList<Candidate> candidates) {
+
         if (!this.candidates.contains(candidates)) {
             this.candidates = candidates;
             photos.clear();
@@ -160,4 +161,5 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
 
     public static class OnNoCandidatesEvent {
     }
+
 }

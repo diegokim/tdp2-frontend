@@ -67,7 +67,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.android.linkup.MainActivity" />
         </activity>
-        <activity android:name=".chat.ChatActivity"></activity>
+        <activity android:name=".chat.ChatActivity"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>
