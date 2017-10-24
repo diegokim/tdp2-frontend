@@ -7,10 +7,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.example.android.linkup.login.AuthManager;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.network.NetworkConfiguration;
 
-public class IpAndPortSelectionActivity extends Activity {
+public class IpAndPortSelectionActivity extends BaseActivity {
 
     private static final String SERVER_PROTOCOL = "http://" ;
     private String IP_AND_PORT_SEPARATOR = ":";
@@ -23,6 +24,13 @@ public class IpAndPortSelectionActivity extends Activity {
         setContentView(R.layout.activity_ip_and_port_selection);
         ipInput = (EditText) findViewById(R.id.ip_input);
         portInput = (EditText) findViewById(R.id.port_input);
+        AuthManager authManager = AuthManager.getInstance(this);
+        if (authManager.userIsLoggedIn()) {
+            setServerAddress();
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 
     public void setServerAddress() {

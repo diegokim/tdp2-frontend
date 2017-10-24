@@ -81,7 +81,7 @@ public class WebServiceManager {
     }
 
     public void reportUser(String id, String reason) {
-        Request request = ActionOnCandidateRequestGenerator.generate(id,"block",reason);
+        Request request = ActionOnCandidateRequestGenerator.generate(id,"report",reason);
         sendRequest(request);
     }
 

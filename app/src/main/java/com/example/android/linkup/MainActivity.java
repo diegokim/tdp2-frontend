@@ -41,6 +41,7 @@ import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 
 import java.util.ArrayList;
@@ -65,6 +66,7 @@ public class MainActivity extends BaseActivity implements Observer{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         // Adding Toolbar to Main screen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
