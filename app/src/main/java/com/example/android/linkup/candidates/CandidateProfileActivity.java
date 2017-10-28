@@ -1,14 +1,19 @@
 package com.example.android.linkup.candidates;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,8 +21,15 @@ import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.CandidateSelectedProfile;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
+import com.example.android.linkup.profile.ProfileActivity;
 import com.example.android.linkup.profile.ProfilePagerAdapter;
+import com.example.android.linkup.profile.edit_profile.EditProfileActivity;
 import com.example.android.linkup.utils.Base64Converter;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 public class CandidateProfileActivity extends BaseActivity {
     private static final String PROFILE_APP_BAR_TEXT = "Mi Perfil" ;
@@ -57,6 +69,40 @@ public class CandidateProfileActivity extends BaseActivity {
             age.setText(Integer.toString(profile.age) + " Años");
             gender.setText(profile.gender);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        this.menu = menu;
+        MenuItem item = menu.add("Denunciar");
+        item.setIcon(R.drawable.com_facebook_button_icon);
+        item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                createReportDialog(CandidateSelectedProfile.getInstance().profile.id);
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    private void createReportDialog(final String userId) {
+        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
+        View mView = getLayoutInflater().inflate(R.layout.description_input_dialog, null);
+
+        final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
+        mBuilder.setView(mView);
+        mBuilder.setTitle("Razon");
+        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String reason = descriptionTextView.getText().toString();
+                WebServiceManager.getInstance(getApplicationContext()).reportUser(userId, reason);
+            }
+        } );
+
+        AlertDialog dialog = mBuilder.create();
+        dialog.show();
     }
 
     @Override
@@ -106,4 +152,20 @@ public class CandidateProfileActivity extends BaseActivity {
         });
     }
 
+    @Subscribe
+    public void onActionSuccessEvent(ActionOnCandidateResponseListener.OnActionSuccessEvent event) {
+        finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
 }
