@@ -28,6 +28,7 @@ public class Settings {
     public boolean mujeres;
     public boolean solo_amigos;
     public boolean invisible;
+    public boolean notifications;
     public String accountType;
 
 
@@ -51,6 +52,9 @@ public class Settings {
             params.put("ageRange",ageRange);
 
             params.put("invisible",invisible);
+
+            params.put("notifications",notifications);
+
 
             params.put("accountType", accountType);
 
@@ -100,6 +104,7 @@ public class Settings {
         this.age_to = s.age_to;
         this.range = s.range;
         this.invisible = s.invisible;
+        this.notifications = s.notifications;
         this.accountType = s.accountType;
         this.hombres = s.hombres;
         this.mujeres = s.mujeres;
