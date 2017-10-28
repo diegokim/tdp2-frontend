@@ -106,8 +106,8 @@ public class CandidatesFragment extends BaseFragment {
             noCandidatesText.setVisibility(View.VISIBLE);
             noCandidatesImage.setVisibility(View.VISIBLE);
         } else {
-            noCandidatesText.setVisibility(View.INVISIBLE);
-            noCandidatesImage.setVisibility(View.INVISIBLE);
+            noCandidatesText.setVisibility(View.GONE);
+            noCandidatesImage.setVisibility(View.GONE);
         }
 
     }
