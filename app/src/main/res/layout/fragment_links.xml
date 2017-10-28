@@ -46,12 +46,13 @@
         android:id="@+id/recyclerview"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_above="@+id/imageView" />
+        android:layout_above="@+id/advertising" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/advertising"
         android:layout_width="match_parent"
-        android:layout_height="150dp"
+        android:layout_height="70dp"
+
         android:layout_alignParentEnd="true"
         app:srcCompat="@drawable/trivago_rectangular"
         android:layout_alignParentBottom="true" />
