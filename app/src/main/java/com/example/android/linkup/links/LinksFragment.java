@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.android.linkup.BaseFragment;
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Link;
 import com.example.android.linkup.models.Session;
@@ -22,7 +23,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 
-public class LinksFragment extends Fragment {
+public class LinksFragment extends BaseFragment {
 
     private RecyclerView recyclerView;
     private View noLinksView;

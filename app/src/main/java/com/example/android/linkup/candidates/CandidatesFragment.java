@@ -86,6 +86,8 @@ public class CandidatesFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
+        showProgressDialog();
+        WebServiceManager.getInstance(getContext()).getCandidates();
         if (!Session.getInstance().mySettings.accountType.equals("free") ) {
             advertising.setVisibility(View.GONE);
         } else {
