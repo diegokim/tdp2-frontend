@@ -1,6 +1,7 @@
 package com.example.android.linkup.candidates;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v4.app.Fragment;
@@ -39,12 +40,15 @@ public class CandidatesFragment extends BaseFragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private CandidatesAdapter mAdapter;
     private long mLastClickTime;
+    private ImageView advertising;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         //TODO: Get Candidates
+
+
         showProgressDialog();
         view = inflater.inflate(R.layout.fragment_list_of_candidates, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.candidates_refresh_layout);
@@ -61,6 +65,11 @@ public class CandidatesFragment extends BaseFragment {
         );
 
 
+        advertising = (ImageView) view.findViewById(R.id.advertising);
+        if (!Session.getInstance().mySettings.accountType.equals("free") ) {
+            advertising.setVisibility(View.GONE);
+        }
+
         noCandidatesImage = (ImageView) view.findViewById(R.id.no_candidates_image);
         noCandidatesText = (TextView) view.findViewById(R.id.no_candidates_text);
         WebServiceManager.getInstance(view.getContext()).getCandidates();
@@ -72,6 +81,16 @@ public class CandidatesFragment extends BaseFragment {
 
         mLastClickTime = 0;
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!Session.getInstance().mySettings.accountType.equals("free") ) {
+            advertising.setVisibility(View.GONE);
+        } else {
+            advertising.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
@@ -109,7 +128,6 @@ public class CandidatesFragment extends BaseFragment {
             noCandidatesText.setVisibility(View.GONE);
             noCandidatesImage.setVisibility(View.GONE);
         }
-
     }
 
     @Subscribe
