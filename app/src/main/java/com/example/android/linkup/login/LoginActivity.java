@@ -26,7 +26,6 @@ import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
 import com.example.android.linkup.network.login.LoginResponseListener;
-import com.example.android.linkup.network.register.RegisterRequestGenerator;
 import com.example.android.linkup.network.register.RegisterResponseListener;
 import com.example.android.linkup.utils.Command;
 import com.facebook.FacebookSdk;
@@ -37,8 +36,6 @@ import com.facebook.appevents.AppEventsLogger;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.messaging.FirebaseMessagingService;
 
 
 import org.greenrobot.eventbus.EventBus;

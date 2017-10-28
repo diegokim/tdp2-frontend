@@ -22,7 +22,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         this.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(5000),
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-
+        setShouldCache(false);
     }
 
     @Override

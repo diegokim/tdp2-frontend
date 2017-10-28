@@ -14,6 +14,7 @@ public abstract class BaseFragment extends Fragment {
             mProgressDialog = new ProgressDialog(this.getContext());
             mProgressDialog.setMessage(getString(R.string.loading));
             mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
         }
 
         mProgressDialog.show();

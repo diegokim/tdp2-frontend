@@ -48,11 +48,13 @@ public class CandidatesFragment extends BaseFragment {
         showProgressDialog();
         view = inflater.inflate(R.layout.fragment_list_of_candidates, container, false);
         swipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.candidates_refresh_layout);
-
+        swipeRefreshLayout.setRefreshing(false);
         swipeRefreshLayout.setOnRefreshListener(
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
+                        swipeRefreshLayout.setRefreshing(false);
+                        showProgressDialog();
                         WebServiceManager.getInstance(view.getContext()).getCandidates();
                     }
                 }

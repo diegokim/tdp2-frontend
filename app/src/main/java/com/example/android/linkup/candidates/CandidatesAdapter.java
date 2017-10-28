@@ -64,7 +64,9 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
     public void onBindViewHolder(final CandidatesViewHolder holder, final int position) {
         final Candidate candidate = candidates.get(position);
         final Profile profile = candidate.profile;
-
+        holder.photo.setImageBitmap(photos.get(position));
+        holder.header.setText(profile.name + ", " + profile.age +" Años" );
+        holder.distance.setText(candidate.distance + " Km");
         holder.reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +81,8 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
                                 super.onAnimationEnd(animation);
                                 candidates.remove(candidate);
                                 photos.remove(holder.getAdapterPosition());
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, candidates.size());
                                 if (candidates.size() == 0) {
                                     EventBus.getDefault().post(new OnNoCandidatesEvent());
                                 }
@@ -90,7 +94,31 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
         holder.link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
-                WebServiceManager.getInstance(context).link(profile.id);
+                holder.view.animate()
+                        .translationX(holder.view.getWidth())
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+
+                                candidates.remove(candidate);
+                                photos.remove(holder.getAdapterPosition());
+
+                                if (candidates.size() == 0) {
+                                    EventBus.getDefault().post(new OnNoCandidatesEvent());
+                                }
+                                CandidatesAdapter.this.notifyDataSetChanged();
+                                WebServiceManager.getInstance(context).link(profile.id);
+                            }
+                        });
+            }
+        });
+        holder.superlink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(final View v) {
+
                 holder.view.animate()
                         .translationX(holder.view.getWidth())
                         .alpha(0.0f)
@@ -101,32 +129,12 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
                                 super.onAnimationEnd(animation);
                                 candidates.remove(candidate);
                                 photos.remove(holder.getAdapterPosition());
+
                                 if (candidates.size() == 0) {
                                     EventBus.getDefault().post(new OnNoCandidatesEvent());
                                 }
                                 CandidatesAdapter.this.notifyDataSetChanged();
-                            }
-                        });
-            }
-        });
-        holder.superlink.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                WebServiceManager.getInstance(context).superLink(profile.id);
-                holder.view.animate() // TODO: DEBERIA REMOVERSE SOLO SI EL SERVER RESPONDIO OK
-                        .translationX(holder.view.getWidth())
-                        .alpha(0.0f)
-                        .setDuration(300)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                candidates.remove(candidate);
-                                photos.remove(holder.getAdapterPosition());
-                                if (candidates.size() == 0) {
-                                    EventBus.getDefault().post(new OnNoCandidatesEvent());
-                                }
-                                CandidatesAdapter.this.notifyDataSetChanged();
+                                WebServiceManager.getInstance(context).superLink(profile.id);
                             }
                         });
             }
@@ -149,9 +157,6 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
             }
         });
         holder.setIsRecyclable(false);
-        holder.photo.setImageBitmap(photos.get(position));
-        holder.header.setText(profile.name + ", " + profile.age +" Años" );
-        holder.distance.setText(candidate.distance + " Km");
     }
 
     @Override
