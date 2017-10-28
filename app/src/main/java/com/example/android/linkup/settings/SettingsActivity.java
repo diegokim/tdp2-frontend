@@ -30,6 +30,7 @@ public class SettingsActivity extends AppCompatActivity {
     private MultiSlider age_slider = null;
     private SeekBar distance_slider = null;
     private Switch invisible_switch = null;
+    private Switch notifications_switch = null;
     private Switch premium_switch = null;
     private RadioButton just_friends_radioButton = null;
     private RadioButton findCouple_radioButton = null;
@@ -108,6 +109,16 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 mySettings.invisible = b;
+            }
+        });
+
+        //NOTIFICATIONS
+        notifications_switch = (Switch) findViewById(R.id.notifications_switch);
+        notifications_switch.setChecked(mySettings.notifications);
+        notifications_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                mySettings.notifications = b;
             }
         });
 

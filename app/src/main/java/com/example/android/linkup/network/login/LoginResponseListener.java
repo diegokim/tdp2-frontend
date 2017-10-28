@@ -46,6 +46,7 @@ public class LoginResponseListener implements Response.Listener<JSONObject> {
                 mysettings.age_to = settingsJSON.getJSONObject("ageRange").getInt("max");
                 mysettings.range = settingsJSON.getJSONObject("distRange").getInt("max");
                 mysettings.invisible = settingsJSON.getBoolean("invisible");
+                mysettings.notifications = settingsJSON.getBoolean("notifications");
                 mysettings.accountType = settingsJSON.getString("accountType");
                 String interestType = settingsJSON.getString("interestType");
                 if (interestType.equals("friends")) {
