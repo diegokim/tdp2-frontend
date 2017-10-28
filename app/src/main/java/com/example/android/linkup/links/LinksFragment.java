@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Link;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
 import com.example.android.linkup.network.candidates.GetLinksResponseListener;
@@ -24,7 +26,7 @@ public class LinksFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private View noLinksView;
-
+    ImageView advertising;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +39,10 @@ public class LinksFragment extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
         noLinksView = (View) view.findViewById(R.id.no_links_layout);
+        advertising = (ImageView) view.findViewById(R.id.advertising);
+        if (!Session.getInstance().mySettings.accountType.equals("free") ) {
+            advertising.setVisibility(View.GONE);
+        }
 
         return view;
     }
@@ -44,6 +50,11 @@ public class LinksFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (!Session.getInstance().mySettings.accountType.equals("free") ) {
+            advertising.setVisibility(View.GONE);
+        } else {
+            advertising.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override

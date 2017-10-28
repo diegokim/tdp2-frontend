@@ -40,7 +40,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
     Context context;
 
 
-    Command notAllowedChatCommand;
+
 
     public LinksAdapter (Context context, ArrayList<Link> links) {
         this.links = links;
@@ -88,17 +88,17 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
 
 
 
-        notAllowedChatCommand = new Command() {
+        holder.notAllowedChatCommand = new Command() {
             @Override
             public void excecute() {
-                Toast toast = Toast.makeText(context,"Lo sentimos pero las mujeres deben ser quienes comiencen la conversacion!", Toast.LENGTH_LONG);
+                Toast toast = Toast.makeText(context,"Tenemos que esperar a que " + profile.name + " comience la conversación =)", Toast.LENGTH_LONG);
                 toast.show();
             }
         };
 
         if ( link.profile.gender.equals("Mujer")  && Session.getInstance().myProfile.gender.equals("Hombre")){
             ladiesFirstApply = true;
-            holder.onLinkClickCommand = notAllowedChatCommand;
+            holder.onLinkClickCommand = holder.notAllowedChatCommand;
         } else {
             ladiesFirstApply = false;
             holder.onLinkClickCommand = holder.allowedChatCommand;
