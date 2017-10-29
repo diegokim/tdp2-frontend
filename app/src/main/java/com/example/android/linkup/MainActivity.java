@@ -64,6 +64,12 @@ public class MainActivity extends BaseActivity implements Observer{
     private CandidatesFragment candidatesFragment;
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        WebServiceManager.getInstance(this).updateToken(FirebaseInstanceId.getInstance().getToken());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -154,6 +160,8 @@ public class MainActivity extends BaseActivity implements Observer{
         navView = navigationView;
         updateNavHeaderView();
 //        showCandidatesFragment();
+
+        WebServiceManager.getInstance(this).updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override

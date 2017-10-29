@@ -1,10 +1,27 @@
-package com.example.android.linkup;
+package com.example.android.linkup.notifications;
 
 import android.app.Service;
+import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Settings;
+import com.example.android.linkup.models.Token;
+import com.example.android.linkup.network.CustomJsonObjectRequest;
+import com.example.android.linkup.network.NetworkConfiguration;
+import com.example.android.linkup.network.NetworkErrorMessages;
+import com.example.android.linkup.network.NetworkRequestQueue;
+import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
+
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Created by joaquin on 28/10/17.
@@ -45,5 +62,12 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // TODO: Implement this method to send token to your app server.
         Log.d(TAG,"Enviando Token a servidor -> "+token);
 
+        if (WebServiceManager.getInstance() != null) {
+            Log.d(TAG,"Updating token...");
+            WebServiceManager.getInstance().updateToken(token);
+            Log.d(TAG,"Token updated: "+token);
+        } else {
+            Log.d(TAG,"Webservice Manager null");
+        }
     }
 }

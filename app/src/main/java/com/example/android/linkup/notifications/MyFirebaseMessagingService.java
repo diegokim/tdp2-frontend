@@ -1,4 +1,4 @@
-package com.example.android.linkup;
+package com.example.android.linkup.notifications;
 
 import android.app.Service;
 import android.util.Log;
