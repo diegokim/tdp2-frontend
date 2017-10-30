@@ -168,6 +168,7 @@ public class MainActivity extends BaseActivity implements Observer{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         if (requestCode == REQUEST_UPDATE_SETTINGS) {
+            updateNavHeaderView();
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
