@@ -43,6 +43,7 @@ public class JSONParser {
             result.range = settings.getJSONObject("distRange").getInt("max");
             result.age_from = settings.getJSONObject("ageRange").getInt("min");
             result.age_to = settings.getJSONObject("ageRange").getInt("max");
+            result.superLinksCount = settings.getInt("superLinksCount");
             String interestType = settings.getString("interestType");
             if (interestType.equals("male")) {
                 result.just_friends = false;

@@ -19,7 +19,7 @@ public class CustomJsonObjectRequest extends JsonObjectRequest {
         super(method, url, jsonRequest, listener, errorListener);
         Log.d("Req URL",url);
         Log.d("Req Body", jsonRequest.toString());
-        this.setRetryPolicy(new DefaultRetryPolicy((int) TimeUnit.SECONDS.toMillis(5000),
+        this.setRetryPolicy(new DefaultRetryPolicy(10000,
                 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         setShouldCache(false);
