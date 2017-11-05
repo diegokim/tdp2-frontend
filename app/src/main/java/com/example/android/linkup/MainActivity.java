@@ -64,6 +64,12 @@ public class MainActivity extends BaseActivity implements Observer{
     private CandidatesFragment candidatesFragment;
 
     @Override
+    protected void onResume(){
+        super.onResume();
+        WebServiceManager.getInstance(this).updateToken(FirebaseInstanceId.getInstance().getToken());
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -154,12 +160,15 @@ public class MainActivity extends BaseActivity implements Observer{
         navView = navigationView;
         updateNavHeaderView();
 //        showCandidatesFragment();
+
+        WebServiceManager.getInstance(this).updateToken(FirebaseInstanceId.getInstance().getToken());
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Check which request we're responding to
         if (requestCode == REQUEST_UPDATE_SETTINGS) {
+            updateNavHeaderView();
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
@@ -189,6 +198,14 @@ public class MainActivity extends BaseActivity implements Observer{
         Bitmap bitmap = converter.Base64ToBitmap(base64Photo);
         bitmap = converter.getRoundedCornerBitmap(bitmap,Color.parseColor("#607D8B"),12,1,this);
         profilePhoto.setImageBitmap(bitmap);
+
+        ImageView premiumLogo = (ImageView) navHeader.findViewById(R.id.premium_logo);
+
+        if (Session.getInstance().mySettings.accountType.equals("premium")) {
+            premiumLogo.setVisibility(View.VISIBLE);
+        } else {
+            premiumLogo.setVisibility(View.GONE);
+        }
     }
 
 
@@ -221,8 +238,6 @@ public class MainActivity extends BaseActivity implements Observer{
         public Fragment getItem(int position) {
             return mFragmentList.get(position);
         }
-
-
 
         @Override
         public int getCount() {

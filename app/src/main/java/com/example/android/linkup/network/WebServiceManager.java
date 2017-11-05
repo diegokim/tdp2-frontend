@@ -3,8 +3,14 @@ package com.example.android.linkup.network;
 
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.example.android.linkup.models.Token;
+import com.example.android.linkup.network.NotificationToken.SaveNotificationTokenResponseListener;
 import com.example.android.linkup.network.candidates.GetCandidatesRequestGenerator;
 import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
 import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
@@ -15,6 +21,10 @@ import com.example.android.linkup.network.login.LoginRequestGenerator;
 import com.example.android.linkup.network.register.RegisterData;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 
+import org.greenrobot.eventbus.EventBus;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class WebServiceManager {
     private static WebServiceManager instance;
     private Context context;
@@ -24,6 +34,10 @@ public class WebServiceManager {
             instance = new WebServiceManager();
             instance.context = context;
         }
+        return instance;
+    }
+
+    public static WebServiceManager getInstance() {
         return instance;
     }
 
@@ -99,5 +113,42 @@ public class WebServiceManager {
     public void register (RegisterData data) {
         Request registerRequest = RegisterRequestGenerator.generate(data);
         sendRequest(registerRequest);
+    }
+
+    public void updateToken(String token) {
+        Log.d("Notification","Updating token from WebService Manager");
+
+        JSONObject params = new JSONObject();
+
+        try {
+            params.put("registrationToken",token);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        final Token new_token = new Token();
+        new_token.token = token;
+
+        CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                SaveNotificationTokenResponseListener.SaveNotificationTokenSuccessEvent event = new SaveNotificationTokenResponseListener.SaveNotificationTokenSuccessEvent(new_token);
+                EventBus.getDefault().post(event);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(NetworkErrorMessages.SETTINGS_TAG,error.toString());
+                WebServiceManager.ErrorMessageEvent event = new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER);
+                EventBus.getDefault().post(event);
+            }
+        });
+
+        objectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+
+        NetworkRequestQueue.getInstance(context).addToRequestQueue(objectRequest);
+
     }
  }

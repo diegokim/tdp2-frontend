@@ -1,12 +1,16 @@
 package com.example.android.linkup.settings;
 
+import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.SeekBar;
 import android.widget.Switch;
@@ -131,7 +135,35 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (b) {
-                    mySettings.accountType = "premium";
+                    //TODO: Simulate Payment
+
+                    final View view = getLayoutInflater().inflate(R.layout.credit_card_dialog, null);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
+                    final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
+
+                    alertDialog.setTitle("Confirmar Datos");
+                    alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_credit_card));
+                    alertDialog.setMessage("Desea volverse usuario premium?");
+
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirmar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(SettingsActivity.this, "Datos Verificados", Toast.LENGTH_SHORT).show();
+                            mySettings.accountType = "premium";
+                        }
+                    });
+
+
+                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            premium_switch.setChecked(false);
+                            alertDialog.dismiss();
+                        }
+                    });
+                    alertDialog.setView(view);
+                    alertDialog.show();
                 } else {
                     mySettings.accountType = "free";
                 }

@@ -12,11 +12,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.linkup.R;
 import com.example.android.linkup.models.Candidate;
 import com.example.android.linkup.models.CandidateSelectedProfile;
 import com.example.android.linkup.models.Profile;
+import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.utils.Base64Converter;
 
@@ -70,6 +72,10 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
         holder.reject.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 WebServiceManager.getInstance(context).reject(profile.id);
                 holder.view.animate()
                         .translationX(-holder.view.getWidth())
@@ -94,6 +100,10 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
         holder.link.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
                 holder.view.animate()
                         .translationX(holder.view.getWidth())
                         .alpha(0.0f)
@@ -118,6 +128,16 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
         holder.superlink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View v) {
+                if (SystemClock.elapsedRealtime() - mLastClickTime < 1000) {
+                    return;
+                }
+                mLastClickTime = SystemClock.elapsedRealtime();
+
+                if (Session.getInstance().mySettings.superLinksCount == 0) {
+                    Toast toast = Toast.makeText(context, "Ya no te quedan SuperLinks", Toast.LENGTH_SHORT);
+                    toast.show();
+                    return;
+                }
 
                 holder.view.animate()
                         .translationX(holder.view.getWidth())
@@ -135,6 +155,7 @@ public class CandidatesAdapter extends RecyclerView.Adapter<CandidatesViewHolder
                                 }
                                 CandidatesAdapter.this.notifyDataSetChanged();
                                 WebServiceManager.getInstance(context).superLink(profile.id);
+                                Session.getInstance().mySettings.superLinksCount--;
                             }
                         });
             }

@@ -11,6 +11,7 @@ import com.example.android.linkup.network.CustomJsonObjectRequest;
 import com.example.android.linkup.network.NetworkConfiguration;
 import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.NetworkRequestQueue;
+import com.example.android.linkup.network.ServerErrorListener;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 
@@ -30,7 +31,7 @@ public class Settings {
     public boolean invisible;
     public boolean notifications;
     public String accountType;
-
+    public int superLinksCount;
 
 
     public Settings (){
@@ -73,24 +74,8 @@ public class Settings {
             }
             final Settings settings = new Settings();
             settings.update(this);
-            CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new Response.Listener<JSONObject>() {
-                @Override
-                public void onResponse(JSONObject response) {
-                    SaveSettingsResponseListener.SaveSettingsSuccessEvent event = new SaveSettingsResponseListener.SaveSettingsSuccessEvent(settings);
-                   EventBus.getDefault().post(event);
-                }
-            }, new Response.ErrorListener() {
-                @Override
-                public void onErrorResponse(VolleyError error) {
-                    Log.e(NetworkErrorMessages.SETTINGS_TAG,error.toString());
-                    WebServiceManager.ErrorMessageEvent event = new WebServiceManager.ErrorMessageEvent(NetworkErrorMessages.ERROR_COMMUNICATING_WITH_THE_SERVER);
-                    EventBus.getDefault().post(event);
-                }
-            });
-
-            objectRequest.setRetryPolicy(new DefaultRetryPolicy(10000,
-                    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+            CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new SaveSettingsResponseListener()
+            , new ServerErrorListener(NetworkErrorMessages.SETTINGS_TAG));
 
             NetworkRequestQueue.getInstance(context).addToRequestQueue(objectRequest);
 
@@ -111,5 +96,6 @@ public class Settings {
         this.pareja = s.pareja;
         this.just_friends = s.just_friends;
         this.solo_amigos =s.solo_amigos;
+        this.superLinksCount = s.superLinksCount;
     }
 }

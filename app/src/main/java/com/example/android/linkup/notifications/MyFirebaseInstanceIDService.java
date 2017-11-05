@@ -1,8 +1,8 @@
-package com.example.android.linkup;
+package com.example.android.linkup.notifications;
 
-import android.app.Service;
 import android.util.Log;
 
+import com.example.android.linkup.network.WebServiceManager;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
@@ -19,7 +19,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * the previous token had been compromised. Note that this is called when the InstanceID token
      * is initially generated so this is where you would retrieve the token.
      */
-    // [START refresh_token]
     @Override
     public void onTokenRefresh() {
         // Get updated InstanceID token.
@@ -31,7 +30,6 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
         // Instance ID token to your app server.
         sendRegistrationToServer(refreshedToken);
     }
-    // [END refresh_token]
 
     /**
      * Persist token to third-party servers.
@@ -42,8 +40,14 @@ public class MyFirebaseInstanceIDService extends FirebaseInstanceIdService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
-        Log.d(TAG,"Enviando Token a servidor -> "+token);
+        Log.d(TAG,"Sending token to server -> "+token);
 
+        if (WebServiceManager.getInstance() != null) {
+            Log.d(TAG,"Updating token...");
+            WebServiceManager.getInstance().updateToken(token);
+            Log.d(TAG,"Token updated: "+token);
+        } else {
+            Log.d(TAG,"Webservice Manager is null");
+        }
     }
 }

@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Settings;
+import com.example.android.linkup.models.Token;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +23,17 @@ public class JSONParser {
     private static final String AGE_KEY = "age";
     private static final String ID_KEY = "id";
 
+    public static Token getToken(JSONObject token) {
+        Token result = new Token();
+        try {
+            result.token = token.getString("registrationToken");
+            return result;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static Settings getSettings (JSONObject settings) {
         Settings result = new Settings();
         try {
@@ -31,6 +43,7 @@ public class JSONParser {
             result.range = settings.getJSONObject("distRange").getInt("max");
             result.age_from = settings.getJSONObject("ageRange").getInt("min");
             result.age_to = settings.getJSONObject("ageRange").getInt("max");
+            result.superLinksCount = settings.getInt("superLinksCount");
             String interestType = settings.getString("interestType");
             if (interestType.equals("male")) {
                 result.just_friends = false;
