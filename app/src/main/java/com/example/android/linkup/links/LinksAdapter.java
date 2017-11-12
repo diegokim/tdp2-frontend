@@ -74,6 +74,7 @@ public class LinksAdapter extends RecyclerView.Adapter<LinksViewHolder>{
                         for (DataSnapshot child : dataSnapshot.getChildren()) {
                             String key = child.getKey();
                             innerRef.child(key).child("viewed").setValue(true);
+                            innerRef.child(key).child("highlight").setValue(false);
                         }
                     }
 

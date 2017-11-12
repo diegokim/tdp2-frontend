@@ -18,6 +18,7 @@ import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerat
 import com.example.android.linkup.network.get_profile.GetProfileRequestGenerator;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
 import com.example.android.linkup.network.login.LoginRequestGenerator;
+import com.example.android.linkup.network.messages.SendMessageResquestGenerator;
 import com.example.android.linkup.network.register.RegisterData;
 import com.example.android.linkup.network.register.RegisterRequestGenerator;
 
@@ -51,6 +52,11 @@ public class WebServiceManager {
 
     public void updateProfile(String profilePhotoSelected, String description) {
         Request request = EditProfileRequestGenerator.generate(description, profilePhotoSelected);
+        sendRequest(request);
+    }
+
+    public void sendChatMessage(String message,String idUser_to) {
+        Request request = SendMessageResquestGenerator.generate(message,idUser_to);
         sendRequest(request);
     }
 

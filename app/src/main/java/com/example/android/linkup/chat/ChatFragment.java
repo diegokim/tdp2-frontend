@@ -17,6 +17,7 @@ import com.example.android.linkup.R;
 import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.models.ChatMessage;
 import com.example.android.linkup.models.Session;
+import com.example.android.linkup.network.WebServiceManager;
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -54,49 +55,15 @@ public class ChatFragment extends Fragment {
 
                 boolean highlight = true;
 
-                if (noForbbidenMessages(input)) {
-                    // Read the input field and push a new instance
-                    // of ChatMessage to the Firebase database
-                    FirebaseDatabase.getInstance()
-                            .getReference("chats/"+id_host+"/messages/"+id_guest)
-                            .push()
-                            .setValue(new ChatMessage(input.getText().toString(),
-                                    FirebaseAuth.getInstance()
-                                            .getCurrentUser()
-                                            .getDisplayName(),id_guest,highlight)
-                            );
 
-                    FirebaseDatabase.getInstance()
-                            .getReference("chats/"+id_guest+"/messages/"+id_host)
-                            .push()
-                            .setValue(new ChatMessage(input.getText().toString(),
-                                    FirebaseAuth.getInstance()
-                                            .getCurrentUser()
-                                            .getDisplayName(),id_guest,highlight)
-                            );
+                WebServiceManager.getInstance().sendChatMessage(input.getText().toString(),id_guest);
 
-                    // Clear the input
-                    input.setText("");
-                } else {
-                    if (!input.getText().toString().equals("")) {
-                        input.setText("Cochino!!!");
-                    }
-                }
+                input.setText("");
             }
         });
 
 
         return v;
-    }
-
-
-    private boolean noForbbidenMessages(EditText input) {
-        boolean respuesta = true;
-        if (input.getText().toString().equals("caca")) respuesta = false;
-        if (input.getText().toString().equals("")) respuesta = false;
-        if (input.getText().toString().equals("pedo")) respuesta = false;
-
-        return respuesta;
     }
 
     private void displayChatMessages(View view) {
