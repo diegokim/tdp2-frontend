@@ -1,5 +1,6 @@
 package com.example.android.linkup.links;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -96,7 +97,9 @@ public class LinksFragment extends BaseFragment {
     @Subscribe
     public void OnGetAdvertisingSuccessEvent(AdvertisingResponseListener.OnGetAdvertisingSuccessEvent event) {
         if( event.ads.size() >0 ) {
-            advertising.setImageBitmap(event.ads.get(0).image);
+            Bitmap originalBitmap = event.ads.get(0).image;
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap,290,75,false);
+            advertising.setImageBitmap(resizedBitmap);
         }
     }
 

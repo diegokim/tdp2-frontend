@@ -1,6 +1,7 @@
 package com.example.android.linkup.candidates;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -155,7 +156,9 @@ public class CandidatesFragment extends BaseFragment {
     @Subscribe
     public void OnGetAdvertisingSuccessEvent(AdvertisingResponseListener.OnGetAdvertisingSuccessEvent event) {
         if( event.ads.size() >0 ) {
-            advertising.setImageBitmap(event.ads.get(0).image);
+            Bitmap originalBitmap = event.ads.get(0).image;
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(originalBitmap,290,75,false);
+            advertising.setImageBitmap(resizedBitmap);
         }
     }
 }

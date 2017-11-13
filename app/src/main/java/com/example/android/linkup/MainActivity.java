@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 
+import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.graphics.drawable.VectorDrawableCompat;
@@ -160,6 +161,20 @@ public class MainActivity extends BaseActivity implements Observer{
         navView = navigationView;
         updateNavHeaderView();
 //        showCandidatesFragment();
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                while (true) {
+                    WebServiceManager.getInstance().getAdvertising();
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
 
         WebServiceManager.getInstance(this).updateToken(FirebaseInstanceId.getInstance().getToken());
     }
