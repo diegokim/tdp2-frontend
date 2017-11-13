@@ -35,7 +35,7 @@ public class SettingsActivity extends AppCompatActivity {
     private SeekBar distance_slider = null;
     private Switch invisible_switch = null;
     private Switch notifications_switch = null;
-    private Switch premium_switch = null;
+    //private Switch premium_switch = null;
     private RadioButton just_friends_radioButton = null;
     private RadioButton findCouple_radioButton = null;
     private CheckBox men_checkbox = null;
@@ -125,7 +125,7 @@ public class SettingsActivity extends AppCompatActivity {
                 mySettings.notifications = b;
             }
         });
-
+/*
         //PREMIUM
         boolean isPremium = mySettings.accountType.equals("premium");
 
@@ -169,7 +169,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
+*/
         //ENCONTRAR PAREJA
         findCouple_radioButton = (RadioButton) findViewById(R.id.pareja_radioButton);
         just_friends_radioButton = (RadioButton) findViewById(R.id.solo_amigos_radioButton);

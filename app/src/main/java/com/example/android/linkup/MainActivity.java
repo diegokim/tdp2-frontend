@@ -15,7 +15,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -31,10 +30,9 @@ import com.example.android.linkup.links.LinksFragment;
 import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
 
-import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
 
-import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
+import com.example.android.linkup.premium.PremiumActivity;
 import com.example.android.linkup.settings.SettingsActivity;
 
 import com.example.android.linkup.profile.ProfileActivity;
@@ -46,9 +44,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -140,6 +135,9 @@ public class MainActivity extends BaseActivity implements Observer{
                             case R.id.item_prefs:
                                 Log.d("DEBUG", "Aprete mis preferencias");
                                 startActivityForResult(new Intent (MainActivity.this,SettingsActivity.class),REQUEST_UPDATE_SETTINGS);
+                                break;
+                            case R.id.item_premium:
+                                startActivityForResult(new Intent(MainActivity.this,PremiumActivity.class),REQUEST_UPDATE_SETTINGS);
                                 break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
