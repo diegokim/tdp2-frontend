@@ -100,8 +100,8 @@ public class WebServiceManager {
         sendRequest(blockUser);
     }
 
-    public void reportUser(String id, String reason) {
-        Request request = ActionOnCandidateRequestGenerator.generate(id,"report",reason);
+    public void reportUser(String id, String reason, String tipoDenuncia) {
+        Request request = ActionOnCandidateRequestGenerator.generate(id,"report",reason,tipoDenuncia);
         sendRequest(request);
     }
 

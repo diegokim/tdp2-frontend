@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
@@ -15,7 +16,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.linkup.BaseActivity;
 import com.example.android.linkup.R;
@@ -41,6 +44,13 @@ public class CandidateProfileActivity extends BaseActivity {
     private Profile profile;
     private Base64Converter photoConverter;
     private Menu menu;
+
+    public RadioButton spam = null;
+    public RadioButton otro = null;
+    public RadioButton lenguajeInapropiado = null;
+    public RadioButton comportamientoAbusivo = null;
+
+    public String tipoDenuncia = null;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,6 +79,57 @@ public class CandidateProfileActivity extends BaseActivity {
             age.setText(Integer.toString(profile.age) + " Años");
             gender.setText(profile.gender);
         }
+
+        View mView = getLayoutInflater().inflate(R.layout.description_input_dialog, null);
+        otro = (RadioButton) mView.findViewById(R.id.rad_otro);
+        spam = (RadioButton) mView.findViewById(R.id.rad_spam);
+        lenguajeInapropiado = (RadioButton) mView.findViewById(R.id.rad_lenguaje);
+        comportamientoAbusivo = (RadioButton) mView.findViewById(R.id.rad_comportamiento);
+
+        tipoDenuncia = "";
+    }
+
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        switch (view.getId()) {
+            case R.id.rad_comportamiento:
+                if (checked) {
+                    otro.setChecked(false);
+                    spam.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    comportamientoAbusivo.setChecked(true);
+                    tipoDenuncia = "comportamiento abusivo";
+                }
+                break;
+            case R.id.rad_lenguaje:
+                if (checked) {
+                    otro.setChecked(false);
+                    spam.setChecked(false);
+                    comportamientoAbusivo.setChecked(false);
+                    lenguajeInapropiado.setChecked(true);
+                    tipoDenuncia = "lenguaje inapropiado";
+                }
+                break;
+            case R.id.rad_spam:
+                if (checked) {
+                    otro.setChecked(false);
+                    comportamientoAbusivo.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    spam.setChecked(true);
+                    tipoDenuncia = "spam";
+                }
+                break;
+            case R.id.rad_otro:
+                if (checked) {
+                    comportamientoAbusivo.setChecked(false);
+                    spam.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    otro.setChecked(true);
+                    tipoDenuncia = "otro";
+                }
+                break;
+
+        }
     }
 
     @Override
@@ -92,12 +153,26 @@ public class CandidateProfileActivity extends BaseActivity {
 
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
         mBuilder.setView(mView);
-        mBuilder.setTitle("Razon");
+        mBuilder.setTitle("Denunciar usuario");
+        mBuilder.setIcon(getResources().getDrawable(R.drawable.ic_report));
+        mBuilder.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                spam.setChecked(false);
+                comportamientoAbusivo.setChecked(false);
+                lenguajeInapropiado.setChecked(false);
+                otro.setChecked(false);
+            }
+        });
         mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String reason = descriptionTextView.getText().toString();
-                WebServiceManager.getInstance(getApplicationContext()).reportUser(userId, reason);
+                if (tipoDenuncia.equals("") || tipoDenuncia.isEmpty()) {
+                    Toast.makeText(CandidateProfileActivity.this,"Error: Debe elegir un motivo",Toast.LENGTH_SHORT).show();
+                } else {
+                    WebServiceManager.getInstance(getApplicationContext()).reportUser(userId, reason,tipoDenuncia);
+                }
             }
         } );
 

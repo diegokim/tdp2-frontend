@@ -1,6 +1,7 @@
 package com.example.android.linkup.chat;
 
 import android.content.DialogInterface;
+import android.provider.MediaStore;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,12 +12,18 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.linkup.R;
+import com.example.android.linkup.candidates.CandidateProfileActivity;
 import com.example.android.linkup.models.ActiveChatProfile;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
@@ -35,6 +42,14 @@ public class ChatActivity extends AppCompatActivity {
     protected ViewPager fragmentContainer;
     protected Menu menu;
     private Base64Converter converter;
+
+    private RadioButton spam = null;
+    private RadioButton otro = null;
+    private RadioButton lenguajeInapropiado = null;
+    private RadioButton comportamientoAbusivo = null;
+    private RadioGroup grupo_tipo_denuncia = null;
+
+    private String tipoDenuncia = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +86,14 @@ public class ChatActivity extends AppCompatActivity {
             }
         });
 
+        View mView = getLayoutInflater().inflate(R.layout.description_input_dialog, null);
+        otro = (RadioButton) mView.findViewById(R.id.rad_otro);
+        spam = (RadioButton) mView.findViewById(R.id.rad_spam);
+        lenguajeInapropiado = (RadioButton) mView.findViewById(R.id.rad_lenguaje);
+        comportamientoAbusivo = (RadioButton) mView.findViewById(R.id.rad_comportamiento);
+        grupo_tipo_denuncia = (RadioGroup) mView.findViewById(R.id.grupo_tipo_denuncia);
 
+        tipoDenuncia = "";
     }
 
 
@@ -139,24 +161,87 @@ public class ChatActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    public void onRadioButtonClicked(View view) {
+        boolean checked = ((RadioButton) view).isChecked();
+        Log.d("RadioButton","OnRadioButtonClicked");
+        switch (view.getId()) {
+            case R.id.rad_comportamiento:
+                if (checked) {
+                    otro.setChecked(false);
+                    spam.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    comportamientoAbusivo.setChecked(true);
+                    tipoDenuncia = "comportamiento abusivo";
+                }
+                Log.d("RadioButton","rad_comportamiento");
+                break;
+            case R.id.rad_lenguaje:
+                if (checked) {
+                    otro.setChecked(false);
+                    spam.setChecked(false);
+                    comportamientoAbusivo.setChecked(false);
+                    lenguajeInapropiado.setChecked(true);
+                    tipoDenuncia = "lenguaje inapropiado";
+                }
+                Log.d("RadioButton","rad_lenguaje");
+                break;
+            case R.id.rad_spam:
+                if (checked) {
+                    otro.setChecked(false);
+                    comportamientoAbusivo.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    spam.setChecked(true);
+                    tipoDenuncia = "spam";
+                }
+                break;
+            case R.id.rad_otro:
+                if (checked) {
+                    comportamientoAbusivo.setChecked(false);
+                    spam.setChecked(false);
+                    lenguajeInapropiado.setChecked(false);
+                    otro.setChecked(true);
+                    tipoDenuncia = "otro";
+                }
+                break;
+
+        }
+    }
+
 
     private void createReportDialog(final String userId) {
-        AlertDialog.Builder mBuilder = new AlertDialog.Builder(this);
-        View mView = getLayoutInflater().inflate(R.layout.description_input_dialog, null);
+        final View mView = getLayoutInflater().inflate(R.layout.description_input_dialog, null);
+
+        final AlertDialog alertDialog = new AlertDialog.Builder(ChatActivity.this).create();
 
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
-        mBuilder.setView(mView);
-        mBuilder.setTitle("Razon");
-        mBuilder.setPositiveButton("Denunciar", new DialogInterface.OnClickListener() {
+
+        alertDialog.setTitle("Denunciar Usuario");
+        alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_report));
+        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE,"Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                spam.setChecked(false);
+                comportamientoAbusivo.setChecked(false);
+                lenguajeInapropiado.setChecked(false);
+                otro.setChecked(false);
+                tipoDenuncia = "";
+            }
+        });
+        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE,"Denunciar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String reason = descriptionTextView.getText().toString();
-                WebServiceManager.getInstance(getApplicationContext()).reportUser(userId, reason);
+                if (tipoDenuncia.equals("") || tipoDenuncia.isEmpty()) {
+                    Toast.makeText(ChatActivity.this,"Error: Debe elegir un motivo",Toast.LENGTH_SHORT).show();
+                } else {
+                    WebServiceManager.getInstance(getApplicationContext()).reportUser(userId, reason,tipoDenuncia);
+                }
+
             }
         } );
 
-        AlertDialog dialog = mBuilder.create();
-        dialog.show();
+        alertDialog.setView(mView);
+        alertDialog.show();
     }
 
     @Override

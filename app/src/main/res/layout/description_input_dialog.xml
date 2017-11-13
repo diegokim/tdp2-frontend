@@ -2,32 +2,84 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:weightSum="1">
+    android:gravity="center_horizontal"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp">
 
+    <TextView
+        android:id="@+id/motivo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/bodyTextColor"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Motivo de Denuncia" />
 
-    <!--<EditText-->
-        <!--android:inputType="textMultiLine"-->
-        <!--android:lines="8"-->
-        <!--android:minLines="6"-->
-        <!--android:gravity="top|left"-->
-        <!--android:maxLines="10"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:scrollbars="vertical"-->
-    <!--/>-->
+    <RadioGroup
+        android:id="@+id/grupo_tipo_denuncia"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+    <RadioButton
+        android:id="@+id/rad_spam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:onClick="onRadioButtonClicked"
+        android:layout_marginTop="4dp"
+        android:text="Spam" />
+
+    <RadioButton
+        android:id="@+id/rad_comportamiento"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"
+        android:layout_marginBottom="4dp"
+        android:text="Comportamiento abusivo" />
+
+    <RadioButton
+        android:id="@+id/rad_lenguaje"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"
+        android:layout_marginBottom="4dp"
+        android:text="Lenguaje inapropiado" />
+
+    <RadioButton
+        android:id="@+id/rad_otro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="onRadioButtonClicked"
+        android:layout_marginBottom="4dp"
+        android:text="Otro" />
+    </RadioGroup>
+
+    <TextView
+        android:id="@+id/observaciones"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:textColor="@color/bodyTextColor"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Observaciones" />
+
     <EditText
         android:id="@+id/description_text_field"
         style="@style/Widget.AppCompat.EditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.35"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:ems="10"
         android:gravity="top|left"
         android:inputType="textMultiLine"
         android:lines="8"
         android:maxLines="10"
         android:minLines="6"
-
         android:padding="32dp"
         android:text="" />
 </LinearLayout>

@@ -65,4 +65,18 @@ public class ActionOnCandidateRequestGenerator {
         }
         return baseRequest(id, action, obj);
     }
+
+    public static Request generate(String id, String action, String reason,String tipoDenuncia) {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("action",action);
+            obj.put("message", reason);
+            obj.put("type", tipoDenuncia);
+        } catch (Exception e ) {
+            //TODO: handle error
+            e.printStackTrace(System.err);
+            Log.e("ACTIONS", e.toString());
+        }
+        return baseRequest(id, action, obj);
+    }
 }
