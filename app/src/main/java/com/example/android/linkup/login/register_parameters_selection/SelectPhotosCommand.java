@@ -182,7 +182,7 @@ public class SelectPhotosCommand implements Command {
 
     public void createDescriptionInputDialog() {
         AlertDialog.Builder mBuilder = new AlertDialog.Builder(activity);
-        View mView = inflater.inflate(R.layout.description_input_dialog, null);
+        View mView = inflater.inflate(R.layout.login_description_dialog, null);
 
         final TextView descriptionTextView = (TextView) mView.findViewById(R.id.description_text_field);
         descriptionTextView.setText("Soy una persona divertida, a la que le gusta arriesgarse y vivir la vida al máximo.");

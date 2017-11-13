@@ -14,6 +14,7 @@ import com.example.android.linkup.network.NotificationToken.SaveNotificationToke
 import com.example.android.linkup.network.candidates.GetCandidatesRequestGenerator;
 import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
 import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
+import com.example.android.linkup.network.deleteAccount.DeleteAccountRequestGenerator;
 import com.example.android.linkup.network.edit_profile.EditProfileRequestGenerator;
 import com.example.android.linkup.network.get_profile.GetProfileRequestGenerator;
 import com.example.android.linkup.network.location_update.UpdateLocationRequestGenerator;
@@ -103,6 +104,10 @@ public class WebServiceManager {
     public void reportUser(String id, String reason, String tipoDenuncia) {
         Request request = ActionOnCandidateRequestGenerator.generate(id,"report",reason,tipoDenuncia);
         sendRequest(request);
+    }
+
+    public void deleteAccount() {
+        sendRequest(DeleteAccountRequestGenerator.generate());
     }
 
     public static class ErrorMessageEvent {

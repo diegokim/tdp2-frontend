@@ -1,6 +1,7 @@
 package com.example.android.linkup.settings;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -17,11 +18,15 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.android.linkup.MainActivity;
 import com.example.android.linkup.R;
+import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
+import com.facebook.login.LoginManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -262,6 +267,46 @@ public class SettingsActivity extends AppCompatActivity {
     public void sendSettings(View view) {
         if (view.getId() == R.id.guardar_cambios) {
             mySettings.updateSettings(SettingsActivity.this);
+        }
+    }
+
+    public void borrarCuenta(View view) {
+        if (view.getId() == R.id.borrar_cuenta) {
+            final View viewdialog = getLayoutInflater().inflate(R.layout.delete_account_dialog, null);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
+
+            final EditText descriptionTextView = (EditText) viewdialog.findViewById(R.id.editText);
+
+            alertDialog.setTitle("Eliminar mi Cuenta");
+            alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_report));
+            alertDialog.setMessage("Desea eliminar su cuenta definitivamente?");
+
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (descriptionTextView.getText().toString().equals("Quiero borrar mi cuenta")) {
+                        Toast.makeText(SettingsActivity.this, "Vuelve pronto! :)", Toast.LENGTH_LONG).show();
+                        FirebaseAuth.getInstance().signOut();
+                        LoginManager.getInstance().logOut();
+                        WebServiceManager.getInstance().deleteAccount();
+                        startActivity(new Intent(SettingsActivity.this,LoginActivity.class));
+                        finish();
+                    } else {
+                        Toast.makeText(SettingsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                }
+            });
+            alertDialog.setView(viewdialog);
+            alertDialog.show();
         }
     }
 
