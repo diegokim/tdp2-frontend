@@ -15,6 +15,7 @@ import com.example.android.linkup.R;
 import com.example.android.linkup.models.Link;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.advertising.AdvertisingResponseListener;
 import com.example.android.linkup.network.candidates.ActionOnCandidateResponseListener;
 import com.example.android.linkup.network.candidates.GetLinksResponseListener;
 
@@ -44,13 +45,14 @@ public class LinksFragment extends BaseFragment {
         if (!Session.getInstance().mySettings.accountType.equals("free") ) {
             advertising.setVisibility(View.GONE);
         }
-
+        WebServiceManager.getInstance().getAdvertising();
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        WebServiceManager.getInstance().getAdvertising();
         if (!Session.getInstance().mySettings.accountType.equals("free") ) {
             advertising.setVisibility(View.GONE);
         } else {
@@ -62,6 +64,7 @@ public class LinksFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        WebServiceManager.getInstance().getAdvertising();
     }
 
     @Override
@@ -72,6 +75,7 @@ public class LinksFragment extends BaseFragment {
 
     @Subscribe
     public void onGetLinksSuccessEvent (GetLinksResponseListener.OnGetLinksSuccessEvent links) {
+        WebServiceManager.getInstance().getAdvertising();
         if (links.links.size() == 0) {
             noLinksView.setVisibility(View.VISIBLE);
         } else {
@@ -82,10 +86,18 @@ public class LinksFragment extends BaseFragment {
 
     @Subscribe
     public void onActionSuccessEvent(ActionOnCandidateResponseListener.OnActionSuccessEvent event) {
+        WebServiceManager.getInstance().getAdvertising();
         if (event.action.equals("delete") || event.action.equals("block") || event.action.equals("report") ){
             WebServiceManager.getInstance(getActivity()).getLinks();
         }
 
+    }
+
+    @Subscribe
+    public void OnGetAdvertisingSuccessEvent(AdvertisingResponseListener.OnGetAdvertisingSuccessEvent event) {
+        if( event.ads.size() >0 ) {
+            advertising.setImageBitmap(event.ads.get(0).image);
+        }
     }
 
 }

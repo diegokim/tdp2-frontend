@@ -191,7 +191,7 @@ public class SettingsActivity extends AppCompatActivity {
             just_friends_radioButton.setChecked(true);
         }
 
-
+        WebServiceManager.getInstance().getAdvertising();
     }
 
     public void onRadioButtonClicked(View view) {

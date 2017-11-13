@@ -13,7 +13,8 @@ public class NetworkErrorMessages {
     public static final String NO_PROFILE_ERROR = "Get profile returned a non valid profile";
     public static final String UPDATE_LOCATION_TAG = "REQ: UPDT LOCATION";
     public static final String LOGIN_TAG = "REQ: LOGIN";
-        public static final String REGISTER_TAG = "REQ: REGISTER";
+    public static final String REGISTER_TAG = "REQ: REGISTER";
     public static final String SETTINGS_TAG = "REQ: SETTINGS";
+    public static final String ADVERTISING_TAG = "REQ: ADVERTISING";
 //    public static final String
 }

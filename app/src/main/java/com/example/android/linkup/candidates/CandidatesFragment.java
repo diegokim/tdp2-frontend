@@ -23,6 +23,7 @@ import com.example.android.linkup.models.Profile;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.advertising.AdvertisingResponseListener;
 import com.example.android.linkup.utils.Base64Converter;
 
 import org.greenrobot.eventbus.EventBus;
@@ -80,6 +81,8 @@ public class CandidatesFragment extends BaseFragment {
         candidatesView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mLastClickTime = 0;
+
+        WebServiceManager.getInstance().getAdvertising();
         return view;
     }
 
@@ -87,6 +90,7 @@ public class CandidatesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         showProgressDialog();
+        WebServiceManager.getInstance().getAdvertising();
         WebServiceManager.getInstance(getContext()).getCandidates();
         if (!Session.getInstance().mySettings.accountType.equals("free") ) {
             advertising.setVisibility(View.GONE);
@@ -99,6 +103,7 @@ public class CandidatesFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
+        WebServiceManager.getInstance().getAdvertising();
     }
 
     @Override
@@ -110,6 +115,7 @@ public class CandidatesFragment extends BaseFragment {
 
     @Subscribe
     public void onGetCandidatesSuccess (ArrayList<Candidate> candidates) {
+        WebServiceManager.getInstance().getAdvertising();
         hideProgressDialog();
         if (swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);
@@ -144,5 +150,12 @@ public class CandidatesFragment extends BaseFragment {
     public void onNoCandidatesEvent (CandidatesAdapter.OnNoCandidatesEvent event) {
         hideProgressDialog();
         showNoCandidates(true);
+    }
+
+    @Subscribe
+    public void OnGetAdvertisingSuccessEvent(AdvertisingResponseListener.OnGetAdvertisingSuccessEvent event) {
+        if( event.ads.size() >0 ) {
+            advertising.setImageBitmap(event.ads.get(0).image);
+        }
     }
 }

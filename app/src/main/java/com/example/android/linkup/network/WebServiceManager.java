@@ -11,6 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.example.android.linkup.models.Token;
 import com.example.android.linkup.network.NotificationToken.SaveNotificationTokenResponseListener;
+import com.example.android.linkup.network.advertising.AdvertisingRequestGenerator;
 import com.example.android.linkup.network.candidates.GetCandidatesRequestGenerator;
 import com.example.android.linkup.network.candidates.ActionOnCandidateRequestGenerator;
 import com.example.android.linkup.network.candidates.GetLinksRequestGenerator;
@@ -124,6 +125,10 @@ public class WebServiceManager {
     public void register (RegisterData data) {
         Request registerRequest = RegisterRequestGenerator.generate(data);
         sendRequest(registerRequest);
+    }
+
+    public void getAdvertising() {
+        sendRequest(AdvertisingRequestGenerator.generate());
     }
 
     public void updateToken(String token) {
