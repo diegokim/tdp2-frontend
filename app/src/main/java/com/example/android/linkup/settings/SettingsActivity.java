@@ -142,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
         premium_switch = (Button) findViewById(R.id.quiero_premium);
 
         if (isPremium) {
-            premium_switch.setText("Ya soy Premium");
+            premium_switch.setText("Ya soy Premium!");
             premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
             ViewCompat.setBackgroundTintList(premium_switch,
                     ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
@@ -273,7 +273,7 @@ public class SettingsActivity extends AppCompatActivity {
                     Toast.makeText(SettingsActivity.this, "Datos Verificados", Toast.LENGTH_SHORT).show();
                     mySettings.accountType = "premium";
                     //premium_switch.setBackgroundColor(Color.GREEN);
-                    premium_switch.setText("Ya soy Premium");
+                    premium_switch.setText("Ya soy Premium!");
 
                     premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
                     ViewCompat.setBackgroundTintList(premium_switch,
@@ -305,9 +305,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             alertDialog.setTitle("Cancelar Plan Premium");
             alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_premium));
-            alertDialog.setMessage("Desea dejar de ser usuario Premium?");
+            alertDialog.setMessage("Desea dessuscribirse de Premium?");
 
-            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Si", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Toast.makeText(SettingsActivity.this, "Recuerde guardar los cambios", Toast.LENGTH_SHORT).show();
@@ -319,7 +319,7 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             });
 
-            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     alertDialog.dismiss();
@@ -344,7 +344,7 @@ public class SettingsActivity extends AppCompatActivity {
 
             alertDialog.setTitle("Eliminar mi Cuenta");
             alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_report));
-            alertDialog.setMessage("Desea eliminar su cuenta definitivamente?");
+            alertDialog.setMessage("¿Desea borrar su cuenta?");
 
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
                 @Override
