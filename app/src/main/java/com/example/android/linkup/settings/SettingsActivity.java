@@ -270,7 +270,12 @@ public class SettingsActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirmar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SettingsActivity.this, "Datos Verificados", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SettingsActivity.this, "Datos Verificados, redirigiendo...", Toast.LENGTH_SHORT).show();
+                    Settings s = new Settings();
+                    s.update(Session.getInstance().mySettings);
+                    s.accountType = "premium";
+                    s.updateSettings(SettingsActivity.this);
+                    /*
                     mySettings.accountType = "premium";
                     //premium_switch.setBackgroundColor(Color.GREEN);
                     premium_switch.setText("Ya soy Premium!");
@@ -278,6 +283,7 @@ public class SettingsActivity extends AppCompatActivity {
                     premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
                     ViewCompat.setBackgroundTintList(premium_switch,
                             ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
+                            */
                 }
             });
 
@@ -311,11 +317,17 @@ public class SettingsActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Toast.makeText(SettingsActivity.this, "Recuerde guardar los cambios", Toast.LENGTH_SHORT).show();
+                    Settings s = new Settings();
+                    s.update(Session.getInstance().mySettings);
+                    s.accountType = "free";
+                    s.updateSettings(SettingsActivity.this);
+                    /*
                     mySettings.accountType = "free";
                     premium_switch.setText("Quiero Ser Premium");
                     premium_switch.setTextColor(getResources().getColor(R.color.lightBackground));
                     ViewCompat.setBackgroundTintList(premium_switch,
                             ContextCompat.getColorStateList(getApplicationContext(),R.color.colorAccent));
+                   */
                 }
             });
 
