@@ -107,7 +107,7 @@ public class CandidateProfileActivity extends BaseActivity {
                     spam.setChecked(false);
                     comportamientoAbusivo.setChecked(false);
                     lenguajeInapropiado.setChecked(true);
-                    tipoDenuncia = "lenguaje inapropiado";
+                    tipoDenuncia = "mensaje inapropiado";
                 }
                 break;
             case R.id.rad_spam:

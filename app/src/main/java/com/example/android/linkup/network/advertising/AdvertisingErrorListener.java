@@ -13,6 +13,6 @@ import org.greenrobot.eventbus.EventBus;
 public class AdvertisingErrorListener implements Response.ErrorListener {
     @Override
     public void onErrorResponse(VolleyError error) {
-        EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Ups! Ha ocurrido un error :("));
+        //EventBus.getDefault().post(new WebServiceManager.ErrorMessageEvent("Ups! Ha ocurrido un error :("));
     }
 }

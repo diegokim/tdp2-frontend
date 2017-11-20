@@ -256,13 +256,12 @@
                     android:layout_marginEnd="@dimen/activity_vertical_margin">
 
                     <Button
-                        android:id="@+id/borrar_cuenta"
-                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:id="@+id/quiero_premium"
+                        style="@style/Widget.AppCompat.Button.Colored"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:onClick="borrarCuenta"
-                        android:text="Eliminar mi cuenta"
+                        android:text="Quiero Ser Premium"
                         android:textSize="14dp" />
                 </LinearLayout>
 
@@ -282,6 +281,25 @@
                         android:layout_gravity="center_horizontal"
                         android:onClick="sendSettings"
                         android:text="Guardar Cambios"
+                        android:textSize="14dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:layout_marginStart="@dimen/activity_horizontal_margin"
+                    android:layout_marginEnd="@dimen/activity_vertical_margin">
+
+                    <Button
+                        android:id="@+id/borrar_cuenta"
+                        style="@style/Widget.AppCompat.Button.ButtonBar.AlertDialog"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:onClick="borrarCuenta"
+                        android:text="Eliminar mi cuenta"
                         android:textSize="14dp" />
                 </LinearLayout>
 

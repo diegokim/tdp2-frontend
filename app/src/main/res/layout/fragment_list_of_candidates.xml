@@ -86,6 +86,5 @@
         android:layout_width="match_parent"
         android:layout_height="70dp"
 
-        android:layout_alignParentBottom="true"
-        app:srcCompat="@drawable/trivago_rectangular"/>
+        android:layout_alignParentBottom="true" />
 </RelativeLayout>

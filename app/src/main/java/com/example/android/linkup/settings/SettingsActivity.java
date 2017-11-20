@@ -2,13 +2,18 @@ package com.example.android.linkup.settings;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -40,7 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
     private SeekBar distance_slider = null;
     private Switch invisible_switch = null;
     private Switch notifications_switch = null;
-    //private Switch premium_switch = null;
+    private Button premium_switch = null;
     private RadioButton just_friends_radioButton = null;
     private RadioButton findCouple_radioButton = null;
     private CheckBox men_checkbox = null;
@@ -53,6 +58,7 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar.setTitle("Mis Preferencias");
         setSupportActionBar(toolbar);
 
 
@@ -130,51 +136,31 @@ public class SettingsActivity extends AppCompatActivity {
                 mySettings.notifications = b;
             }
         });
-/*
+
         //PREMIUM
-        boolean isPremium = mySettings.accountType.equals("premium");
+        final boolean isPremium = mySettings.accountType.equals("premium");
+        premium_switch = (Button) findViewById(R.id.quiero_premium);
 
-        premium_switch = (Switch) findViewById(R.id.premium_account_switch);
-        premium_switch.setChecked(isPremium);
-        premium_switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        if (isPremium) {
+            premium_switch.setText("Ya soy Premium");
+            premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
+            ViewCompat.setBackgroundTintList(premium_switch,
+                    ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
+        } else {
+            premium_switch.setText("Quiero ser premium");
+        }
+
+        premium_switch.setOnClickListener(new Button.OnClickListener(){
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    //TODO: Simulate Payment
-
-                    final View view = getLayoutInflater().inflate(R.layout.credit_card_dialog, null);
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
-                    final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
-
-                    alertDialog.setTitle("Confirmar Datos");
-                    alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_credit_card));
-                    alertDialog.setMessage("Desea volverse usuario premium?");
-
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirmar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(SettingsActivity.this, "Datos Verificados", Toast.LENGTH_SHORT).show();
-                            mySettings.accountType = "premium";
-                        }
-                    });
-
-
-                    alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            premium_switch.setChecked(false);
-                            alertDialog.dismiss();
-                        }
-                    });
-                    alertDialog.setView(view);
-                    alertDialog.show();
+            public void onClick(View view){
+                if (mySettings.accountType.equals("premium")) {
+                    cancelarPremium(view);
                 } else {
-                    mySettings.accountType = "free";
+                    quieroSerPremium(view);
                 }
             }
         });
-*/
+
         //ENCONTRAR PAREJA
         findCouple_radioButton = (RadioButton) findViewById(R.id.pareja_radioButton);
         just_friends_radioButton = (RadioButton) findViewById(R.id.solo_amigos_radioButton);
@@ -270,13 +256,91 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
-    public void borrarCuenta(View view) {
-        if (view.getId() == R.id.borrar_cuenta) {
-            final View viewdialog = getLayoutInflater().inflate(R.layout.delete_account_dialog, null);
+    public void quieroSerPremium(View view) {
+        if (view.getId() == R.id.quiero_premium) {
+            final View myview = getLayoutInflater().inflate(R.layout.credit_card_dialog, null);
 
+            AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
             final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
 
-            final EditText descriptionTextView = (EditText) viewdialog.findViewById(R.id.editText);
+            alertDialog.setTitle("Confirmar Datos");
+            alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_credit_card));
+            alertDialog.setMessage("Desea volverse usuario premium?");
+
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirmar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(SettingsActivity.this, "Datos Verificados", Toast.LENGTH_SHORT).show();
+                    mySettings.accountType = "premium";
+                    //premium_switch.setBackgroundColor(Color.GREEN);
+                    premium_switch.setText("Ya soy Premium");
+
+                    premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
+                    ViewCompat.setBackgroundTintList(premium_switch,
+                            ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
+                }
+            });
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                    /*
+                    mySettings.accountType = "free";
+                    premium_switch.setText("Quiero Ser Premium");
+                    premium_switch.setTextColor(getResources().getColor(R.color.background));
+                    ViewCompat.setBackgroundTintList(premium_switch,
+                            ContextCompat.getColorStateList(getApplicationContext(),R.color.colorAccent));
+                    */
+                }
+            });
+            alertDialog.setView(myview);
+            alertDialog.show();
+        }
+    }
+
+    public void cancelarPremium(View view) {
+        if (view.getId() == R.id.quiero_premium) {
+            final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
+
+            alertDialog.setTitle("Cancelar Plan Premium");
+            alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_premium));
+            alertDialog.setMessage("Desea dejar de ser usuario Premium?");
+
+            alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Toast.makeText(SettingsActivity.this, "Recuerde guardar los cambios", Toast.LENGTH_SHORT).show();
+                    mySettings.accountType = "free";
+                    premium_switch.setText("Quiero Ser Premium");
+                    premium_switch.setTextColor(getResources().getColor(R.color.lightBackground));
+                    ViewCompat.setBackgroundTintList(premium_switch,
+                            ContextCompat.getColorStateList(getApplicationContext(),R.color.colorAccent));
+                }
+            });
+
+            alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancelar", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    alertDialog.dismiss();
+                    /*
+                    mySettings.accountType = "premium";
+                    premium_switch.setText("Ya soy Premium");
+                    premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
+                    ViewCompat.setBackgroundTintList(premium_switch,
+                            ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
+                    */
+                }
+            });
+            alertDialog.show();
+        }
+    }
+
+    public void borrarCuenta(View view) {
+        if (view.getId() == R.id.borrar_cuenta) {
+            //final View viewdialog = getLayoutInflater().inflate(R.layout.delete_account_dialog, null);
+
+            final AlertDialog alertDialog = new AlertDialog.Builder(SettingsActivity.this).create();
 
             alertDialog.setTitle("Eliminar mi Cuenta");
             alertDialog.setIcon(getResources().getDrawable(R.drawable.ic_report));
@@ -285,16 +349,12 @@ public class SettingsActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Aceptar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    if (descriptionTextView.getText().toString().equals("Quiero borrar mi cuenta")) {
-                        Toast.makeText(SettingsActivity.this, "Vuelve pronto! :)", Toast.LENGTH_LONG).show();
-                        FirebaseAuth.getInstance().signOut();
-                        LoginManager.getInstance().logOut();
-                        WebServiceManager.getInstance().deleteAccount();
-                        startActivity(new Intent(SettingsActivity.this,LoginActivity.class));
-                        finish();
-                    } else {
-                        Toast.makeText(SettingsActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                    }
+                Toast.makeText(SettingsActivity.this, "Vuelve pronto! :)", Toast.LENGTH_LONG).show();
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                WebServiceManager.getInstance().deleteAccount();
+                startActivity(new Intent(SettingsActivity.this,LoginActivity.class));
+                finish();
                 }
             });
 
@@ -305,7 +365,7 @@ public class SettingsActivity extends AppCompatActivity {
                     alertDialog.dismiss();
                 }
             });
-            alertDialog.setView(viewdialog);
+            //alertDialog.setView(viewdialog);
             alertDialog.show();
         }
     }

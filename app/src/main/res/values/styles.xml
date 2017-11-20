@@ -60,6 +60,10 @@
         <item name="android:background">@color/colorLight</item>
     </style>
 
+    <style name="BrandButtonStyle" parent="Widget.AppCompat.Button.Colored">
+        <item name="android:colorButtonNormal">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorLight</item>
+    </style>
 
     <dimen name="icon_top_margin">24dp</dimen>
     <dimen name="icon_bottom_margin">24dp</dimen>

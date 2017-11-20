@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:onClick="onRadioButtonClicked"
         android:layout_marginBottom="4dp"
-        android:text="Lenguaje inapropiado" />
+        android:text="Mensaje inapropiado" />
 
     <RadioButton
         android:id="@+id/rad_otro"

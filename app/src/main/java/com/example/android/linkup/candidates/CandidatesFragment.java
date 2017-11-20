@@ -83,7 +83,7 @@ public class CandidatesFragment extends BaseFragment {
 
         mLastClickTime = 0;
 
-        WebServiceManager.getInstance().getAdvertising();
+        //WebServiceManager.getInstance().getAdvertising();
         return view;
     }
 
@@ -91,7 +91,7 @@ public class CandidatesFragment extends BaseFragment {
     public void onResume() {
         super.onResume();
         showProgressDialog();
-        WebServiceManager.getInstance().getAdvertising();
+        //WebServiceManager.getInstance().getAdvertising();
         WebServiceManager.getInstance(getContext()).getCandidates();
         if (!Session.getInstance().mySettings.accountType.equals("free") ) {
             advertising.setVisibility(View.GONE);
@@ -104,7 +104,7 @@ public class CandidatesFragment extends BaseFragment {
     public void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        WebServiceManager.getInstance().getAdvertising();
+        //WebServiceManager.getInstance().getAdvertising();
     }
 
     @Override
@@ -116,7 +116,7 @@ public class CandidatesFragment extends BaseFragment {
 
     @Subscribe
     public void onGetCandidatesSuccess (ArrayList<Candidate> candidates) {
-        WebServiceManager.getInstance().getAdvertising();
+        //WebServiceManager.getInstance().getAdvertising();
         hideProgressDialog();
         if (swipeRefreshLayout.isRefreshing()){
             swipeRefreshLayout.setRefreshing(false);

@@ -181,7 +181,7 @@ public class ChatActivity extends AppCompatActivity {
                     spam.setChecked(false);
                     comportamientoAbusivo.setChecked(false);
                     lenguajeInapropiado.setChecked(true);
-                    tipoDenuncia = "lenguaje inapropiado";
+                    tipoDenuncia = "mensaje inapropiado";
                 }
                 Log.d("RadioButton","rad_lenguaje");
                 break;

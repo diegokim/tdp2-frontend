@@ -82,7 +82,7 @@ public class MainActivity extends BaseActivity implements Observer{
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 String title = tab.getText().toString();
-                WebServiceManager.getInstance().getAdvertising();
+                //WebServiceManager.getInstance().getAdvertising();
                 if ( title.equals("Links")) {
                     WebServiceManager.getInstance(MainActivity.this).getLinks();
                 } else if (title.equals("Personas")){
@@ -96,7 +96,7 @@ public class MainActivity extends BaseActivity implements Observer{
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
-                WebServiceManager.getInstance().getAdvertising();
+                //WebServiceManager.getInstance().getAdvertising();
                 String title = tab.getText().toString();
                 if ( title.equals("Links")) {
                     WebServiceManager.getInstance(MainActivity.this).getLinks();
@@ -139,9 +139,6 @@ public class MainActivity extends BaseActivity implements Observer{
                                 Log.d("DEBUG", "Aprete mis preferencias");
                                 startActivityForResult(new Intent (MainActivity.this,SettingsActivity.class),REQUEST_UPDATE_SETTINGS);
                                 break;
-                            case R.id.item_premium:
-                                startActivityForResult(new Intent(MainActivity.this,PremiumActivity.class),REQUEST_UPDATE_SETTINGS);
-                                break;
                             case R.id.item_logout:
                                 Toast.makeText(MainActivity.this, "Cerrar sesion",
                                         Toast.LENGTH_SHORT).show();
@@ -168,7 +165,7 @@ public class MainActivity extends BaseActivity implements Observer{
                 while (true) {
                     WebServiceManager.getInstance().getAdvertising();
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(5000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -184,7 +181,7 @@ public class MainActivity extends BaseActivity implements Observer{
         // Check which request we're responding to
         if (requestCode == REQUEST_UPDATE_SETTINGS) {
             updateNavHeaderView();
-            WebServiceManager.getInstance().getAdvertising();
+            //WebServiceManager.getInstance().getAdvertising();
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.

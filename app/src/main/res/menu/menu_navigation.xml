@@ -12,13 +12,6 @@
             android:tint="@color/button_grey"
             android:title="Mis Preferencias" />
     </group>
-    <group android:id="@+id/premium_group">
-        <item
-            android:id="@+id/item_premium"
-            android:icon="@drawable/ic_premium"
-            android:tint="@color/button_grey"
-            android:title="Quiero ser Premium" />
-    </group>
     <group android:id="@+id/signout_group">
         <item
             android:id="@+id/item_logout"
