@@ -13,6 +13,7 @@ import com.example.android.linkup.network.NetworkErrorMessages;
 import com.example.android.linkup.network.NetworkRequestQueue;
 import com.example.android.linkup.network.ServerErrorListener;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.settings.SaveSettingsLocalResponseListener;
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,6 +77,52 @@ public class Settings {
             settings.update(this);
             CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new SaveSettingsResponseListener()
             , new ServerErrorListener(NetworkErrorMessages.SETTINGS_TAG));
+
+            NetworkRequestQueue.getInstance(context).addToRequestQueue(objectRequest);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateSettingsLocal(final Context context) {
+        JSONObject params = new JSONObject();
+        JSONObject distRange = new JSONObject();
+        JSONObject ageRange = new JSONObject();
+        try {
+            distRange.put("min",0);
+            distRange.put("max",range);
+
+            ageRange.put("min",age_from);
+            ageRange.put("max",age_to);
+
+            params.put("distRange",distRange);
+            params.put("ageRange",ageRange);
+
+            params.put("invisible",invisible);
+
+            params.put("notifications",notifications);
+
+
+            params.put("accountType", accountType);
+
+            if (solo_amigos) {
+                params.put("interestType","friends");
+            } else {
+                if (hombres && mujeres) {
+                    params.put("interestType","both");
+                } else {
+                    if (hombres) {
+                        params.put("interestType","male");
+                    } else {
+                        params.put("interestType","female");
+                    }
+                }
+            }
+            final Settings settings = new Settings();
+            settings.update(this);
+            CustomJsonObjectRequest objectRequest = new CustomJsonObjectRequest(Request.Method.PATCH, NetworkConfiguration.getInstance().serverAddr + "/users/me/settings", params, new SaveSettingsLocalResponseListener()
+                    , new ServerErrorListener(NetworkErrorMessages.SETTINGS_TAG));
 
             NetworkRequestQueue.getInstance(context).addToRequestQueue(objectRequest);
 

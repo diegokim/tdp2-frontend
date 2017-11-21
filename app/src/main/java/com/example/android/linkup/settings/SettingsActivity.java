@@ -29,6 +29,7 @@ import com.example.android.linkup.login.LoginActivity;
 import com.example.android.linkup.models.Session;
 import com.example.android.linkup.models.Settings;
 import com.example.android.linkup.network.WebServiceManager;
+import com.example.android.linkup.network.settings.SaveSettingsLocalResponseListener;
 import com.example.android.linkup.network.settings.SaveSettingsResponseListener;
 import com.facebook.login.LoginManager;
 import com.google.firebase.auth.FirebaseAuth;
@@ -270,12 +271,12 @@ public class SettingsActivity extends AppCompatActivity {
             alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Confirmar", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    Toast.makeText(SettingsActivity.this, "Datos Verificados, redirigiendo...", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(SettingsActivity.this, "Datos Verificados, redirigiendo...", Toast.LENGTH_SHORT).show();
                     Settings s = new Settings();
                     s.update(Session.getInstance().mySettings);
                     s.accountType = "premium";
-                    s.updateSettings(SettingsActivity.this);
-                    /*
+                    s.updateSettingsLocal(SettingsActivity.this);
+
                     mySettings.accountType = "premium";
                     //premium_switch.setBackgroundColor(Color.GREEN);
                     premium_switch.setText("Ya soy Premium!");
@@ -283,7 +284,7 @@ public class SettingsActivity extends AppCompatActivity {
                     premium_switch.setTextColor(getResources().getColor(R.color.colorAccent));
                     ViewCompat.setBackgroundTintList(premium_switch,
                             ContextCompat.getColorStateList(getApplicationContext(),R.color.lightBackground));
-                            */
+
                 }
             });
 
@@ -320,14 +321,14 @@ public class SettingsActivity extends AppCompatActivity {
                     Settings s = new Settings();
                     s.update(Session.getInstance().mySettings);
                     s.accountType = "free";
-                    s.updateSettings(SettingsActivity.this);
-                    /*
+                    s.updateSettingsLocal(SettingsActivity.this);
+
                     mySettings.accountType = "free";
                     premium_switch.setText("Quiero Ser Premium");
                     premium_switch.setTextColor(getResources().getColor(R.color.lightBackground));
                     ViewCompat.setBackgroundTintList(premium_switch,
                             ContextCompat.getColorStateList(getApplicationContext(),R.color.colorAccent));
-                   */
+
                 }
             });
 
@@ -417,5 +418,13 @@ public class SettingsActivity extends AppCompatActivity {
         Session.getInstance().mySettings.update(event.settings);
         setResult(RESULT_OK);
         finish();
+    }
+
+    @Subscribe
+    public void onUpdateSettingsLocalSuccess (SaveSettingsLocalResponseListener.SaveSettingsLocalSuccessEvent event) {
+        Toast.makeText(this,"Configuración guardada con éxito!",Toast.LENGTH_LONG).show();
+        Session.getInstance().mySettings.update(event.settings);
+        setResult(RESULT_OK);
+        //finish();
     }
 }
